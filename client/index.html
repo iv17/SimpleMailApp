@@ -1,0 +1,456 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Simple mail app</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="module" src="js/osc.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+	<script type="module">
+
+		import {
+			A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
+			InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
+			Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
+		} from './js/osc.js';
+
+		var user = {
+			"name": "Josh Hamadani",
+			"email": "josh@gmail.com",
+			"inboxNum": "3",
+			"sentMailNum": "10",
+			"importantNum": "5",
+			"draftsNum": "2",
+			"trashNum": "14"
+		};
+		var sender = {
+			"name": "John Smith",
+			"email": "john@gmail.com"
+		};
+
+		var messages = [
+			{
+				"sender": {
+					"name": "Jon Smith",
+					"email": "john.smith@gmail.com"
+				},
+				"title": "Faucibus rutrum",
+				"message": "Phasellus sodales vulputate urna, vel accumsan augue egestas ac. " +
+					"Donec vitae leo at sem lobortis porttitor eu consequat risus." +
+					"Mauris sed congue orci. Donec ultrices faucibus rutrum. " +
+					"Phasellus sodales vulputate urna, vel accumsan augue egestas ac." +
+					"Donec vitae leo at sem lobortis porttitor eu consequat risus." +
+					"Mauris sed congue orci. Donec ultrices faucibus rutrum." +
+					"Phasellus sodales vulputate urna, vel accumsan augue egestas ac. " +
+					"Donec vitae leo at sem lobortis porttitor eu consequat risus." +
+					"Mauris sed congue orci. Donec ultrices faucibus rutrum. " +
+					"Phasellus sodales vulputate urna, vel accumsan augue egestas ac." +
+					"Donec vitae leo at sem lobortis porttitor eu consequat risus." +
+					"Mauris sed congue orci. Donec ultrices faucibus rutrum.",
+				"time": "12:15 PM"
+			},
+			{
+				"sender": {
+					"name": "Ana Nicol",
+					"email": "ana.nicol@gmail.com"
+				},
+				"title": "Donec ultrices faucibus rutrum.",
+				"message": "...",
+				"time": "15:30 PM"
+			},
+			{
+				"sender": {
+					"name": "Jon Smith",
+					"email": "john.smith@gmail.com"
+				},
+				"title": "Mauris sed congue orci",
+				"message": "...",
+				"time": "12:15 PM"
+			}
+		];
+
+		function drawSignIn() {
+
+			var inputEmail = new InputField('i1', 'form-control', 'email', 'Email');
+			var inputPassword = new InputField('i2', 'form-control', 'password', 'Password');
+			var button1 = new Button('b1', 'btn btn-lg btn-primary btn-block', 'Sign in', 'submit');
+
+			var form = new Form('form1', 'form-signin');
+			form.add(inputEmail);
+			form.add(inputPassword);
+			form.add(button1);
+
+			var h1 = new H1('h1', 'text-center login-title', 'Sign in to continue to Gmail');
+			var vp3 = new VerticalPanel('vp3', 'col-sm-6 col-md-4 col-md-offset-4');
+			vp3.add(h1);
+			vp3.add(form);
+
+			var vp2 = new VerticalPanel('vp2', 'row justify-content-md-center');
+			vp2.add(vp3);
+
+			inputEmail.onchange = function (e) {
+				var at = document.getElementById("i1").value.indexOf("@");
+				if (at == -1) {
+					alert('Not a valid email address!');
+				}
+			}
+			inputPassword.onchange = function (e) {
+				var password = document.getElementById("i2").value;
+				if (password.length < 6) {
+					alert('Password must be a least 6 characters long!');
+				}
+			}
+
+			button1.onclick = function (e) {
+				alert(document.getElementById("i1").value + " - " + document.getElementById("i2").value);
+			}
+			return vp2;
+		}
+
+		function drawInbox() {
+
+			var vp11 = new VerticalPanel('vp11', 'list-group');
+
+			var inbox_rows = [];
+			for (let index = 1; index < messages.length + 1; index++) {
+				var inbox_rowID = "inbox_row" + index;
+				inbox_rows.push(new AContainer(inbox_rowID, 'list-group-item', '', '#'));
+
+			}
+			for (let index = 0; index < messages.length; index++) {
+
+				var container = inbox_rows[index];
+				container.add(new InputField("checkbox" + index, '', 'checkbox', ''));
+				container.add(new EmptyCol('ec1', ''));
+				container.add(new EmptyCol('ec2', ''));
+				container.add(new Label("sender" + index, 'name', messages[index].sender.name, 'min-width: 120px;display: inline-block;'));
+				container.add(new Label("title" + index, '', messages[index].title, ''));
+				container.add(new Label("time" + index, 'badge', messages[index].time, ''));
+
+				vp11.add(container);
+
+				container.onclick = function (e) {
+
+				}
+
+			}
+			var vp10 = new VerticalPanel('vp10', 'tab-pane fade in active');
+			vp10.add(vp11);
+			var vp9 = new VerticalPanel('vp9', 'tab-content');
+			vp9.add(vp10);
+
+			//------------TABS------------
+			var hp2 = new HorizontalPanel('hp2', 'glyphicon glyphicon-user');
+			var a32 = new AContainer('a32', '', 'Social', '#', 'tab');
+			a32.add(hp2);
+			var li32 = new LI('li32', '');
+			li32.add(a32);
+
+			var hp1 = new HorizontalPanel('hp1', 'glyphicon glyphicon-inbox');
+			var a31 = new AContainer('a31', '', 'Primary', '#', 'tab');
+			a31.add(hp1);
+			var li31 = new LI('li31', 'active');
+			li31.add(a31);
+
+			var ul3 = new UL('ul3', 'nav nav-tabs');
+			ul3.add(li31);
+			ul3.add(li32);
+
+			var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+			vp9.add(ul3);
+			vp9.add(vp10);
+
+			return vp9;
+		}
+
+		function drawSingleMail() {
+
+			var i6 = new I('i6', 'fa fa-trash-o');
+			var button6 = new AContainer('button6', 'btn btn-sm btn-default', 'Delete', '', '');
+			button6.add(i6);
+
+			var i5 = new I('i5', 'fa fa-arrow-right');
+			var button5 = new AContainer('button5', 'btn btn-sm btn-default', 'Forward', '', '');
+			button5.add(i5);
+
+			var i4 = new I('i4', 'fa fa-reply');
+			var button4 = new AContainer('button4', 'btn btn-sm btn-primary', 'Reply', '', '');
+			button4.add(i4);
+
+			button4.onclick = function (e) {
+				alert('KLIK');
+			}
+
+			var emptyCol3 = new EmptyCol('ec3', '');
+			var emptyCol4 = new EmptyCol('ec4', '');
+
+			var vp20 = new VerticalPanel('vp20', 'compose-btn pull-left');
+			vp20.add(button4);
+			vp20.add(emptyCol3);
+			vp20.add(button5);
+			vp20.add(emptyCol4);
+			vp20.add(button6);
+
+			var message = new Label('message', '', messages[0].message);
+			var vp19 = new VerticalPanel('vp19', 'view-mail');
+			vp19.add(message);
+
+			var textMe = new Strong('textMe', '', ' me ');
+			var textTo = new Label('textTo', '', ' to ');
+			var senderMail = new Label('senderMail', '', ' [' + messages[0].sender.email + ' ] ');
+			var senderName = new Strong('senderName', '', messages[0].sender.name);
+			var senderImage = new Image('senderImage', '', 'https://bootdey.com/img/Content/avatar/avatar6.png', sender.name, '40px', '40px');
+
+			var vp18 = new VerticalPanel('vp18', 'col-md-12');
+			vp18.add(senderImage);
+			vp18.add(senderName);
+			vp18.add(senderMail);
+			vp18.add(textTo);
+			vp18.add(textMe);
+
+			var vp17 = new VerticalPanel('vp17', 'row');
+			vp17.add(vp18);
+			var vp16 = new VerticalPanel('vp16', 'sender-info');
+			vp16.add(vp17);
+
+			var hr1 = new HR('hr1', '');
+			var h41 = new H4('h41', '', messages[0].title);
+			var vp15 = new VerticalPanel('vp15', 'col-md-12');
+			vp15.add(h41);
+			vp15.add(hr1);
+
+			var date = new Label('date', 'date', messages[0].time);
+			var vp14 = new VerticalPanel('vp14', 'col-md-4 text-right');
+			vp14.add(date);
+
+			var i3 = new I('i3', 'fa fa-trash-o');
+			var button3 = new AContainer('button3', 'btn btn-sm btn-default', 'Delete', '#', '');
+			button3.add(i3);
+
+			var i2 = new I('i2', 'fa fa-arrow-right');
+			var button2 = new AContainer('button2', 'btn btn-sm btn-default', 'Forward', '#', '');
+			button2.add(i2);
+
+			var i1 = new I('i1', 'fa fa-reply');
+			var button1 = new AContainer('button1', 'btn btn-sm btn-primary', 'Reply', '#', '');
+			button1.add(i1);
+
+			var emptyCol1 = new EmptyCol('ec1', '');
+			var emptyCol2 = new EmptyCol('ec2', '');
+
+			var vp13 = new VerticalPanel('vp13', 'compose-btn pull-left');
+			vp13.add(button1);
+			vp13.add(emptyCol1);
+			vp13.add(button2);
+			vp13.add(emptyCol2);
+			vp13.add(button3);
+
+			var emptyRow4 = new EmptyRow('er4', '');
+			var vp12 = new VerticalPanel('vp12', 'col-md-8');
+			vp12.add(vp13);
+			vp12.add(emptyRow4);
+
+			var vp11 = new VerticalPanel('vp11', 'heading-inbox row');
+			vp11.add(vp12);
+			vp11.add(vp14);
+			vp11.add(vp15);
+
+			var emptyRow2 = new EmptyRow('er2', '');
+			var emptyRow3 = new EmptyRow('er3', '');
+
+			var vp10 = new VerticalPanel('vp10', 'inbox-body');
+			vp10.add(vp11);
+			vp10.add(vp16);
+			vp10.add(emptyRow2);
+			vp10.add(vp19);
+			vp10.add(emptyRow3);
+			vp10.add(vp20);
+
+			var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+			vp9.add(vp10);
+
+			return vp9;
+		}
+
+		function drawCompose() {
+
+			var i2 = new I('i2', 'fa fa-trash-o');
+			var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard', '', '');
+			buttonDiscard.add(i2);
+
+			var i1 = new I('i1', 'fa fa-envelope');
+			var buttonSend = new AContainer('buttonSend', 'btn btn-sm btn-primary', 'Send', '', '');
+			buttonSend.add(i1);
+
+			var ec1 = new EmptyCol('ec1', '');
+			var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
+			vp14.add(buttonSend);
+			vp14.add(ec1);
+			vp14.add(buttonDiscard);
+
+			var emptyRow2 = new EmptyRow('er2', '');
+			var emptyRow3 = new EmptyRow('er3', '');
+			var inputTitle = new InputField('inputTitile', 'form-control', 'text', 'Title');
+			var inputMessage = new InputArea('inputMessage', 'form-control', 'Enter a message', 10, 50);
+
+			var vp13 = new VerticalPanel('vp13', 'view-mail');
+			vp13.add(inputTitle);
+			vp13.add(emptyRow2);
+			vp13.add(inputMessage);
+			vp13.add(emptyRow3);
+
+			var hr1 = new HR('hr1', '');
+			var inputEmail = new InputField('i1', 'form-control', 'email', 'To');
+
+			var vp12 = new VerticalPanel('vp12', 'col-md-12');
+			vp12.add(inputEmail);
+			vp12.add(hr1);
+
+			var vp11 = new VerticalPanel('vp11', 'heading-inbox row');
+			vp11.add(vp12);
+
+			var vp10 = new VerticalPanel('vp10', 'inbox-body');
+			vp10.add(vp11);
+			vp10.add(vp13);
+			vp10.add(vp14);
+
+			var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+			vp9.add(vp10);
+
+			return vp9;
+		}
+
+		function drawMail() {
+
+			var vp9 = drawInbox();
+
+			//------------SIDE BAR------------
+			var badge5 = new Label('badge5', 'badge pull-right', user.trashNum);
+			var a25 = new AContainer('a25', '', 'Trash', '#');
+			a25.add(badge5);
+			var li25 = new LI('li25', '');
+			li25.add(a25);
+
+			li25.onclick = function (e) {
+
+			}
+
+			var badge4 = new Label('badge4', 'badge pull-right', user.draftsNum);
+			var a24 = new AContainer('a24', '', 'Drafts', '#');
+			a24.add(badge4);
+			var li24 = new LI('li24', '');
+			li24.add(a24);
+
+			var badge3 = new Label('badge3', 'badge pull-right', user.importantNum);
+			var a23 = new AContainer('a23', '', 'Important', '#');
+			a23.add(badge3);
+			var li23 = new LI('li23', '');
+			li23.add(a23);
+
+
+			var badge2 = new Label('badge2', 'badge pull-right', user.sentMailNum);
+			var a22 = new AContainer('a22', '', 'Sent Mail', '#');
+			a22.add(badge2);
+			var li22 = new LI('li22', '');
+			li22.add(a22);
+
+			var badge1 = new Label('badge1', 'badge pull-right', user.inboxNum);
+			var a21 = new AContainer('a21', '', 'Inbox', '#');
+			a21.add(badge1);
+			var li21 = new LI('li21', 'active');
+			li21.add(a21);
+			li21.onclick = function (e) {
+
+			}
+
+			var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
+			ul2.add(li21);
+			ul2.add(li22);
+			ul2.add(li23);
+			ul2.add(li24);
+			ul2.add(li25);
+			var buttonCompose = new A('buttonCompose', 'btn btn-danger btn-sm btn-block', 'COMPOSE', '#');
+
+			var hr2 = new HR('hr2');
+			var vp8 = new VerticalPanel('vp8', 'col-sm-3 col-md-2');
+			vp8.add(buttonCompose);
+			vp8.add(hr2);
+			vp8.add(ul2);
+
+			var hr1 = new HR('hr1');
+			var vp7 = new VerticalPanel('vp7', 'row');
+			vp7.add(hr1);
+			vp7.add(vp8);
+			vp7.add(vp9);
+
+			//------------HEADER------------;
+			var h51 = new H5('h51', '', user.name);
+			var vp6 = new VerticalPanel('vp6', 'user-name');
+			vp6.add(h51);
+
+			var image1 = new Image('image1', 'img-responsive', 'https://bootdey.com/img/Content/avatar/avatar1.png', user.name, '50px', '50px');
+			var ac1 = new AContainer('ac1', 'inbox-avatar', '', '#', '');
+			ac1.add(image1);
+
+			var a12 = new A('a12', '', 'Log out', '#');
+			var li12 = new LI('li12', '');
+			li12.add(a12);
+
+			var a11 = new A('a11', '', user.email, '#');
+			var li11 = new LI('li11', '');
+			li11.add(a11);
+
+			var ul1 = new UL('ul1', 'dropdown-menu');
+			ul1.add(li11);
+			ul1.add(li12);
+
+			var label1 = new Label('l1', 'caret', '', '');
+			var b1 = new ButtonContainer('b1', 'btn btn-primary dropdown-toggle', '', 'button', 'dropdown');
+			b1.add(label1);
+
+			var vp5 = new VerticalPanel('vp5', 'btn-group pull-right');
+			vp5.add(b1);
+			vp5.add(ul1);
+
+			var vp4 = new HorizontalPanel('vp4', 'user-head');
+			vp4.add(ac1);
+			vp4.add(vp5);
+			vp4.add(vp6);
+
+			var vp3 = new VerticalPanel('vp3', 'col-sm-3 col-md-2');
+			vp3.add(vp4);
+
+			var vp2 = new VerticalPanel('vp2', 'row');
+			vp2.add(vp3);
+
+			var emptyRow1 = new EmptyRow('er1', 'row');
+			var vp1 = new VerticalPanel('vp1', 'container');
+			vp1.add(emptyRow1);
+			vp1.add(vp2)
+			vp1.add(vp7);
+
+			return vp1;
+		}
+
+		$(document).ready(function () {
+
+			var vp1 = drawMail();
+
+			var mp = new MainPanel('main');
+			mp.add(vp1);
+			//mp.remove(vp1);
+			mp.draw();
+
+		});
+	</script>
+
+</body>
