@@ -1,13 +1,13 @@
 import Component  from './component.js';
 
 export default class Label extends Component {
-    constructor(id, style, text, style2) {
-        super(id, style);
+    constructor(id, CSSclass, text, style) {
+        super(id, CSSclass);
         this.text = text;
-        this.style2 = style2;
+        this.style = style;
     }
     
     tohtml() {
-        return "<span id=\'" + this.id + "\' class=\'" + this.style + "\' style=\'" + this.style2 + "\'>" + this.text + "</span>";
+        return "<span id=\'" + this.id + "\' class=\'" + this.CSSclass + "\' style=\'" + this.style + "\'>" + this.text + "</span>";
     }
 }

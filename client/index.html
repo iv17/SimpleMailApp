@@ -77,7 +77,18 @@
 				"time": "12:15 PM"
 			}
 		];
-
+		//-----------------------------------
+		function changeActiveClass(button) {
+			if(button.getCSSClass() == '') {
+				button.addCSSClass('active');
+					for (var child of button.getParent().children.values()) {
+						if(child.id != button.id && child.getCSSClass() == 'active') {
+							child.removeCSSClass('active');
+						}
+					}
+			} 	
+		}
+		//-----------------------------------
 		function drawSignIn() {
 
 			var inputEmail = new InputField('i1', 'form-control', 'email', 'Email');
@@ -341,7 +352,7 @@
 			li25.add(a25);
 
 			li25.onclick = function (e) {
-
+				alert('aa')
 			}
 
 			var badge4 = new Label('badge4', 'badge pull-right', user.draftsNum);
@@ -368,9 +379,7 @@
 			a21.add(badge1);
 			var li21 = new LI('li21', 'active');
 			li21.add(a21);
-			li21.onclick = function (e) {
-
-			}
+			
 
 			var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
 			ul2.add(li21);
@@ -391,6 +400,23 @@
 			vp7.add(hr1);
 			vp7.add(vp8);
 			vp7.add(vp9);
+
+			li21.onclick = function (e) {
+				changeActiveClass(li21);
+			}
+			li22.onclick = function (e) {
+				changeActiveClass(li22);
+			}
+			li23.onclick = function (e) {
+				changeActiveClass(li23);
+			}
+			li24.onclick = function (e) {
+				changeActiveClass(li24);
+			}
+			li25.onclick = function (e) {
+				changeActiveClass(li25);
+			}
+			
 
 			//------------HEADER------------;
 			var h51 = new H5('h51', '', user.name);
@@ -443,14 +469,14 @@
 
 		$(document).ready(function () {
 
-			var vp1 = drawMail();
-
 			var mp = new MainPanel('main');
+			var vp1 = drawMail();
 			mp.add(vp1);
-			//mp.remove(vp1);
+			
 			mp.draw();
 
 		});
 	</script>
 
 </body>
+</html>

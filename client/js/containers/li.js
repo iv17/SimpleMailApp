@@ -1,12 +1,12 @@
 import Container from './container.js';
 
 export default class LI extends Container {
-    constructor(id, style) {
-        super(id, style);
+    constructor(id, CSSclass) {
+        super(id, CSSclass);
     }
     
     tohtml() {
-        var ret = "<li id=\'" + this.id + "\' class=\'" + this.style + "\'>";
+        var ret = "<li id=\'" + this.id + "\' class=\'" + this.CSSclass + "\'>";
         for (var child of this.children.values()) {
             ret += child.tohtml();
         }

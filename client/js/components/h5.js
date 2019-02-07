@@ -1,12 +1,12 @@
 import Label  from './label.js';
 
 class H5 extends Label {
-    constructor(id, style, text) {
-        super(id, style, text);
+    constructor(id, CSSclass, text) {
+        super(id, CSSclass, text);
     }
     
     tohtml() {
-        return "<h5 id=\'" + this.id + "\' class=\'" + this.style + "\'>" + this.text + "</h5>";
+        return "<h5 id=\'" + this.id + "\' class=\'" + this.CSSclass + "\'>" + this.text + "</h5>";
     }
 }
 

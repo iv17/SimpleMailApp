@@ -1,18 +1,43 @@
 import Component  from '../components/component.js';
 
 export default class Container extends Component {
-    constructor(id, style) {
-        super(id, style);
+    constructor(id, CSSclass) {
+        super(id, CSSclass);
         this.children = new Map();
+    }
+   
+    findChild(id) {
+        for (var child of this.children.values()) {
+            if(child.id == id) {
+                //nasao dete
+            }
+        }
+        for (var child of children.values()) { //?
+            if(child.id == id && child instanceof Container) {
+
+            }
+        }
     }
     add(component) {
         this.children.set(component.id, component);
         component.setParent(this);
+        //$('#' + this.id).append(component.tohtml());
+        //this.addListeners(component);
+        //component.element = $("#" + component.id)[0];
     }
     
     remove(component) {
         this.children.delete(component.id);
-        //component.setParent(null);
+        $('#' + this.id).empty();
+    }
+
+    draw() {
+        var src = this.tohtml();
+        $('#' + this.id).append(src);
+        for (var child of this.children.values()) {
+            this.addListeners(child);
+            child.element = $("#" + child.id)[0];
+        }
     }
     
     addListeners(component) {

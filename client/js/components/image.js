@@ -1,8 +1,8 @@
 import Component from './component.js';
 
 export default class Image extends Component {
-    constructor(id, style, src, title, width, height) {
-        super(id, style);
+    constructor(id, CSSclass, src, title, width, height) {
+        super(id, CSSclass);
         this.src = src;
         this.title = title;
         this.width = width;

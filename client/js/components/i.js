@@ -1,11 +1,11 @@
 import Component from './component.js';
 
 export default class I extends Component {
-    constructor(id, style) {
-        super(id, style);
+    constructor(id, CSSclass) {
+        super(id, CSSclass);
     }
     
     tohtml() {
-        return "<i id=\'" + this.id + "\' class=\'" + this.style + "\'></i>";
+        return "<i id=\'" + this.id + "\' class=\'" + this.CSSclass + "\'></i>";
     }
 }

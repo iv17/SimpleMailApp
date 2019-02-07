@@ -1,21 +1,35 @@
 export default class Component {
-    constructor(id, style) {
+    constructor(id, CSSclass) {
       this.id = id;
-      this.style = style;
+      this.CSSclass = CSSclass;
     }
         
     setParent(parent) {
       this.parent = parent;
     }
+
     getParent() {
-      return component.parent;
+      return this.parent;
     }
     
-    setStyle(style) {
-      this.style = style;
+    //http://api.jquery.com/category/manipulation/class-attribute/
+    addCSSClass(CSSclass) {
+      this.CSSclass = CSSclass;
+      $('#' + this.id).addClass(CSSclass);
     }
-    getStyle() {
-      return this.style;
+
+    changeCSSClass(CSSclass) {
+      this.CSSclass = CSSclass;
+      $('#' + this.id).toggleClass(CSSclass);
+    }
+
+    removeCSSClass(CSSclass) {
+      this.CSSclass = '';
+      $('#' + this.id).removeClass(CSSclass);
+    }
+
+    getCSSClass() {
+      return this.CSSclass;
     }
     
     tohtml_b() {
