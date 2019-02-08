@@ -1,19 +1,19 @@
-import Component  from '../components/component.js';
+import Component from '../components/component.js';
 
 export default class Container extends Component {
     constructor(id, CSSclass) {
         super(id, CSSclass);
         this.children = new Map();
     }
-   
+
     findChild(id) {
         for (var child of this.children.values()) {
-            if(child.id == id) {
+            if (child.id == id) {
                 //nasao dete
             }
         }
         for (var child of children.values()) { //?
-            if(child.id == id && child instanceof Container) {
+            if (child.id == id && child instanceof Container) {
 
             }
         }
@@ -21,28 +21,35 @@ export default class Container extends Component {
     add(component) {
         this.children.set(component.id, component);
         component.setParent(this);
-        //$('#' + this.id).append(component.tohtml());
+        $('#' + this.id).append(component.tohtml());
+        //console.log(this.id + " " + component.id);
         //this.addListeners(component);
+
+        for (var child of this.children.values()) {
+            this.addListeners(child);
+            //child.element = $("#" + child.id)[0];
+        }
+
         //component.element = $("#" + component.id)[0];
     }
-    
+
     remove(component) {
         this.children.delete(component.id);
         $('#' + this.id).empty();
     }
 
     draw() {
-        var src = this.tohtml();
-        $('#' + this.id).append(src);
+        //var src = this.tohtml();
+        //$('#' + this.id).append(src);
         for (var child of this.children.values()) {
             this.addListeners(child);
             child.element = $("#" + child.id)[0];
         }
     }
-    
+
     addListeners(component) {
         if (component.children) {
-            for (var child of component.children.values()) {            
+            for (var child of component.children.values()) {
                 this.addListeners(child);
             }
         }
@@ -111,12 +118,11 @@ export default class Container extends Component {
         if (component.onkeyup) {
             $("#" + component.id).keyup(component.onkeyup);
         }
-        
-       
+
         var el = $("#" + component.id);
         el[0].component = component;
     }
-    
+
     tohtml() {
         var ret = "";
         for (var child of this.children.values()) {
