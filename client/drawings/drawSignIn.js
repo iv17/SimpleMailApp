@@ -21,8 +21,8 @@ export default function drawSignIn() {
 
     var button1 = new Button('authorize_button', 'btn btn-lg btn-primary btn-block', 'Sign in', 'submit', '');
     form.add(button1);
-    var button2 = new Button('signout_button', 'btn btn-lg btn-primary btn-block', 'Sign out', 'submit', '');
-    form.add(button2);
+    //var button2 = new Button('signout_button', 'btn btn-lg btn-primary btn-block', 'Sign out', 'button', '');
+    //form.add(button2);
 
     
     return vp2;

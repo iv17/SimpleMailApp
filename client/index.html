@@ -27,19 +27,20 @@
 		import drawSignIn from './drawings/drawSignIn.js';
 		import drawMail from './drawings/drawMail.js';
 
-	
-
 		$(document).ready(function () {
-
 			var mp = new MainPanel('main', '');
 			mp.draw(); //SAMO POZOVEM DA SE DODA NA BODY
 
 			var vp1 = new VerticalPanel('vp1', 'container');
 			mp.add(vp1);
+
 			vp1 = drawSignIn();
-			var authorizeButton = document.getElementById('authorize_button');
-			window.authorizeButton = authorizeButton;
-			var signoutButton = document.getElementById('signout_button');
+
+			/*var zabr = document.getElementById('vp1');
+			mp.remove(zabr);
+			var vp1 = new VerticalPanel('vp1', 'container');
+			mp.add(vp1);
+			vp1 = drawMail();*/
 		});
 
 	</script>
@@ -55,7 +56,6 @@
 		// Authorization scopes required by the API; multiple scopes can be
 		// included, separated by spaces.
 		var SCOPES = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify https://mail.google.com/";
-
 
 		/**
 		  *  On load, called to load the auth2 library and API client library.
@@ -80,10 +80,15 @@
 
 				// Handle the initial sign-in state.
 				updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-				window.authorizeButton.onclick = function () {
+				var authorizeButton = document.getElementById('authorize_button');
+				authorizeButton.onclick = function () {
 					handleAuthClick();
 				}
-				//signoutButton.onclick = handleSignoutClick;
+				/*var signoutButton = document.getElementById('signout_button');
+				signoutButton.onclick = function() {
+					handleSignoutClick();
+				}*/
+				
 			}, function (error) {
 				console.error(JSON.stringify(error));
 			});
@@ -96,9 +101,6 @@
 		function updateSigninStatus(isSignedIn) {
 			if (isSignedIn) {
 				console.log('SIGN IN');
-				listLabels();
-				//vp1 = drawMail();
-				//mp.draw();
 
 			} else {
 				console.log('NOT SIGN IN');
