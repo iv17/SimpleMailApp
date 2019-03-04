@@ -5,6 +5,7 @@ import {
 } from '.././js/osc.js';
 
 export default function drawSignIn() {
+    
     var vp1 = new VerticalPanel('vp1', 'container');
     
     var vp2 = new VerticalPanel('vp2', 'row justify-content-md-center');
@@ -17,28 +18,12 @@ export default function drawSignIn() {
 
     var form = new Form('form1', 'form-signin');
     vp3.add(form);
-    var inputEmail = new InputField('i1', 'form-control', 'email', 'Email');
-    form.add(inputEmail);
-    var inputPassword = new InputField('i2', 'form-control', 'password', 'Password');
-    form.add(inputPassword);
-    var button1 = new Button('b1', 'btn btn-lg btn-primary btn-block', 'Sign in', 'submit');
+
+    var button1 = new Button('authorize_button', 'btn btn-lg btn-primary btn-block', 'Sign in', 'submit', '');
     form.add(button1);
+    var button2 = new Button('signout_button', 'btn btn-lg btn-primary btn-block', 'Sign out', 'submit', '');
+    form.add(button2);
 
-    inputEmail.onchange = function (e) {
-        var at = document.getElementById("i1").value.indexOf("@");
-        if (at == -1) {
-            alert('Not a valid email address!');
-        }
-    }
-    inputPassword.onchange = function (e) {
-        var password = document.getElementById("i2").value;
-        if (password.length < 6) {
-            alert('Password must be a least 6 characters long!');
-        }
-    }
-
-    button1.onclick = function (e) {
-        alert(document.getElementById("i1").value + " - " + document.getElementById("i2").value);
-    }
+    
     return vp2;
 }
