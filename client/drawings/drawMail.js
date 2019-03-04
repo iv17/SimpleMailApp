@@ -10,14 +10,54 @@ import drawCompose from './drawCompose.js';
 
 var user = {
     "name": "Josh Hamadani",
-    "email": "josh@gmail.com",
-    "inboxNum": "3",
-    "sentMailNum": "10",
-    "importantNum": "5",
-    "draftsNum": "2",
-    "trashNum": "14"
+    "email": "josh@gmail.com"
 };
 
+var labels = [
+    {
+        "id": "1",
+        "name": "INBOX",
+        "messageListVisibility": "string",
+        "labelListVisibility": "string",
+        "type": "string",
+        "messagesTotal": 10,
+        "messagesUnread": 2,
+        "threadsTotal": 10,
+        "threadsUnread": 2,
+        "color": {
+            "textColor": "string",
+            "backgroundColor": "string"
+        }
+    },
+    {
+        "id": "SENT",
+        "name": "SENT",
+        "type": "system",
+        "messagesTotal": 5
+    },
+    {
+        "id": "TRASH",
+        "name": "TRASH",
+        "messageListVisibility": "hide",
+        "labelListVisibility": "labelHide",
+        "type": "system",
+        "messagesTotal": 1
+    },
+    {
+        "id": "DRAFT",
+        "name": "DRAFT",
+        "type": "system",
+        "messagesTotal": 1
+    },
+    {
+        "id": "SPAM",
+        "name": "SPAM",
+        "messageListVisibility": "hide",
+        "labelListVisibility": "labelHide",
+        "type": "system",
+        "messagesTotal": 2,
+    }
+];
 //-----------------------------------
 function changeActiveClass(button) {
     if (button.getCSSClass() == '') {
@@ -88,60 +128,28 @@ export default function drawMail() {
     var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
     vp8.add(ul2);
 
-    var li21 = new LI('li21', 'active');
-    ul2.add(li21);
-    var a21 = new AContainer('a21', '', 'Inbox', '#');
-    li21.add(a21);
-    var badge1 = new Label('badge1', 'badge pull-right', user.inboxNum);
-    a21.add(badge1);
 
-    var li22 = new LI('li22', '');
-    ul2.add(li22);
-    var a22 = new AContainer('a22', '', 'Sent Mail', '#');
-    li22.add(a22);
-    var badge2 = new Label('badge2', 'badge pull-right', user.sentMailNum);
-    a22.add(badge2);
+    var list_items = [];
+    for (let index = 1; index < labels.length + 1; index++) {
 
-    var li23 = new LI('li23', '');
-    ul2.add(li23);
-    var a23 = new AContainer('a23', '', 'Important', '#');
-    li23.add(a23);
-    var badge3 = new Label('badge3', 'badge pull-right', user.importantNum);
-    a23.add(badge3);
+        var itemID = "item" + index;
+        list_items.push(new LI(itemID, ''));
 
-    var li24 = new LI('li24', '');
-    ul2.add(li24);
-    var a24 = new AContainer('a24', '', 'Drafts', '#');
-    li24.add(a24);
-    var badge4 = new Label('badge4', 'badge pull-right', user.draftsNum);
-    a24.add(badge4);
-
-    var li25 = new LI('li25', '');
-    ul2.add(li25);
-    var a25 = new AContainer('a25', '', 'Trash', '#');
-    li25.add(a25);
-    var badge5 = new Label('badge5', 'badge pull-right', user.trashNum);
-    a25.add(badge5);
-
-    li21.onclick = function (e) {
-        changeActiveClass(li21);
     }
-    li22.onclick = function (e) {
-        changeActiveClass(li22);
-    }
-    li23.onclick = function (e) {
-        changeActiveClass(li23);
-    }
-    li24.onclick = function (e) {
-        changeActiveClass(li24);
-    }
-    li25.onclick = function (e) {
-        changeActiveClass(li25);
+    for (let index = 0; index < labels.length; index++) {
+        if (labels[index].labelListVisibility != "labelHide") {
+            var container = list_items[index];
+            ul2.add(container);
+            var a = new AContainer('a2' + index, '', labels[index].name, '#');
+            container.add(a);
+            var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
+            a.add(badge);
+        }
     }
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
-    vp9 = drawCompose();
+    vp9 = drawInbox();
 
 
     return vp1;

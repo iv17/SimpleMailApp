@@ -6,42 +6,69 @@ import {
 
 var messages = [
     {
-        "sender": {
-            "name": "Jon Smith",
-            "email": "john.smith@gmail.com"
+        "id": "16948d9189e3ed78",
+        "threadId": "169489f6c4cdd9ed",
+        "labelIds": {
+            '0': 'CATEGORY_PERSONAL',
+            '1': 'INBOX'
         },
-        "title": "Faucibus rutrum",
-        "message": "Phasellus sodales vulputate urna, vel accumsan augue egestas ac. " +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum. " +
-            "Phasellus sodales vulputate urna, vel accumsan augue egestas ac." +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum." +
-            "Phasellus sodales vulputate urna, vel accumsan augue egestas ac. " +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum. " +
-            "Phasellus sodales vulputate urna, vel accumsan augue egestas ac." +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum.",
-        "time": "12:15 PM"
+        "payload": {
+            "partId": "string",
+            "mimeType": "string",
+            "filename": "string",
+            "headers": [
+                {
+                    "name": "Date",
+                    "value": "Mon, 4 Mar 2019 12:13:19"
+                },
+                {
+                    "name": "Subject",
+                    "value": "Апликација My Project се повезала са вашим Google налогом"
+                },
+                {
+                    "name": "From",
+                    "value": "Google <no-reply@accounts.google.com>"
+                },
+                {
+                    "name": "To",
+                    "value": "ivana.osc1@gmail.com"
+                }
+            ]
+        },
+        "snippet": "Апликација My Project је повезана са Google налого…ect може: Прегледајте имејлове и подешавања Слање",
+        "historyId": "1788"
     },
     {
-        "sender": {
-            "name": "Ana Nicol",
-            "email": "ana.nicol@gmail.com"
+        "id": "169488142faac9fb", "threadId": "169488142faac9fb",
+        "labelIds": {
+            '0': 'CATEGORY_PERSONAL',
+            '1': 'INBOX'
         },
-        "title": "Donec ultrices faucibus rutrum.",
-        "message": "...",
-        "time": "15:30 PM"
-    },
-    {
-        "sender": {
-            "name": "Jon Smith",
-            "email": "john.smith@gmail.com"
+        "payload": {
+            "partId": "string",
+            "mimeType": "string",
+            "filename": "string",
+            "headers": [
+                {
+                    "name": "Date",
+                    "value": "Mon, 4 Mar 2019 12:13:19"
+                },
+                {
+                    "name": "Subject",
+                    "value": "Ivana, добро дошли на нов Google налог "
+                },
+                {
+                    "name": "From",
+                    "value": "Google <no-reply@accounts.google.com>"
+                },
+                {
+                    "name": "To",
+                    "value": "ivana.osc1@gmail.com"
+                }
+            ]
         },
-        "title": "Mauris sed congue orci",
-        "message": "...",
-        "time": "12:15 PM"
+        "snippet": "Здраво Ivana, Хвала вам што сте отворили Google на…ите оно што вам одговара. Управљајте подешавањима",
+        "historyId": "1532"
     }
 ];
 
@@ -83,12 +110,25 @@ export default function drawInbox() {
 
         var container = inbox_rows[index];
         vp12.add(container);
+        for (let j = 0; j < messages[index].payload.headers.length; j++) {
+            if (messages[index].payload.headers[j].name == 'From') {
+                var from = messages[index].payload.headers[j].value;
+            }
+            if (messages[index].payload.headers[j].name == 'Subject') {
+                var subject = messages[index].payload.headers[j].value;
+            }
+            if (messages[index].payload.headers[j].name == 'Date') {
+                var date = messages[index].payload.headers[j].value;
+            }
+        }
         container.add(new InputField("checkbox" + index, '', 'checkbox', ''));
         container.add(new EmptyCol('ec1', ''));
         container.add(new EmptyCol('ec2', ''));
-        container.add(new Label("sender" + index, 'name', messages[index].sender.name, 'min-width: 120px;display: inline-block;'));
-        container.add(new Label("title" + index, '', messages[index].title, ''));
-        container.add(new Label("time" + index, 'badge', messages[index].time, ''));
+        container.add(new Label("sender" + index, 'name', from, 'min-width: 120px;display: inline-block;'));
+        container.add(new Label("title" + index, '', subject, ''));
+        container.add(new Label("time" + index, 'badge', date, ''));
+
+
     }
     return vp9;
 }

@@ -34,18 +34,18 @@
 			var vp1 = new VerticalPanel('vp1', 'container');
 			mp.add(vp1);
 
-			vp1 = drawSignIn();
+			//vp1 = drawSignIn();
 
-			/*var zabr = document.getElementById('vp1');
-			mp.remove(zabr);
-			var vp1 = new VerticalPanel('vp1', 'container');
-			mp.add(vp1);
-			vp1 = drawMail();*/
+			//var zabr = document.getElementById('vp1');
+			//mp.remove(zabr);
+			//var vp1 = new VerticalPanel('vp1', 'container');
+			//mp.add(vp1);
+			vp1 = drawMail();
 		});
 
 	</script>
 	<script type="text/javascript">
-		
+
 		// Client ID and API key from the Developer Console
 		var CLIENT_ID = '17862775206-uckparbu27qeha01hv1u6mvqs0t7ev8m.apps.googleusercontent.com';
 		var API_KEY = 'AIzaSyB1gce4OPo4O8SWmMQXUTtkNpugN4PSQY0';
@@ -80,15 +80,15 @@
 
 				// Handle the initial sign-in state.
 				updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-				var authorizeButton = document.getElementById('authorize_button');
+				/*var authorizeButton = document.getElementById('authorize_button');
 				authorizeButton.onclick = function () {
 					handleAuthClick();
-				}
+				}*/
 				/*var signoutButton = document.getElementById('signout_button');
 				signoutButton.onclick = function() {
 					handleSignoutClick();
 				}*/
-				
+
 			}, function (error) {
 				console.error(JSON.stringify(error));
 			});
@@ -101,6 +101,7 @@
 		function updateSigninStatus(isSignedIn) {
 			if (isSignedIn) {
 				console.log('SIGN IN');
+				listDrafts();
 
 			} else {
 				console.log('NOT SIGN IN');
@@ -121,27 +122,73 @@
 			gapi.auth2.getAuthInstance().signOut();
 		}
 		function listLabels() {
-            gapi.client.gmail.users.labels.list({
-                'userId': 'me'
-            }).then(function (response) {
-                var labels = response.result.labels;
-                console.log('Labels:');
+			gapi.client.gmail.users.labels.list({
+				'userId': 'me'
+			}).then(function (response) {
+				var labels = response.result.labels;
+				console.log('Labels:');
 
-                if (labels && labels.length > 0) {
-                    for (i = 0; i < labels.length; i++) {
-                        var label = labels[i];
-                        console.log(label.name)
-                    }
-                } else {
-                    //appendPre('No Labels found.');
-                }
-            });
-        }
+				if (labels && labels.length > 0) {
+					for (i = 0; i < labels.length; i++) {
+						var label = labels[i];
+						console.log(label)
+					}
+					return labels;
+				} else {
+					console.log('No labels found.');
+				}
+			});
+		}
+
+		function listMessages() {
+			gapi.client.gmail.users.messages.list({
+				'userId': 'me'
+			}).then(function (response) {
+				var messages = response.result.messages;
+
+				if (messages && messages.length > 0) {
+					for (i = 0; i < messages.length; i++) {
+						var message = messages[i];
+						gapi.client.gmail.users.messages.get({
+							'userId': 'me',
+							'id': message.id
+						}).then(function (response) {
+							console.log(response.result);
+						})
+					}
+				} else {
+					console.log('No messages found.');
+				}
+			});
+		}
+		function listDrafts() {
+				gapi.client.gmail.users.drafts.list({
+					'userId': 'me'
+				}).then(function (response) {
+					var drafts = response.result.drafts;
+
+					if (drafts && drafts.length > 0) {
+						for (i = 0; i < drafts.length; i++) {
+							var draft = drafts[i];
+							gapi.client.gmail.users.drafts.get({
+								'userId': 'me',
+								'id': drafts.id
+							}).then(function (response) {
+								console.log(response.result);
+							})
+						}
+					} else {
+						console.log('No drafts found.');
+					}
+				});
+			}
 
 	</script>
+
 	<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
 	 onreadystatechange="if (this.readyState === 'complete') this.onload()">
 	</script>
+
 </body>
 
 </html>
