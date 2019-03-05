@@ -6,16 +6,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="module" src="js/osc.js"></script>
+	<script type="text/javascript" src="js/gapi.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-	<script src="https://apis.google.com/js/platform.js?onload=onLoadCallback"></script>
-
+	
 	<script type="module">
 
 		import {
@@ -101,8 +102,6 @@
 		function updateSigninStatus(isSignedIn) {
 			if (isSignedIn) {
 				console.log('SIGN IN');
-				listDrafts();
-
 			} else {
 				console.log('NOT SIGN IN');
 			}

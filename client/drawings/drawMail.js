@@ -130,11 +130,10 @@ export default function drawMail() {
 
 
     var list_items = [];
+   
     for (let index = 1; index < labels.length + 1; index++) {
-
         var itemID = "item" + index;
         list_items.push(new LI(itemID, ''));
-
     }
     for (let index = 0; index < labels.length; index++) {
         if (labels[index].labelListVisibility != "labelHide") {
