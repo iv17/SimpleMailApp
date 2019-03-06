@@ -58,6 +58,7 @@
 		// included, separated by spaces.
 		var SCOPES = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send https://www.googleapis.com/auth/gmail.modify https://mail.google.com/";
 
+		var labels = [];
 		/**
 		  *  On load, called to load the auth2 library and API client library.
 		  */
@@ -102,6 +103,7 @@
 		function updateSigninStatus(isSignedIn) {
 			if (isSignedIn) {
 				console.log('SIGN IN');
+				
 			} else {
 				console.log('NOT SIGN IN');
 			}
@@ -130,7 +132,7 @@
 				if (labels && labels.length > 0) {
 					for (i = 0; i < labels.length; i++) {
 						var label = labels[i];
-						console.log(label)
+						//console.log(label)
 					}
 					return labels;
 				} else {
