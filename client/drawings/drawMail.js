@@ -8,12 +8,14 @@ import drawInbox from './drawInbox.js';
 import drawSingleMail from './drawSingleMail.js';
 import drawCompose from './drawCompose.js';
 
+//import labels from '../index.html';
+
 var user = {
     "name": "Josh Hamadani",
     "email": "josh@gmail.com"
 };
 
-var labels = [
+/*var labels = [
     {
         "id": "1",
         "name": "INBOX",
@@ -57,7 +59,7 @@ var labels = [
         "type": "system",
         "messagesTotal": 2,
     }
-];
+];*/
 //-----------------------------------
 function changeActiveClass(button) {
     if (button.getCSSClass() == '') {
@@ -69,7 +71,6 @@ function changeActiveClass(button) {
         }
     }
 }
-//-----------------------------------
 
 export default function drawMail() {
     var vp1 = new VerticalPanel('vp1', 'container');
@@ -124,32 +125,37 @@ export default function drawMail() {
     var hr2 = new HR('hr2');
     vp8.add(hr2);
 
-
     var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
     vp8.add(ul2);
 
-
-    var list_items = [];
-   
-    for (let index = 1; index < labels.length + 1; index++) {
-        var itemID = "item" + index;
-        list_items.push(new LI(itemID, ''));
+    var labels = [];
+    var storage = localStorage.getItem("labels");
+    if(storage.length > 2) {
+        labels = JSON.parse(storage);
     }
-    for (let index = 0; index < labels.length; index++) {
-        if (labels[index].labelListVisibility != "labelHide") {
-            var container = list_items[index];
-            ul2.add(container);
-            var a = new AContainer('a2' + index, '', labels[index].name, '#');
-            container.add(a);
-            var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
-            a.add(badge);
+    var list_items = [];
+    if(labels.length > 0) {
+        for (let index = 1; index < labels.length + 1; index++) {
+            var itemID = "item" + index;
+            
+            list_items.push(new LI(itemID, ''));
+        }
+        for (let index = 0; index < labels.length; index++) {
+            
+            if (labels[index].labelListVisibility != "labelHide") {
+                var container = list_items[index];
+                ul2.add(container);
+                var a = new AContainer('a2' + index, '', labels[index].name, '#');
+                container.add(a);
+                var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
+                a.add(badge);
+            }
         }
     }
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
     vp9 = drawInbox();
-
 
     return vp1;
 }

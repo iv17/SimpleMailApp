@@ -25,29 +25,28 @@
 			Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 		} from './js/osc.js';
 
-		import drawSignIn from './drawings/drawSignIn.js';
 		import drawMail from './drawings/drawMail.js';
 
-		const url = 'http://localhost:9000/login';
+		const url = 'http://localhost:9000';
 
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get('code');
-
+	
 		$(document).ready(function () {
-
+			var labels = [];
+			var messages = [];
+			axios.get(url + "/labels?code=" + code)
+				.then(function (response) {
+					labels = response.data;
+					//console.log(labels);
+					localStorage.setItem("labels", JSON.stringify(labels));
+				});
 			axios.get(url + "/messages?code=" + code)
 				.then(function (response) {
-					// handle success
-					console.log(response.data);
-				})
-				.catch(function (error) {
-					// handle error
-					console.log(error);
-				})
-				.then(function () {
-					// always executed
+					messages = response.data;
+					localStorage.setItem("messages", JSON.stringify(messages));
 				});
-
+			
 			var mp = new MainPanel('main', '');
 			mp.draw(); //SAMO POZOVEM DA SE DODA NA BODY
 
