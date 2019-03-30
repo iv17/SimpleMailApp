@@ -8,58 +8,12 @@ import drawInbox from './drawInbox.js';
 import drawSingleMail from './drawSingleMail.js';
 import drawCompose from './drawCompose.js';
 
-//import labels from '../index.html';
 
 var user = {
     "name": "Josh Hamadani",
     "email": "josh@gmail.com"
 };
 
-/*var labels = [
-    {
-        "id": "1",
-        "name": "INBOX",
-        "messageListVisibility": "string",
-        "labelListVisibility": "string",
-        "type": "string",
-        "messagesTotal": 10,
-        "messagesUnread": 2,
-        "threadsTotal": 10,
-        "threadsUnread": 2,
-        "color": {
-            "textColor": "string",
-            "backgroundColor": "string"
-        }
-    },
-    {
-        "id": "SENT",
-        "name": "SENT",
-        "type": "system",
-        "messagesTotal": 5
-    },
-    {
-        "id": "TRASH",
-        "name": "TRASH",
-        "messageListVisibility": "hide",
-        "labelListVisibility": "labelHide",
-        "type": "system",
-        "messagesTotal": 1
-    },
-    {
-        "id": "DRAFT",
-        "name": "DRAFT",
-        "type": "system",
-        "messagesTotal": 1
-    },
-    {
-        "id": "SPAM",
-        "name": "SPAM",
-        "messageListVisibility": "hide",
-        "labelListVisibility": "labelHide",
-        "type": "system",
-        "messagesTotal": 2,
-    }
-];*/
 //-----------------------------------
 function changeActiveClass(button) {
     if (button.getCSSClass() == '') {
@@ -72,7 +26,7 @@ function changeActiveClass(button) {
     }
 }
 
-export default function drawMail() {
+export default function drawMail(labels, messages) {
     var vp1 = new VerticalPanel('vp1', 'container');
 
     var emptyRow1 = new EmptyRow('er1', 'row');
@@ -128,34 +82,32 @@ export default function drawMail() {
     var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
     vp8.add(ul2);
 
-    var labels = [];
-    var storage = localStorage.getItem("labels");
-    if(storage.length > 2) {
-        labels = JSON.parse(storage);
-    }
     var list_items = [];
     if(labels.length > 0) {
         for (let index = 1; index < labels.length + 1; index++) {
             var itemID = "item" + index;
-            
-            list_items.push(new LI(itemID, ''));
+            var li = new LI(itemID, '');
+            list_items.push(li);
         }
         for (let index = 0; index < labels.length; index++) {
             
             if (labels[index].labelListVisibility != "labelHide") {
-                var container = list_items[index];
+                var container = list_items[index]; 
                 ul2.add(container);
                 var a = new AContainer('a2' + index, '', labels[index].name, '#');
                 container.add(a);
                 var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
                 a.add(badge);
+                container.onclick = function (e) {
+                    e.stopImmediatePropagation();
+                    console.log(list_items[index].id + " " + labels[index].name);
+                }
             }
         }
     }
-
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
-    vp9 = drawInbox();
+    vp9 = drawInbox(messages);
 
     return vp1;
 }

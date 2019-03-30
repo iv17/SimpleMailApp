@@ -26,34 +26,37 @@
 		} from './js/osc.js';
 
 		import drawMail from './drawings/drawMail.js';
+		import LabelManager from './js/managers/LabelManager.js';
+		import MessageManager from './js/managers/MessageManager.js';
+
+		window._api = {}
+		//console.log("Window", window, window._api)
+		window._api.axios = axios;
 
 		const url = 'http://localhost:9000';
 
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get('code');
-	
+
 		$(document).ready(function () {
-			var labels = [];
-			var messages = [];
-			axios.get(url + "/labels?code=" + code)
-				.then(function (response) {
-					labels = response.data;
-					//console.log(labels);
-					localStorage.setItem("labels", JSON.stringify(labels));
-				});
-			axios.get(url + "/messages?code=" + code)
-				.then(function (response) {
-					messages = response.data;
-					localStorage.setItem("messages", JSON.stringify(messages));
-				});
-			
-			var mp = new MainPanel('main', '');
-			mp.draw(); //SAMO POZOVEM DA SE DODA NA BODY
+			let labelManager = new LabelManager(axios);
+			let messageManager = new MessageManager(axios);
 
-			var vp1 = new VerticalPanel('vp1', 'container');
-			mp.add(vp1);
+			let fetchLabels = labelManager.fetchLabels(url, code);
+			let fetchMessages = messageManager.fetchMessages(url, code);
 
-			vp1 = drawMail();
+			Promise.all([
+				fetchLabels,
+				fetchMessages
+			]).then(response => {
+				var mp = new MainPanel('main', '');
+				mp.draw(); //SAMO POZOVEM DA SE DODA NA BODY
+
+				var vp1 = new VerticalPanel('vp1', 'container');
+				mp.add(vp1);
+
+				vp1 = drawMail(labelManager.labels, messageManager.messages);
+			})
 		});
 
 	</script>

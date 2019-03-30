@@ -4,75 +4,7 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '.././js/osc.js';
 
-var messages = [
-    {
-        "id": "16948d9189e3ed78",
-        "threadId": "169489f6c4cdd9ed",
-        "labelIds": {
-            '0': 'CATEGORY_PERSONAL',
-            '1': 'INBOX'
-        },
-        "payload": {
-            "partId": "string",
-            "mimeType": "string",
-            "filename": "string",
-            "headers": [
-                {
-                    "name": "Date",
-                    "value": "Mon, 4 Mar 2019 12:13:19"
-                },
-                {
-                    "name": "Subject",
-                    "value": "Апликација My Project се повезала са вашим Google налогом"
-                },
-                {
-                    "name": "From",
-                    "value": "Google <no-reply@accounts.google.com>"
-                },
-                {
-                    "name": "To",
-                    "value": "ivana.osc1@gmail.com"
-                }
-            ]
-        },
-        "snippet": "Апликација My Project је повезана са Google налого…ect може: Прегледајте имејлове и подешавања Слање",
-        "historyId": "1788"
-    },
-    {
-        "id": "169488142faac9fb", "threadId": "169488142faac9fb",
-        "labelIds": {
-            '0': 'CATEGORY_PERSONAL',
-            '1': 'INBOX'
-        },
-        "payload": {
-            "partId": "string",
-            "mimeType": "string",
-            "filename": "string",
-            "headers": [
-                {
-                    "name": "Date",
-                    "value": "Mon, 4 Mar 2019 12:13:19"
-                },
-                {
-                    "name": "Subject",
-                    "value": "Ivana, добро дошли на нов Google налог "
-                },
-                {
-                    "name": "From",
-                    "value": "Google <no-reply@accounts.google.com>"
-                },
-                {
-                    "name": "To",
-                    "value": "ivana.osc1@gmail.com"
-                }
-            ]
-        },
-        "snippet": "Здраво Ivana, Хвала вам што сте отворили Google на…ите оно што вам одговара. Управљајте подешавањима",
-        "historyId": "1532"
-    }
-];
-
-export default function drawInbox() {
+export default function drawInbox(messages) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -104,21 +36,19 @@ export default function drawInbox() {
     for (let index = 1; index < messages.length + 1; index++) {
         var inbox_rowID = "inbox_row" + index;
         inbox_rows.push(new AContainer(inbox_rowID, 'list-group-item', '', '#'));
-
     }
     for (let index = 0; index < messages.length; index++) {
-
         var container = inbox_rows[index];
         vp12.add(container);
-        for (let j = 0; j < messages[index].payload.headers.length; j++) {
-            if (messages[index].payload.headers[j].name == 'From') {
-                var from = messages[index].payload.headers[j].value;
+        for (let j = 0; j < messages[index].headers.length; j++) {
+            if (messages[index].headers[j].name == 'From') {
+                var from = messages[index].headers[j].value;
             }
-            if (messages[index].payload.headers[j].name == 'Subject') {
-                var subject = messages[index].payload.headers[j].value;
+            if (messages[index].headers[j].name == 'Subject') {
+                var subject = messages[index].headers[j].value;
             }
-            if (messages[index].payload.headers[j].name == 'Date') {
-                var date = messages[index].payload.headers[j].value;
+            if (messages[index].headers[j].name == 'Date') {
+                var date = messages[index].headers[j].value;
             }
         }
         container.add(new InputField("checkbox" + index, '', 'checkbox', ''));
@@ -127,8 +57,6 @@ export default function drawInbox() {
         container.add(new Label("sender" + index, 'name', from, 'min-width: 120px;display: inline-block;'));
         container.add(new Label("title" + index, '', subject, ''));
         container.add(new Label("time" + index, 'badge', date, ''));
-
-
     }
     return vp9;
 }
