@@ -26,6 +26,7 @@
 		} from './js/osc.js';
 
 		import drawMail from './drawings/drawMail.js';
+		import UserManager from './js/managers/UserManager.js';
 		import LabelManager from './js/managers/LabelManager.js';
 		import MessageManager from './js/managers/MessageManager.js';
 
@@ -39,13 +40,16 @@
 		const code = urlParams.get('code');
 
 		$(document).ready(function () {
+			let userManager = new UserManager(axios);
 			let labelManager = new LabelManager(axios);
 			let messageManager = new MessageManager(axios);
 
+			let fetchUser = userManager.fetchUser(url, code);
 			let fetchLabels = labelManager.fetchLabels(url, code);
 			let fetchMessages = messageManager.fetchMessages(url, code);
 
 			Promise.all([
+				fetchUser,
 				fetchLabels,
 				fetchMessages
 			]).then(response => {
@@ -55,7 +59,7 @@
 				var vp1 = new VerticalPanel('vp1', 'container');
 				mp.add(vp1);
 
-				vp1 = drawMail(labelManager.labels, messageManager.messages);
+				vp1 = drawMail(labelManager.labels, messageManager.messages, userManager.user);
 			})
 		});
 

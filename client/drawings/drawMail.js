@@ -8,12 +8,6 @@ import drawInbox from './drawInbox.js';
 import drawSingleMail from './drawSingleMail.js';
 import drawCompose from './drawCompose.js';
 
-
-var user = {
-    "name": "Josh Hamadani",
-    "email": "josh@gmail.com"
-};
-
 //-----------------------------------
 function changeActiveClass(button) {
     if (button.getCSSClass() == '') {
@@ -26,7 +20,7 @@ function changeActiveClass(button) {
     }
 }
 
-export default function drawMail(labels, messages) {
+export default function drawMail(labels, messages, user) {
     var vp1 = new VerticalPanel('vp1', 'container');
 
     var emptyRow1 = new EmptyRow('er1', 'row');
@@ -64,7 +58,7 @@ export default function drawMail(labels, messages) {
     var vp6 = new VerticalPanel('vp6', 'user-name');
     vp4.add(vp6);
 
-    var h51 = new H5('h51', '', user.name);
+    var h51 = new H5('h51', '', user.email);
     vp6.add(h51);
 
     var vp7 = new VerticalPanel('vp7', 'row');

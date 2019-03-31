@@ -38,6 +38,7 @@ import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
+import com.google.api.services.gmail.model.Profile;
 
 //@CrossOrigin(origins = "*")
 @CrossOrigin(origins = "http://localhost:5500")
@@ -92,7 +93,33 @@ public class Controller {
 		return redirect;
 
 	}
+	@RequestMapping(value = "/me", method = RequestMethod.GET, params = "code",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getMe(@RequestParam(value = "code") String code) {
 
+		JSONObject me = new JSONObject();
+		
+		try {
+			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
+			credential = flow.createAndStoreCredential(response, "userID");
+
+			client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+					.setApplicationName(APPLICATION_NAME).build();
+
+			String userId = "me";
+			Profile profile = client.users().getProfile(userId).execute();
+			
+			me.put("email", profile.getEmailAddress());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(me.toString(), HttpStatus.OK);
+
+	}
+
+	
 	@RequestMapping(value = "/labels", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getLabels(@RequestParam(value = "code") String code) {
@@ -160,7 +187,7 @@ public class Controller {
 			for (Message msg : msgResponse.getMessages()) {
 
 				Message message = client.users().messages().get(userId, msg.getId()).execute();
-				//System.out.println(message);
+
 				JSONObject messageJSON = new JSONObject();
 				messageJSON.put("id", message.getId());
 				messageJSON.put("snippet", message.getSnippet());
@@ -175,7 +202,7 @@ public class Controller {
 						SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
 						f.setTimeZone(TimeZone.getTimeZone("UTC"));
 						Date date =  f.parse(header.getValue());  
-						DateFormat df = new SimpleDateFormat("dd MM yyyy kk:mm", Locale.ENGLISH);
+						DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
 						String s = df.format(date);
 						header.setValue(s);
 						headersArray.put(header);
