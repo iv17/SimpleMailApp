@@ -4,8 +4,9 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '.././js/osc.js';
 import drawSingleMail from './drawSingleMail.js';
+import MessageManager from '.././js/managers/MessageManager.js';
 
-export default function drawInbox(messages, message) {
+export default function drawInbox(messages) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -39,6 +40,7 @@ export default function drawInbox(messages, message) {
         inbox_rows.push(new AContainer(inbox_rowID, 'list-group-item', '', '#'));
     }
     for (let index = 0; index < messages.length; index++) {
+        
         var container = inbox_rows[index];
         vp12.add(container);
         for (let j = 0; j < messages[index].headers.length; j++) {
@@ -59,6 +61,7 @@ export default function drawInbox(messages, message) {
         container.add(new Label("title" + index, '', subject, ''));
         container.add(new Label("time" + index, 'badge', date, ''));
         container.onclick = function (e) {
+            e.preventDefault();
             e.stopImmediatePropagation();
             console.log(messages[index].id);
 
@@ -69,7 +72,19 @@ export default function drawInbox(messages, message) {
             vp7 = new VerticalPanel('vp7', 'row');
             var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
             vp7.add(vp99);
-            vp99 = drawSingleMail(message);
+
+            let axios = window._api.axios;
+            let url = window.a.url;
+            let code = window.a.code;
+            let messageManager = new MessageManager(axios);
+
+           
+            messageManager.fetchMessage(url, code, messages[index].id)
+            .then(response => {
+               console.log(messageManager.message)
+                vp99 = drawSingleMail(messageManager.message);
+			})
+           
         }
     }
     return vp9;

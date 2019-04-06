@@ -2,7 +2,7 @@ export default class MessageManager {
 
     constructor(axiosApi) {
         this.messages = [];
-        this.message;
+        this.message = {};
         this.axios = axiosApi;
     }
 
@@ -22,5 +22,9 @@ export default class MessageManager {
 
     getMessages() {
         return this.messages;
+    }
+
+    getMessage() {
+        return this.message;
     }
 }

@@ -55,6 +55,7 @@ public class Controller {
 	
 	GoogleClientSecrets clientSecrets;
 	GoogleAuthorizationCodeFlow flow;
+	TokenResponse response;
 	Credential credential;
 
 	@Value("${gmail.client.clientId}")
@@ -321,7 +322,10 @@ public class Controller {
 	@RequestMapping(value = "/message", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMessage(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) {
-
+		
+		System.out.println(code);
+		System.out.println(id);
+		
 		JSONObject messageJSON = new JSONObject();
 		try {
 			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
@@ -332,7 +336,7 @@ public class Controller {
 
 			String userId = "me";
 
-			//System.out.println(id);
+			
 			Message message = client.users().messages().get(userId, id).setFormat("full").execute();
 
 			messageJSON.put("id", message.getId());
