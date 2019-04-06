@@ -110,6 +110,11 @@ export default function drawSingleMail(message) {
     button4.add(i4);
     var emptyCol3 = new EmptyCol('ec3', '');
     vp20.add(emptyCol3);
+    button4.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();        
+        console.log(from + '' + subject);
+    }
 
     var button5 = new AContainer('button5', 'btn btn-sm btn-default', 'Forward ', '', '');
     vp20.add(button5);
