@@ -4,6 +4,8 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '.././js/osc.js';
 
+import drawCompose from './drawCompose.js';
+
 export default function drawSingleMail(message) {
 
     for (let j = 0; j < message.headers.length; j++) {
@@ -110,10 +112,21 @@ export default function drawSingleMail(message) {
     button4.add(i4);
     var emptyCol3 = new EmptyCol('ec3', '');
     vp20.add(emptyCol3);
+    
     button4.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();        
         console.log(from + '' + subject);
+
+        var vp7 = document.getElementById("vp7");
+        var vp9 = document.getElementById("vp9");
+        vp9.remove(vp7);
+
+        vp7 = new VerticalPanel('vp7', 'row');
+        var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+        vp7.add(vp99);
+        vp99 = drawCompose();
+        
     }
 
     var button5 = new AContainer('button5', 'btn btn-sm btn-default', 'Forward ', '', '');
