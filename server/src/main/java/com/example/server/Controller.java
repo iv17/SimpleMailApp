@@ -175,7 +175,7 @@ public class Controller {
 
 				labelArray.put(labelJSON);
 			}
-			System.out.println(labelArray);
+			//System.out.println(labelArray);
 
 
 		} catch (Exception e) {
@@ -237,7 +237,7 @@ public class Controller {
 				messageJSON.put("headers", headersArray);
 				messageArray.put(messageJSON);
 			}
-			System.out.println(messageArray);
+			//System.out.println(messageArray);
 
 
 		} catch (Exception e) {
@@ -307,7 +307,7 @@ public class Controller {
 				}
 
 			}
-			System.out.println(messageArray);
+			//System.out.println(messageArray);
 
 
 		} catch (Exception e) {
@@ -332,12 +332,12 @@ public class Controller {
 
 			String userId = "me";
 
-			System.out.println(id);
+			//System.out.println(id);
 			Message message = client.users().messages().get(userId, id).setFormat("full").execute();
 
 			messageJSON.put("id", message.getId());
 			String content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getParts().get(0).getBody().getData()));
-			System.out.println(content);
+			//System.out.println(content);
 			messageJSON.put("content", content);
 			messageJSON.put("snippet", message.getSnippet());
 			JSONArray labels = new JSONArray();
@@ -365,7 +365,7 @@ public class Controller {
 
 			}
 			messageJSON.put("headers", headersArray);
-			System.out.println(messageJSON);
+			//System.out.println(messageJSON);
 
 		} catch (Exception e) {
 			e.printStackTrace();

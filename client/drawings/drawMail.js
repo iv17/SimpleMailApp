@@ -20,7 +20,7 @@ function changeActiveClass(button) {
     }
 }
 
-export default function drawMail(labels, messages, user) {
+export default function drawMail(labels, messages, user, message) {
     var vp1 = new VerticalPanel('vp1', 'container');
 
     var emptyRow1 = new EmptyRow('er1', 'row');
@@ -101,7 +101,7 @@ export default function drawMail(labels, messages, user) {
     }
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
-    vp9 = drawInbox(messages);
-    //vp9 = drawSingleMail();
+    vp9 = drawInbox(messages, message);
+    //vp9 = drawSingleMail(message);
     return vp1;
 }
