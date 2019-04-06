@@ -31,7 +31,6 @@
 		import MessageManager from './js/managers/MessageManager.js';
 
 		window._api = {}
-		//console.log("Window", window, window._api)
 		window._api.axios = axios;
 
 		const url = 'http://localhost:9000';
@@ -46,12 +45,14 @@
 
 			let fetchUser = userManager.fetchUser(url, code);
 			let fetchLabels = labelManager.fetchLabels(url, code);
+			let fetchMessage = messageManager.fetchMessage(url, code, "169d45167e07c8d3");
 			let fetchMessages = messageManager.fetchMessages(url, code);
 
 			Promise.all([
 				fetchUser,
 				fetchLabels,
-				fetchMessages
+				fetchMessages,
+				fetchMessage
 			]).then(response => {
 				var mp = new MainPanel('main', '');
 				mp.draw(); //SAMO POZOVEM DA SE DODA NA BODY

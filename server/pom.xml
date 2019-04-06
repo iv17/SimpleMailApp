@@ -40,6 +40,9 @@
 			<artifactId>google-api-services-gmail</artifactId>
 			<version>v1-rev65-1.18.0-rc</version>
 		</dependency>
+
+	
+
 		<!-- https://mvnrepository.com/artifact/com.google.http-client/google-http-client-jackson2 -->
 		<dependency>
 			<groupId>com.google.http-client</groupId>

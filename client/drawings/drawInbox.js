@@ -57,6 +57,10 @@ export default function drawInbox(messages) {
         container.add(new Label("sender" + index, 'name', from, 'min-width: 120px;display: inline-block;'));
         container.add(new Label("title" + index, '', subject, ''));
         container.add(new Label("time" + index, 'badge', date, ''));
+        container.onclick = function (e) {
+            e.stopImmediatePropagation();
+            console.log(messages[index].id);
+        }
     }
     return vp9;
 }

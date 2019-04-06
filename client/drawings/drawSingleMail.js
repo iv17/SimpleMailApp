@@ -4,55 +4,19 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '.././js/osc.js';
 
-var sender = {
-    "name": "John Smith",
-    "email": "john@gmail.com"
-};
+export default function drawSingleMail(message) {
 
-var messages = [
-    {
-        "sender": {
-            "name": "Jon Smith",
-            "email": "john.smith@gmail.com"
-        },
-        "title": "Faucibus rutrum",
-        "message": "Phasellus sodales vulputate urna, vel accumsan augue egestas ac. " +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum. " +
-            "Phasellus sodales vulputate urna, vel accumsan augue egestas ac." +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum." +
-            "Phasellus sodales vulputate urna, vel accumsan augue egestas ac. " +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum. " +
-            "Phasellus sodales vulputate urna, vel accumsan augue egestas ac." +
-            "Donec vitae leo at sem lobortis porttitor eu consequat risus." +
-            "Mauris sed congue orci. Donec ultrices faucibus rutrum.",
-        "time": "12:15 PM"
-    },
-    {
-        "sender": {
-            "name": "Ana Nicol",
-            "email": "ana.nicol@gmail.com"
-        },
-        "title": "Donec ultrices faucibus rutrum.",
-        "message": "...",
-        "time": "15:30 PM"
-    },
-    {
-        "sender": {
-            "name": "Jon Smith",
-            "email": "john.smith@gmail.com"
-        },
-        "title": "Mauris sed congue orci",
-        "message": "...",
-        "time": "12:15 PM"
+    for (let j = 0; j < message.headers.length; j++) {
+        if (message.headers[j].name == 'From') {
+            var from = message.headers[j].value;
+        }
+        if (message.headers[j].name == 'Subject') {
+            var subject = message.headers[j].value;
+        }
+        if (message.headers[j].name == 'Date') {
+            var date = message.headers[j].value;
+        }
     }
-];
-
-
-export default function drawSingleMail() {
-
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
     var vp10 = new VerticalPanel('vp10', 'inbox-body');
@@ -94,13 +58,13 @@ export default function drawSingleMail() {
     var vp14 = new VerticalPanel('vp14', 'col-md-4 text-right');
     vp11.add(vp14);
 
-    var date = new Label('date', 'date', messages[0].time);
+    var date = new Label('date', 'date', date);
     vp14.add(date);
 
     var vp15 = new VerticalPanel('vp15', 'col-md-12');
     vp11.add(vp15);
 
-    var h41 = new H4('h41', '', messages[0].title);
+    var h41 = new H4('h41', '', message.subject);
     vp15.add(h41);
     var hr1 = new HR('hr1', '');
     vp15.add(hr1);
@@ -119,9 +83,9 @@ export default function drawSingleMail() {
 
     var senderImage = new Image('senderImage', '', 'https://bootdey.com/img/Content/avatar/avatar6.png', sender.name, '40px', '40px');
     vp18.add(senderImage);
-    var senderName = new Strong('senderName', '', messages[0].sender.name);
+    var senderName = new Strong('senderName', '', from);
     vp18.add(senderName);
-    var senderMail = new Label('senderMail', '', ' [' + messages[0].sender.email + ' ] ');
+    var senderMail = new Label('senderMail', '', ' [' + from + ' ] ');
     vp18.add(senderMail);
     var textTo = new Label('textTo', '', ' to ');
     vp18.add(textTo);
@@ -131,7 +95,7 @@ export default function drawSingleMail() {
     var vp19 = new VerticalPanel('vp19', 'view-mail');
     vp10.add(vp19);
 
-    var message = new Label('message', '', messages[0].message);
+    var message = new Label('message', '', message.content);
     vp19.add(message);
 
     var emptyRow3 = new EmptyRow('er3', '');

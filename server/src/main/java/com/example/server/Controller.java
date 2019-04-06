@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +42,6 @@ import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
 import com.google.api.services.gmail.model.Profile;
 
-//@CrossOrigin(origins = "*")
 @CrossOrigin(origins = "http://localhost:5500")
 @RestController
 @RequestMapping(value = "")
@@ -51,6 +52,7 @@ public class Controller {
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static Gmail client;
 
+	
 	GoogleClientSecrets clientSecrets;
 	GoogleAuthorizationCodeFlow flow;
 	Credential credential;
@@ -93,23 +95,39 @@ public class Controller {
 		return redirect;
 
 	}
+
 	@RequestMapping(value = "/me", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMe(@RequestParam(value = "code") String code) {
 
 		JSONObject me = new JSONObject();
-		
+
 		try {
 			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
-			credential = flow.createAndStoreCredential(response, "userID");
+			credential = flow.createAndStoreCredential(response, "userID");	
+
+			response.getAccessToken();
+
 
 			client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
 					.setApplicationName(APPLICATION_NAME).build();
 
+
 			String userId = "me";
 			Profile profile = client.users().getProfile(userId).execute();
-			
+
 			me.put("email", profile.getEmailAddress());
+
+			
+
+			/*GoogleCredential credential = new GoogleCredential().setAccessToken(response.getAccessToken());   
+			Oauth2 oauth2 = new Oauth2.Builder(httpTransport, JSON_FACTORY, credential)
+					.setApplicationName(APPLICATION_NAME).build();
+			Userinfoplus userinfo = oauth2.userinfo().get().execute();
+			System.out.println(userinfo.getName());
+			System.out.println(userinfo.getFamilyName());
+			System.out.println(userinfo.getPicture());
+			userinfo.toPrettyString();*/
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,6 +137,7 @@ public class Controller {
 
 	}
 
+	
 	
 	@RequestMapping(value = "/labels", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -228,4 +247,132 @@ public class Controller {
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
+
+	@RequestMapping(value = "/messagesByLabel", method = RequestMethod.GET, params = "code",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getMessagesByLabel(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) {
+
+		JSONArray messageArray = new JSONArray();
+
+		try {
+			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
+			credential = flow.createAndStoreCredential(response, "userID");
+
+			client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+					.setApplicationName(APPLICATION_NAME).build();
+
+			String userId = "me";
+
+
+			ListMessagesResponse msgResponse = client.users().messages().list(userId).execute();
+
+			for (Message msg : msgResponse.getMessages()) {
+
+				Message message = client.users().messages().get(userId, msg.getId()).execute();
+
+
+				for (String label : message.getLabelIds()) {
+					if(label.equals(id)) {
+
+						JSONObject messageJSON = new JSONObject();
+						messageJSON.put("id", message.getId());
+						messageJSON.put("snippet", message.getSnippet());
+						JSONArray labels = new JSONArray();
+						labels.put(label);
+
+						messageJSON.put("labelIds", labels);
+						JSONArray headersArray = new JSONArray();
+						for (MessagePartHeader header : message.getPayload().getHeaders()) {
+							if(header.getName().equals("Date")) {
+								SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
+								f.setTimeZone(TimeZone.getTimeZone("UTC"));
+								Date date =  f.parse(header.getValue());  
+								DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
+								String s = df.format(date);
+								header.setValue(s);
+								headersArray.put(header);
+							}
+							if(header.getName().equals("Subject")) {
+								headersArray.put(header);
+							}
+							if(header.getName().equals("From")) {
+								headersArray.put(header);
+							}
+
+						}
+						messageJSON.put("headers", headersArray);
+						messageArray.put(messageJSON);
+					}
+
+				}
+
+			}
+			System.out.println(messageArray);
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value = "/message", method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getMessage(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) {
+
+		JSONObject messageJSON = new JSONObject();
+		try {
+			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
+			credential = flow.createAndStoreCredential(response, "userID");
+
+			client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+					.setApplicationName(APPLICATION_NAME).build();
+
+			String userId = "me";
+
+			System.out.println(id);
+			Message message = client.users().messages().get(userId, id).setFormat("full").execute();
+
+			messageJSON.put("id", message.getId());
+			String content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getParts().get(0).getBody().getData()));
+			System.out.println(content);
+			messageJSON.put("content", content);
+			messageJSON.put("snippet", message.getSnippet());
+			JSONArray labels = new JSONArray();
+			for (String label : message.getLabelIds()) {
+				labels.put(label);
+			}
+			messageJSON.put("labelIds", labels);
+			JSONArray headersArray = new JSONArray();
+			for (MessagePartHeader header : message.getPayload().getHeaders()) {
+				if(header.getName().equals("Date")) {
+					SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
+					f.setTimeZone(TimeZone.getTimeZone("UTC"));
+					Date date =  f.parse(header.getValue());  
+					DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
+					String s = df.format(date);
+					header.setValue(s);
+					headersArray.put(header);
+				}
+				if(header.getName().equals("Subject")) {
+					headersArray.put(header);
+				}
+				if(header.getName().equals("From")) {
+					headersArray.put(header);
+				}
+
+			}
+			messageJSON.put("headers", headersArray);
+			System.out.println(messageJSON);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
+
+	}
+
 }

@@ -2,6 +2,7 @@ export default class UserManager {
 
     constructor(axiosApi) {
         this.user;
+        this.user2;
         this.axios = axiosApi;
     }
 
@@ -11,7 +12,7 @@ export default class UserManager {
                 this.user = response.data;
             });
     }
-
+  
     getUser() {
         return this.user;
     }
