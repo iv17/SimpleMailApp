@@ -101,7 +101,7 @@ export default function drawMail(labels, messages, user, message) {
     }
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
-    //vp9 = drawInbox(messages);
-    vp9 = drawSingleMail(message);
+    vp9 = drawInbox(messages, message);
+    //vp9 = drawSingleMail(message);
     return vp1;
 }

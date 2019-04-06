@@ -3,8 +3,9 @@ import {
     InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '.././js/osc.js';
+import drawSingleMail from './drawSingleMail.js';
 
-export default function drawInbox(messages) {
+export default function drawInbox(messages, message) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -60,6 +61,15 @@ export default function drawInbox(messages) {
         container.onclick = function (e) {
             e.stopImmediatePropagation();
             console.log(messages[index].id);
+
+            var vp7 = document.getElementById("vp7");
+            var vp9 = document.getElementById("vp9");
+            vp9.remove(vp7);
+
+            vp7 = new VerticalPanel('vp7', 'row');
+            var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+            vp7.add(vp99);
+            vp99 = drawSingleMail(message);
         }
     }
     return vp9;
