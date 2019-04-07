@@ -1,12 +1,21 @@
 package com.example.server;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.TimeZone;
+
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.codec.binary.StringUtils;
@@ -17,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,7 +62,7 @@ public class Controller {
 	private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 	private static Gmail client;
 
-	
+
 	GoogleClientSecrets clientSecrets;
 	GoogleAuthorizationCodeFlow flow;
 	TokenResponse response;
@@ -77,8 +87,18 @@ public class Controller {
 			clientSecrets = new GoogleClientSecrets().setWeb(web);
 			httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
+			List<String> scopes = new ArrayList<>();
+			scopes.add(GmailScopes.GMAIL_COMPOSE);
+			scopes.add(GmailScopes.GMAIL_INSERT);
+			scopes.add(GmailScopes.GMAIL_LABELS);
+			//scopes.add(GmailScopes.GMAIL_METADATA);
+			scopes.add(GmailScopes.GMAIL_MODIFY);
+			scopes.add(GmailScopes.GMAIL_READONLY);
+			scopes.add(GmailScopes.GMAIL_SEND);
+			scopes.add(GmailScopes.GMAIL_SETTINGS_BASIC);
+			//scopes.addAll(GmailScopes.all());
 			flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
-					Collections.singleton(GmailScopes.GMAIL_READONLY)).build();
+					Collections.unmodifiableList(scopes)).build();
 		}
 		authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectUri);
 
@@ -119,7 +139,7 @@ public class Controller {
 
 			me.put("email", profile.getEmailAddress());
 
-			
+
 
 			/*GoogleCredential credential = new GoogleCredential().setAccessToken(response.getAccessToken());   
 			Oauth2 oauth2 = new Oauth2.Builder(httpTransport, JSON_FACTORY, credential)
@@ -138,8 +158,8 @@ public class Controller {
 
 	}
 
-	
-	
+
+
 	@RequestMapping(value = "/labels", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getLabels(@RequestParam(value = "code") String code) {
@@ -319,13 +339,13 @@ public class Controller {
 
 	}
 
-	@RequestMapping(value = "/message", method = RequestMethod.GET,
+	@RequestMapping(value = "/message", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMessage(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) {
-		
+
 		System.out.println(code);
 		System.out.println(id);
-		
+
 		JSONObject messageJSON = new JSONObject();
 		try {
 			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
@@ -336,12 +356,12 @@ public class Controller {
 
 			String userId = "me";
 
-			
+
 			Message message = client.users().messages().get(userId, id).setFormat("full").execute();
 
 			messageJSON.put("id", message.getId());
 			String content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getParts().get(0).getBody().getData()));
-			//System.out.println(content);
+
 			messageJSON.put("content", content);
 			messageJSON.put("snippet", message.getSnippet());
 			JSONArray labels = new JSONArray();
@@ -376,6 +396,71 @@ public class Controller {
 		}
 
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
+
+	}
+	public static MimeMessage createEmail(String to,
+			String from,
+			String subject,
+			String bodyText)
+					throws MessagingException {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props, null);
+
+		MimeMessage email = new MimeMessage(session);
+
+		email.setFrom(new InternetAddress(from));
+		email.addRecipient(javax.mail.Message.RecipientType.TO,
+				new InternetAddress(to));
+		email.setSubject(subject);
+		email.setText(bodyText);
+		return email;
+	}
+
+	@RequestMapping(value = "/send", method = RequestMethod.POST, params = "code",
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> sendMessage(@RequestParam(value = "code") String code, @RequestBody String body) {		
+
+
+		System.out.println(body);
+		JSONArray messageArray = new JSONArray();
+		JSONObject messageJSON = new JSONObject();
+
+		try {
+			TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
+			credential = flow.createAndStoreCredential(response, "userID");
+
+			client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+					.setApplicationName(APPLICATION_NAME).build();
+
+			String userId = "me";
+
+			JSONObject json = new JSONObject(body);
+			String to = json.getString("to");
+			String title = json.getString("title");
+			String message = json.getString("message");
+
+
+			MimeMessage mime = createEmail(to, userId, title, message);
+			
+			 ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			    mime.writeTo(baos);
+			    String encodedEmail = Base64.encodeBase64URLSafeString(baos.toByteArray());
+			    Message m = new Message();
+			    m.setRaw(encodedEmail);
+
+			//HttpHeaders headers = new HttpHeaders();
+			//headers.set("to", to);
+			Message mm = client.users().messages().send(userId, m).execute();
+
+
+			System.out.println("Message id: " + mm.getId());
+			System.out.println(mm.toPrettyString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
 

@@ -16,14 +16,14 @@ export default function drawCompose() {
 
     var vp12 = new VerticalPanel('vp12', 'col-md-12');
     vp11.add(vp12);
-    var inputEmail = new InputField('i1', 'form-control', 'email', 'To');
+    var inputEmail = new InputField('inputEmail', 'form-control', 'email', 'To');
     vp12.add(inputEmail);
     var hr1 = new HR('hr1', '');
     vp12.add(hr1);
 
     var vp13 = new VerticalPanel('vp13', 'view-mail');
     vp10.add(vp13);
-    var inputTitle = new InputField('inputTitile', 'form-control', 'text', 'Title');
+    var inputTitle = new InputField('inputTitle', 'form-control', 'text', 'Title');
     vp13.add(inputTitle);
     var emptyRow2 = new EmptyRow('er2', '');
     vp13.add(emptyRow2);
@@ -35,14 +35,26 @@ export default function drawCompose() {
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
     vp10.add(vp14);
 
-    var buttonSend = new AContainer('buttonSend', 'btn btn-sm btn-primary', 'Send', '', '');
+    var buttonSend = new AContainer('buttonSend', 'btn btn-sm btn-primary', 'Send ', '', '');
     vp14.add(buttonSend);
     var i1 = new I('i1', 'fa fa-envelope');
     buttonSend.add(i1);
     var ec1 = new EmptyCol('ec1', '');
     vp14.add(ec1);
+    buttonSend.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
 
-    var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard', '', '');
+        var to = document.getElementById('inputEmail').value;
+        var title = document.getElementById('inputTitle').value;
+        var message = document.getElementById('inputMessage').value;
+        console.log(to);
+        console.log(title);
+        console.log(message);
+        
+    }
+
+    var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard ', '', '');
     vp14.add(buttonDiscard);
     var i2 = new I('i2', 'fa fa-trash-o');
     buttonDiscard.add(i2);

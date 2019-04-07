@@ -6,7 +6,7 @@ import {
 import drawSingleMail from './drawSingleMail.js';
 import MessageManager from '.././js/managers/MessageManager.js';
 
-export default function drawInbox(messages) {
+export default function drawInbox(messages, message) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -72,18 +72,18 @@ export default function drawInbox(messages) {
             vp7 = new VerticalPanel('vp7', 'row');
             var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
             vp7.add(vp99);
+            vp99 = drawSingleMail(message);
 
-            let axios = window._api.axios;
+            /*let axios = window._api.axios;
             let url = window.a.url;
             let code = window.a.code;
             let messageManager = new MessageManager(axios);
 
-           
             messageManager.fetchMessage(url, code, messages[index].id)
             .then(response => {
                console.log(messageManager.message)
                 vp99 = drawSingleMail(messageManager.message);
-			})
+			})*/
            
         }
     }

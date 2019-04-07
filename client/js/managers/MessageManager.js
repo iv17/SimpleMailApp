@@ -19,6 +19,15 @@ export default class MessageManager {
                 this.message = response.data;
             });
     }
+    sendMessage(url, code, to, title, message) {
+        return this.axios.post(url + "/send?code=" + code, {
+            to: to,
+            title: title,
+            message: message
+        }).then((response) => {
+            this.message = response.data;
+        });
+    }
 
     getMessages() {
         return this.messages;
