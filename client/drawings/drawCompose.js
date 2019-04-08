@@ -46,11 +46,8 @@ export default function drawCompose() {
         e.stopImmediatePropagation();
 
         var to = document.getElementById('inputEmail').value;
-        var title = document.getElementById('inputTitle').value;
-        var message = document.getElementById('inputMessage').value;
-        console.log(to);
-        console.log(title);
-        console.log(message);
+        var subject = document.getElementById('inputTitle').value;
+        var bodyText = document.getElementById('inputMessage').value;
         
     }
 

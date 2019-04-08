@@ -1,6 +1,7 @@
 package com.example.server;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -398,31 +399,56 @@ public class Controller {
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
 
 	}
-	public static MimeMessage createEmail(String to,
-			String from,
-			String subject,
-			String bodyText)
-					throws MessagingException {
+	
+	 /**
+     * Create a MimeMessage using the parameters provided.
+     *
+     * @param to email address of the receiver
+     * @param from email address of the sender, the mailbox account
+     * @param subject subject of the email
+     * @param bodyText body text of the email
+     * @return the MimeMessage to be used to send email
+     * @throws MessagingException
+     */
+	public static MimeMessage createEmail(String to, String from, String subject, String bodyText) throws MessagingException {
+		
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 
 		MimeMessage email = new MimeMessage(session);
 
 		email.setFrom(new InternetAddress(from));
-		email.addRecipient(javax.mail.Message.RecipientType.TO,
-				new InternetAddress(to));
+		email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
 		email.setSubject(subject);
 		email.setText(bodyText);
+		
 		return email;
 	}
 
+	/**
+     * Create a message from an email.
+     *
+     * @param emailContent Email to be set to raw of message
+     * @return a message containing a base64url encoded email
+     * @throws IOException
+     * @throws MessagingException
+     */
+    public static Message createMessageWithEmail(MimeMessage emailContent)
+            throws MessagingException, IOException {
+    	
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        emailContent.writeTo(buffer);
+        byte[] bytes = buffer.toByteArray();
+        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+        Message message = new Message();
+        message.setRaw(encodedEmail);
+        
+        return message;
+    }
 	@RequestMapping(value = "/send", method = RequestMethod.POST, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> sendMessage(@RequestParam(value = "code") String code, @RequestBody String body) {		
 
-
-		System.out.println(body);
-		JSONArray messageArray = new JSONArray();
 		JSONObject messageJSON = new JSONObject();
 
 		try {
@@ -436,31 +462,22 @@ public class Controller {
 
 			JSONObject json = new JSONObject(body);
 			String to = json.getString("to");
-			String title = json.getString("title");
-			String message = json.getString("message");
+			String subject = json.getString("subject");
+			String bodyText = json.getString("bodyText");
 
-
-			MimeMessage mime = createEmail(to, userId, title, message);
+			MimeMessage emailContent = createEmail(to, userId, subject, bodyText);
 			
-			 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			    mime.writeTo(baos);
-			    String encodedEmail = Base64.encodeBase64URLSafeString(baos.toByteArray());
-			    Message m = new Message();
-			    m.setRaw(encodedEmail);
+			Message message = createMessageWithEmail(emailContent);
+			Message mm = client.users().messages().send(userId, message).execute();
 
-			//HttpHeaders headers = new HttpHeaders();
-			//headers.set("to", to);
-			Message mm = client.users().messages().send(userId, m).execute();
-
-
-			System.out.println("Message id: " + mm.getId());
+			messageJSON.put("message", mm);
 			System.out.println(mm.toPrettyString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
 
 	}
 
