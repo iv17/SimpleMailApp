@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -208,9 +210,9 @@ public class Controller {
 
 	}
 
-	@RequestMapping(value = "/messages", method = RequestMethod.GET, params = "code",
+	@RequestMapping(value = "/allMessages", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getMessages(@RequestParam(value = "code") String code) {
+	public ResponseEntity<String> getAllMessages(@RequestParam(value = "code") String code) {
 
 		JSONArray messageArray = new JSONArray();
 
@@ -222,44 +224,15 @@ public class Controller {
 					.setApplicationName(APPLICATION_NAME).build();
 
 			String userId = "me";
-
 			ListMessagesResponse msgResponse = client.users().messages().list(userId).execute();
 
 			for (Message msg : msgResponse.getMessages()) {
 
 				Message message = client.users().messages().get(userId, msg.getId()).execute();
-
-				JSONObject messageJSON = new JSONObject();
-				messageJSON.put("id", message.getId());
-				messageJSON.put("snippet", message.getSnippet());
-				JSONArray labels = new JSONArray();
-				for (String label : message.getLabelIds()) {
-					labels.put(label);
-				}
-				messageJSON.put("labelIds", labels);
-				JSONArray headersArray = new JSONArray();
-				for (MessagePartHeader header : message.getPayload().getHeaders()) {
-					if(header.getName().equals("Date")) {
-						SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
-						f.setTimeZone(TimeZone.getTimeZone("UTC"));
-						Date date =  f.parse(header.getValue());  
-						DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
-						String s = df.format(date);
-						header.setValue(s);
-						headersArray.put(header);
-					}
-					if(header.getName().equals("Subject")) {
-						headersArray.put(header);
-					}
-					if(header.getName().equals("From")) {
-						headersArray.put(header);
-					}
-
-				}
-				messageJSON.put("headers", headersArray);
+				
+				JSONObject messageJSON = fetchMessages(message);
 				messageArray.put(messageJSON);
 			}
-			//System.out.println(messageArray);
 
 
 		} catch (Exception e) {
@@ -270,9 +243,9 @@ public class Controller {
 
 	}
 
-	@RequestMapping(value = "/messagesByLabel", method = RequestMethod.GET, params = "code",
+	@RequestMapping(value = "/messages", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getMessagesByLabel(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) {
+	public ResponseEntity<String> getMessages(@RequestParam(value = "code") String code, @RequestParam(value = "label") String l) {
 
 		JSONArray messageArray = new JSONArray();
 
@@ -284,52 +257,18 @@ public class Controller {
 					.setApplicationName(APPLICATION_NAME).build();
 
 			String userId = "me";
-
-
-			ListMessagesResponse msgResponse = client.users().messages().list(userId).execute();
+			
+			List<String> labelIds = new ArrayList<>();
+			labelIds.add(l);
+			ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
 
 			for (Message msg : msgResponse.getMessages()) {
 
 				Message message = client.users().messages().get(userId, msg.getId()).execute();
-
-
-				for (String label : message.getLabelIds()) {
-					if(label.equals(id)) {
-
-						JSONObject messageJSON = new JSONObject();
-						messageJSON.put("id", message.getId());
-						messageJSON.put("snippet", message.getSnippet());
-						JSONArray labels = new JSONArray();
-						labels.put(label);
-
-						messageJSON.put("labelIds", labels);
-						JSONArray headersArray = new JSONArray();
-						for (MessagePartHeader header : message.getPayload().getHeaders()) {
-							if(header.getName().equals("Date")) {
-								SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
-								f.setTimeZone(TimeZone.getTimeZone("UTC"));
-								Date date =  f.parse(header.getValue());  
-								DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
-								String s = df.format(date);
-								header.setValue(s);
-								headersArray.put(header);
-							}
-							if(header.getName().equals("Subject")) {
-								headersArray.put(header);
-							}
-							if(header.getName().equals("From")) {
-								headersArray.put(header);
-							}
-
-						}
-						messageJSON.put("headers", headersArray);
-						messageArray.put(messageJSON);
-					}
-
-				}
-
-			}
-			//System.out.println(messageArray);
+				
+				JSONObject messageJSON = fetchMessages(message);
+				messageArray.put(messageJSON);
+			}	
 
 
 		} catch (Exception e) {
@@ -337,15 +276,47 @@ public class Controller {
 		}
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+
+	}
+
+	private JSONObject fetchMessages(Message message) throws IOException, JSONException, ParseException {
+
+		JSONObject messageJSON = new JSONObject();
+
+		messageJSON.put("id", message.getId());
+		messageJSON.put("snippet", message.getSnippet());
+		JSONArray labels = new JSONArray();
+		for (String label : message.getLabelIds()) {
+			labels.put(label);
+		}
+		messageJSON.put("labels", labels);
+		JSONArray headersArray = new JSONArray();
+		for (MessagePartHeader header : message.getPayload().getHeaders()) {
+			if(header.getName().equals("Date")) {
+				SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
+				f.setTimeZone(TimeZone.getTimeZone("UTC"));
+				Date date =  f.parse(header.getValue());  
+				DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
+				String s = df.format(date);
+				header.setValue(s);
+				headersArray.put(header);
+			}
+			if(header.getName().equals("Subject")) {
+				headersArray.put(header);
+			}
+			if(header.getName().equals("From")) {
+				headersArray.put(header);
+			}
+
+		}
+		return messageJSON.put("headers", headersArray);
+
 
 	}
 
 	@RequestMapping(value = "/message", method = RequestMethod.GET, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMessage(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) {
-
-		System.out.println(code);
-		System.out.println(id);
 
 		JSONObject messageJSON = new JSONObject();
 		try {
@@ -399,19 +370,19 @@ public class Controller {
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
 
 	}
-	
-	 /**
-     * Create a MimeMessage using the parameters provided.
-     *
-     * @param to email address of the receiver
-     * @param from email address of the sender, the mailbox account
-     * @param subject subject of the email
-     * @param bodyText body text of the email
-     * @return the MimeMessage to be used to send email
-     * @throws MessagingException
-     */
+
+	/**
+	 * Create a MimeMessage using the parameters provided.
+	 *
+	 * @param to email address of the receiver
+	 * @param from email address of the sender, the mailbox account
+	 * @param subject subject of the email
+	 * @param bodyText body text of the email
+	 * @return the MimeMessage to be used to send email
+	 * @throws MessagingException
+	 */
 	public static MimeMessage createEmail(String to, String from, String subject, String bodyText) throws MessagingException {
-		
+
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 
@@ -421,30 +392,31 @@ public class Controller {
 		email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
 		email.setSubject(subject);
 		email.setText(bodyText);
-		
+
 		return email;
 	}
 
 	/**
-     * Create a message from an email.
-     *
-     * @param emailContent Email to be set to raw of message
-     * @return a message containing a base64url encoded email
-     * @throws IOException
-     * @throws MessagingException
-     */
-    public static Message createMessageWithEmail(MimeMessage emailContent)
-            throws MessagingException, IOException {
-    	
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        emailContent.writeTo(buffer);
-        byte[] bytes = buffer.toByteArray();
-        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
-        Message message = new Message();
-        message.setRaw(encodedEmail);
-        
-        return message;
-    }
+	 * Create a message from an email.
+	 *
+	 * @param emailContent Email to be set to raw of message
+	 * @return a message containing a base64url encoded email
+	 * @throws IOException
+	 * @throws MessagingException
+	 */
+	public static Message createMessageWithEmail(MimeMessage emailContent)
+			throws MessagingException, IOException {
+
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		emailContent.writeTo(buffer);
+		byte[] bytes = buffer.toByteArray();
+		String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+		Message message = new Message();
+		message.setRaw(encodedEmail);
+
+		return message;
+	}
+
 	@RequestMapping(value = "/send", method = RequestMethod.POST, params = "code",
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> sendMessage(@RequestParam(value = "code") String code, @RequestBody String body) {		
@@ -466,7 +438,7 @@ public class Controller {
 			String bodyText = json.getString("bodyText");
 
 			MimeMessage emailContent = createEmail(to, userId, subject, bodyText);
-			
+
 			Message message = createMessageWithEmail(emailContent);
 			Message mm = client.users().messages().send(userId, message).execute();
 

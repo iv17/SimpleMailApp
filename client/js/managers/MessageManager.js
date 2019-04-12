@@ -6,8 +6,14 @@ export default class MessageManager {
         this.axios = axiosApi;
     }
 
-    fetchMessages(url, code) {
-        return this.axios.get(url + "/messages?code=" + code)
+    fetchAllMessages(url, code) {
+        return this.axios.get(url + "/allMessages?code=" + code)
+            .then((response) => {
+                this.messages = response.data;
+            });
+    }
+    fetchMessages(url, code, label) {
+        return this.axios.get(url + "/messages?code=" + code + "&label=" + label)
             .then((response) => {
                 this.messages = response.data;
             });
