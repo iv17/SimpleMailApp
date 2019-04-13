@@ -67,13 +67,11 @@ export default function drawInbox(messages, message) {
             vp7.add(vp99);
             
             let axios = window._api.axios;
-            let url = window._api.url;
-            let code = window._api.code;
             let messageManager = new MessageManager(axios);
 
-            messageManager.fetchMessage(url, code, messages[index].id)
+            messageManager.fetchMessage(messages[index].id)
             .then(response => {
-                vp99 = drawSingleMail(messages, messageManager.message);
+                vp99 = drawSingleMail(messageManager.message);
 			});
            
         }

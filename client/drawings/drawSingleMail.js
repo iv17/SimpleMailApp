@@ -7,7 +7,7 @@ import {
 import drawCompose from './drawCompose.js';
 import drawForward from './drawForward.js';
 
-export default function drawSingleMail(messages, message) {
+export default function drawSingleMail(message) {
 
     for (let j = 0; j < message.headers.length; j++) {
         if (message.headers[j].name == 'From') {
@@ -126,7 +126,7 @@ export default function drawSingleMail(messages, message) {
         vp7 = new VerticalPanel('vp7', 'row');
         var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
         vp7.add(vp99);
-        vp99 = drawCompose(messages, message);
+        vp99 = drawCompose();
         
     }
 
@@ -150,7 +150,7 @@ export default function drawSingleMail(messages, message) {
         var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
         vp7.add(vp99);
         
-        vp99 = drawForward(messages, message);
+        vp99 = drawForward(message);
         
     }
     var button6 = new AContainer('button6', 'btn btn-sm btn-default', 'Delete ', '', '');

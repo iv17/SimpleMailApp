@@ -7,6 +7,7 @@ import {
 import drawInbox from './drawInbox.js';
 import drawSingleMail from './drawSingleMail.js';
 import drawCompose from './drawCompose.js';
+import MessageManager from '.././js/managers/MessageManager.js';
 
 //-----------------------------------
 function changeActiveClass(button) {
@@ -20,7 +21,7 @@ function changeActiveClass(button) {
     }
 }
 
-export default function drawMail(labels, messages, user, message) {
+export default function drawMail(labels, messages, user) {
     var vp1 = new VerticalPanel('vp1', 'container');
 
     var emptyRow1 = new EmptyRow('er1', 'row');
@@ -90,32 +91,50 @@ export default function drawMail(labels, messages, user, message) {
     vp8.add(ul2);
 
     var list_items = [];
-    if(labels.length > 0) {
+    if (labels.length > 0) {
         for (let index = 1; index < labels.length + 1; index++) {
             var itemID = "item" + index;
             var li = new LI(itemID, '');
             list_items.push(li);
         }
         for (let index = 0; index < labels.length; index++) {
-            
+
             if (labels[index].labelListVisibility != "labelHide") {
-                var container = list_items[index]; 
+                var container = list_items[index];
                 ul2.add(container);
                 var a = new AContainer('a2' + index, '', labels[index].name, '#');
                 container.add(a);
                 var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
                 a.add(badge);
+
                 container.onclick = function (e) {
+                    e.preventDefault();
                     e.stopImmediatePropagation();
                     console.log(list_items[index].id + " " + labels[index].name);
+
+                    var vp7 = document.getElementById("vp7");
+                    var vp9 = document.getElementById("vp9");
+                    vp9.remove(vp7);
+
+                    vp7 = new VerticalPanel('vp7', 'row');
+                    var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+                    vp7.add(vp99);
+
+                    let axios = window._api.axios;
+                    let messageManager = new MessageManager(axios);
+
+                    messageManager.fetchMessages(labels[index].name)
+                    .then(response => {
+                        vp99 = drawInbox(messageManager.messages)
+                    });
                 }
             }
         }
     }
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
-    
-    vp9 = drawInbox(messages, message);
+
+    vp9 = drawInbox(messages);
 
     return vp1;
 }

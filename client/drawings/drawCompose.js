@@ -5,7 +5,7 @@ import {
 } from '.././js/osc.js';
 import drawInbox from './drawInbox.js';
 
-export default function drawCompose(messages, message) {
+export default function drawCompose() {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 

@@ -4,7 +4,7 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '../js/osc.js';
 
-export default function drawForward(messages, message) {
+export default function drawForward(message) {
 
     for (let j = 0; j < message.headers.length; j++) {
         if (message.headers[j].name == 'From') {

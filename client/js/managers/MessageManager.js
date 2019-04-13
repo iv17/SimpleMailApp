@@ -4,29 +4,30 @@ export default class MessageManager {
         this.messages = [];
         this.message = {};
         this.axios = axiosApi;
+        this.url = 'http://localhost:9000';
     }
 
-    fetchAllMessages(url, code) {
-        return this.axios.get(url + "/allMessages?code=" + code)
+    fetchAllMessages() {
+        return this.axios.get(this.url + "/allMessages?code=")
             .then((response) => {
                 this.messages = response.data;
             });
     }
-    fetchMessages(url, code, label) {
-        return this.axios.get(url + "/messages?code=" + code + "&label=" + label)
+    fetchMessages(label) {
+        return this.axios.get(this.url + "/messages?label=" + label)
             .then((response) => {
                 this.messages = response.data;
             });
     }
 
-    fetchMessage(url, code, id) {
-        return this.axios.get(url + "/message?code=" + code + "&id=" + id)
+    fetchMessage(id) {
+        return this.axios.get(this.url + "/message?id=" + id)
             .then((response) => {
                 this.message = response.data;
             });
     }
-    sendMessage(url, code, to, subject, bodyText) {
-        return this.axios.post(url + "/send?code=" + code, {
+    sendMessage(to, subject, bodyText) {
+        return this.axios.post(this.url + "/send", {
             to: to,
             subject: subject,
             bodyText: bodyText

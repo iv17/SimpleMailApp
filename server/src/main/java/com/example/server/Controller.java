@@ -106,21 +106,18 @@ public class Controller {
 
 	}
 
-	@RequestMapping(value = "/me", method = RequestMethod.GET, params = "code",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getMe(@RequestParam(value = "code") String code) throws IOException, JSONException {
+	@RequestMapping(value = "/me", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getMe() throws IOException, JSONException {
 
-		
+		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
 
-			client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-					.setApplicationName(APPLICATION_NAME).build();
+		String userId = "me";
+		Profile profile = client.users().getProfile(userId).execute();
+		JSONObject me = new JSONObject();
+		me.put("email", profile.getEmailAddress());
 
-			String userId = "me";
-			Profile profile = client.users().getProfile(userId).execute();
-			JSONObject me = new JSONObject();
-			me.put("email", profile.getEmailAddress());
-
-			/*GoogleCredential credential = new GoogleCredential().setAccessToken(response.getAccessToken());   
+		/*GoogleCredential credential = new GoogleCredential().setAccessToken(response.getAccessToken());   
 			Oauth2 oauth2 = new Oauth2.Builder(httpTransport, JSON_FACTORY, credential)
 					.setApplicationName(APPLICATION_NAME).build();
 			Userinfoplus userinfo = oauth2.userinfo().get().execute();
@@ -134,9 +131,8 @@ public class Controller {
 	}
 
 
-	@RequestMapping(value = "/labels", method = RequestMethod.GET, params = "code",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getLabels(@RequestParam(value = "code") String code) throws IOException, JSONException {
+	@RequestMapping(value = "/labels", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getLabels() throws IOException, JSONException {
 
 		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build();
@@ -171,9 +167,8 @@ public class Controller {
 	}
 
 
-	@RequestMapping(value = "/allMessages", method = RequestMethod.GET, params = "code",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getAllMessages(@RequestParam(value = "code") String code) throws IOException, JSONException, ParseException {
+	@RequestMapping(value = "/allMessages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getAllMessages() throws IOException, JSONException, ParseException {
 
 		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build();
@@ -194,9 +189,8 @@ public class Controller {
 
 	}
 
-	@RequestMapping(value = "/messages", method = RequestMethod.GET, params = "code",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getMessages(@RequestParam(value = "code") String code, @RequestParam(value = "label") String l) throws IOException, JSONException, ParseException {
+	@RequestMapping(value = "/messages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getMessages(@RequestParam(value = "label") String l) throws IOException, JSONException, ParseException {
 
 		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build();
@@ -221,9 +215,8 @@ public class Controller {
 	}
 
 
-	@RequestMapping(value = "/message", method = RequestMethod.GET, params = "code",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> getMessage(@RequestParam(value = "code") String code, @RequestParam(value = "id") String id) throws JSONException, ParseException, IOException {
+	@RequestMapping(value = "/message", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getMessage(@RequestParam(value = "id") String id) throws JSONException, ParseException, IOException {
 
 		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build();
@@ -238,9 +231,8 @@ public class Controller {
 
 	}
 
-	@RequestMapping(value = "/send", method = RequestMethod.POST, params = "code",
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> sendMessage(@RequestParam(value = "code") String code, @RequestBody String body) throws JSONException, IOException, MessagingException {		
+	@RequestMapping(value = "/send", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> sendMessage(@RequestBody String body) throws JSONException, IOException, MessagingException {		
 
 		JSONObject messageJSON = new JSONObject();
 
