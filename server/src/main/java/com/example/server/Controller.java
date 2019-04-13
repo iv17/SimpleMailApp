@@ -31,7 +31,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
@@ -73,24 +72,19 @@ public class Controller {
 			clientSecrets = new GoogleClientSecrets().setWeb(web);
 			httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
-			List<String> scopes = new ArrayList<>();
-			scopes.add(GmailScopes.GMAIL_COMPOSE);
-			scopes.add(GmailScopes.GMAIL_INSERT);
-			scopes.add(GmailScopes.GMAIL_LABELS);
-			//scopes.add(GmailScopes.GMAIL_METADATA);
-			scopes.add(GmailScopes.GMAIL_MODIFY);
-			scopes.add(GmailScopes.GMAIL_READONLY);
-			scopes.add(GmailScopes.GMAIL_SEND);
-			scopes.add(GmailScopes.GMAIL_SETTINGS_BASIC);
-			//scopes.addAll(GmailScopes.all());
-			flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, JSON_FACTORY, clientSecrets,
-					Collections.unmodifiableList(scopes)).build();
+			List<String> scopes = service.getScopes();
+			flow = new GoogleAuthorizationCodeFlow
+					.Builder(httpTransport, JSON_FACTORY, clientSecrets, Collections.unmodifiableList(scopes))
+					//.setAccessType("offline")
+					//.setApprovalPrompt("force")
+					.build();
 		}
 		authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(redirectUri);
 		String build = authorizationUrl.build();
 
 		return new RedirectView(build);
 	}
+
 
 	@RequestMapping(value = "/login/gmailCallback", method = RequestMethod.GET, params = "code",	
 			produces = MediaType.APPLICATION_JSON_VALUE)

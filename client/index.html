@@ -54,7 +54,7 @@
 			let fetchINBOX = messageManager.fetchMessages(url, code, "INBOX");
 			//let fetchSENT = messageManager.fetchMessages(url, code, "SENT");
 			let fetchMessage = messageManager.fetchMessage(url, code, "169d45167e07c8d3");
-			let sendMessage = messageManager.sendMessage(url, code, 'ivana.unitedforce@gmail.com', 'Naslov', 'tekst poruke');
+			//let sendMessage = messageManager.sendMessage(url, code, 'ivana.unitedforce@gmail.com', 'Naslov', 'tekst poruke');
 
 			Promise.all([
 				fetchUser,
@@ -62,7 +62,7 @@
 				//fetchALLMAIL,
 				fetchINBOX,
 				fetchMessage,
-				sendMessage
+				//sendMessage
 			]).then(response => {
 				var mp = new MainPanel('main', '');
 				mp.draw(); //SAMO POZOVEM DA SE DODA NA BODY

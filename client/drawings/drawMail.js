@@ -68,8 +68,21 @@ export default function drawMail(labels, messages, user, message) {
 
     var vp8 = new VerticalPanel('vp8', 'col-sm-3 col-md-2');
     vp7.add(vp8);
-    var buttonCompose = new A('buttonCompose', 'btn btn-danger btn-sm btn-block', 'COMPOSE', '#');
+    var buttonCompose = new AContainer('buttonCompose', 'btn btn-danger btn-sm btn-block', 'COMPOSE');
     vp8.add(buttonCompose);
+    buttonCompose.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var vp7 = document.getElementById("vp7");
+        var vp9 = document.getElementById("vp9");
+        vp9.remove(vp7);
+
+        vp7 = new VerticalPanel('vp7', 'row');
+        var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+        vp7.add(vp99);
+        vp99 = drawCompose();
+    }
     var hr2 = new HR('hr2');
     vp8.add(hr2);
 
@@ -101,7 +114,8 @@ export default function drawMail(labels, messages, user, message) {
     }
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
     vp7.add(vp9);
+    
     vp9 = drawInbox(messages, message);
-    //vp9 = drawSingleMail(message);
+
     return vp1;
 }

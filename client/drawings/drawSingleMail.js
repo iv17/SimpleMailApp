@@ -5,8 +5,9 @@ import {
 } from '.././js/osc.js';
 
 import drawCompose from './drawCompose.js';
+import drawForward from './drawForward.js';
 
-export default function drawSingleMail(message) {
+export default function drawSingleMail(messages, message) {
 
     for (let j = 0; j < message.headers.length; j++) {
         if (message.headers[j].name == 'From') {
@@ -97,8 +98,8 @@ export default function drawSingleMail(message) {
     var vp19 = new VerticalPanel('vp19', 'view-mail');
     vp10.add(vp19);
 
-    var message = new Label('message', '', message.content);
-    vp19.add(message);
+    var content = new Label('message', '', message.content);
+    vp19.add(content);
 
     var emptyRow3 = new EmptyRow('er3', '');
     vp10.add(emptyRow3);
@@ -125,7 +126,7 @@ export default function drawSingleMail(message) {
         vp7 = new VerticalPanel('vp7', 'row');
         var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
         vp7.add(vp99);
-        vp99 = drawCompose();
+        vp99 = drawCompose(messages, message);
         
     }
 
@@ -136,10 +137,35 @@ export default function drawSingleMail(message) {
     var emptyCol4 = new EmptyCol('ec4', '');
     vp20.add(emptyCol4);
 
+    button5.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();        
+        console.log("FORWARD");
+
+        var vp7 = document.getElementById("vp7");
+        var vp9 = document.getElementById("vp9");
+        vp9.remove(vp7);
+
+        vp7 = new VerticalPanel('vp7', 'row');
+        var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+        vp7.add(vp99);
+        
+        vp99 = drawForward(messages, message);
+        
+    }
     var button6 = new AContainer('button6', 'btn btn-sm btn-default', 'Delete ', '', '');
     vp20.add(button6);
     var i6 = new I('i6', 'fa fa-trash-o');
     button6.add(i6);
+
+    button6.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        console.log('DELETE');
+    }
+
+    var hr2 = new HR('hr2', '');
+    vp14.add(hr2);
 
     return vp9;
 }

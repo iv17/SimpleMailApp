@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.TimeZone;
@@ -22,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
 
@@ -150,6 +153,22 @@ public class GmailService {
 		Message message = createMessageWithEmail(emailContent);
 		
 		return message;
+	}
+	
+	protected List<String> getScopes() {
+		List<String> scopes = new ArrayList<>();
+		
+		scopes.add(GmailScopes.GMAIL_COMPOSE);
+		scopes.add(GmailScopes.GMAIL_INSERT);
+		scopes.add(GmailScopes.GMAIL_LABELS);
+		//scopes.add(GmailScopes.GMAIL_METADATA);
+		scopes.add(GmailScopes.GMAIL_MODIFY);
+		scopes.add(GmailScopes.GMAIL_READONLY);
+		scopes.add(GmailScopes.GMAIL_SEND);
+		scopes.add(GmailScopes.GMAIL_SETTINGS_BASIC);
+		//scopes.addAll(GmailScopes.all());
+		
+		return scopes;
 	}
 
 }

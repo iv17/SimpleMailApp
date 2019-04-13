@@ -2,11 +2,22 @@ import {
     A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
     InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
-} from '.././js/osc.js';
-import drawInbox from './drawInbox.js';
+} from '../js/osc.js';
 
-export default function drawCompose(messages, message) {
+export default function drawForward(messages, message) {
 
+    for (let j = 0; j < message.headers.length; j++) {
+        if (message.headers[j].name == 'From') {
+            var from = message.headers[j].value;
+        }
+        if (message.headers[j].name == 'Subject') {
+            var subject = message.headers[j].value;
+        }
+        if (message.headers[j].name == 'Date') {
+            var date = message.headers[j].value;
+        }
+    }
+    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
     var vp10 = new VerticalPanel('vp10', 'inbox-body');
@@ -24,14 +35,17 @@ export default function drawCompose(messages, message) {
 
     var vp13 = new VerticalPanel('vp13', 'view-mail');
     vp10.add(vp13);
-    var inputTitle = new InputField('inputTitle', 'form-control', 'text', 'Title');
+    var inputTitle = new InputField('inputTitle', 'form-control', 'text', '');
     vp13.add(inputTitle);
     var emptyRow2 = new EmptyRow('er2', '');
     vp13.add(emptyRow2);
-    var inputMessage = new InputArea('inputMessage', 'form-control', 'Enter a message', 10, 50);
+    var inputMessage = new InputArea('inputMessage', 'form-control', '', 10, 50);
     vp13.add(inputMessage);
     var emptyRow3 = new EmptyRow('er3', '');
     vp13.add(emptyRow3);
+
+    document.getElementById('inputTitle').value = subject;
+    document.getElementById('inputMessage').value = message.content;
 
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
     vp10.add(vp14);
@@ -42,18 +56,17 @@ export default function drawCompose(messages, message) {
     buttonSend.add(i1);
     var ec1 = new EmptyCol('ec1', '');
     vp14.add(ec1);
-
+    
     buttonSend.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log('SEND');
-        //console.log(message);
-        /*var to = document.getElementById('inputEmail').value;
+
+        var to = document.getElementById('inputEmail').value;
         var subject = document.getElementById('inputTitle').value;
-        var bodyText = document.getElementById('inputMessage').value;*/
+        var bodyText = document.getElementById('inputMessage').value;
         
     }
-   
+
     var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard ', '', '');
     vp14.add(buttonDiscard);
     var i2 = new I('i2', 'fa fa-trash-o');
@@ -64,7 +77,8 @@ export default function drawCompose(messages, message) {
     buttonDiscard.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log('DISCARD'); 
+        console.log('DISCARD');
+        
     }
 
     var hr2 = new HR('hr2', '');

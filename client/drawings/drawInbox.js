@@ -20,13 +20,6 @@ export default function drawInbox(messages, message) {
     var hp1 = new HorizontalPanel('hp1', 'glyphicon glyphicon-inbox');
     a31.add(hp1);
 
-    var li32 = new LI('li32', '');
-    ul3.add(li32);
-    var a32 = new AContainer('a32', '', 'Social ', '#', 'tab');
-    li32.add(a32);
-    var hp2 = new HorizontalPanel('hp2', 'glyphicon glyphicon-user');
-    a32.add(hp2);
-
     var vp10 = new VerticalPanel('vp10', 'tab-content');
     vp9.add(vp10);
     var vp11 = new VerticalPanel('vp11', 'tab-pane fade in active');
@@ -72,7 +65,8 @@ export default function drawInbox(messages, message) {
             vp7 = new VerticalPanel('vp7', 'row');
             var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
             vp7.add(vp99);
-            vp99 = drawSingleMail(message);
+            vp99 = drawSingleMail(messages, message);
+            
 
             /*let axios = window._api.axios;
             let url = window.a.url;
