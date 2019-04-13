@@ -30,24 +30,24 @@
 		import LabelManager from './js/managers/LabelManager.js';
 		import MessageManager from './js/managers/MessageManager.js';
 
-		window._api = {}
-		window._api.axios = axios;
+		
 	
 		const url = 'http://localhost:9000';
 
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get('code');
-		window.a = {}
-		window.a.url = url;
-		window.a.code = code;
+		
+		window._api = {}
+		window._api.axios = axios;
+		window._api.url = url;
+		window._api.code = code;
 		
 
 		$(document).ready(function () {
 			let userManager = new UserManager(axios);
 			let labelManager = new LabelManager(axios);
 			let messageManager = new MessageManager(axios);
-			//window._api.messageManager = messageManager;
-
+		
 			let fetchUser = userManager.fetchUser(url, code);
 			let fetchLabels = labelManager.fetchLabels(url, code);
 			//let fetchALLMAIL = messageManager.fetchAllMessages(url, code);
