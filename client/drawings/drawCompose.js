@@ -48,7 +48,8 @@ export default function drawCompose() {
     buttonSend.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-       
+        console.log('SEND');
+
         var to = document.getElementById('inputEmail').value;
         var subject = document.getElementById('inputTitle').value;
         var bodyText = document.getElementById('inputMessage').value;
@@ -66,7 +67,6 @@ export default function drawCompose() {
 
         messageManager.sendMessage(to, subject, bodyText)
             .then(response => {
-                console.log(response);
                 vp99 = drawSingleMail(messageManager.message);
             });
 

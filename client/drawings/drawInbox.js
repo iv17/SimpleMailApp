@@ -36,23 +36,12 @@ export default function drawInbox(messages) {
         
         var container = inbox_rows[index];
         vp12.add(container);
-        for (let j = 0; j < messages[index].headers.length; j++) {
-            if (messages[index].headers[j].name == 'From') {
-                var from = messages[index].headers[j].value;
-            }
-            if (messages[index].headers[j].name == 'Subject') {
-                var subject = messages[index].headers[j].value;
-            }
-            if (messages[index].headers[j].name == 'Date') {
-                var date = messages[index].headers[j].value;
-            }
-        }
         container.add(new InputField("checkbox" + index, '', 'checkbox', ''));
         container.add(new EmptyCol('ec1', ''));
         container.add(new EmptyCol('ec2', ''));
-        container.add(new Label("sender" + index, 'name', from, 'min-width: 120px;display: inline-block;'));
-        container.add(new Label("title" + index, '', subject, ''));
-        container.add(new Label("time" + index, 'badge', date, ''));
+        container.add(new Label("sender" + index, 'name', messages[index].headers.from, 'min-width: 120px;display: inline-block;'));
+        container.add(new Label("title" + index, '', messages[index].headers.subject, ''));
+        container.add(new Label("time" + index, 'badge', messages[index].headers.date, ''));
         container.onclick = function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();

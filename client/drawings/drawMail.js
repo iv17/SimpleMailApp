@@ -95,39 +95,37 @@ export default function drawMail(labels, messages, user) {
     var list_items = [];
     if (labels.length > 0) {
         for (let index = 0; index < labels.length; index++) {
-            if (labels[index].labelListVisibility != "labelHide") {
-                var container = new LI(labels[index].name, '');
-                ul2.add(container);
-                var a = new AContainer('a2' + index, '', labels[index].name, '#');
-                container.add(a);
-                var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
-                a.add(badge);
-                if (labels[index].name == 'INBOX') {
-                    container.addCSSClass('active');
-                }
-                container.onclick = function (e) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    
-                    var vp7 = document.getElementById("vp7");
-                    var vp9 = document.getElementById("vp9");
-                    vp9.remove(vp7);
-
-                    vp7 = new VerticalPanel('vp7', 'row');
-                    var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
-                    vp7.add(vp99);
-
-                    let axios = window._api.axios;
-                    let messageManager = new MessageManager(axios);
-
-                    messageManager.fetchMessages(labels[index].name)
-                        .then(response => {
-                            vp99 = drawInbox(messageManager.messages)
-                        });
-                }
-               
-                list_items.push(container);
+            var container = new LI(labels[index].name, '');
+            ul2.add(container);
+            var a = new AContainer('a2' + index, '', labels[index].name, '#');
+            container.add(a);
+            var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
+            a.add(badge);
+            if (labels[index].name == 'INBOX') {
+                container.addCSSClass('active');
             }
+            container.onclick = function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+
+                var vp7 = document.getElementById("vp7");
+                var vp9 = document.getElementById("vp9");
+                vp9.remove(vp7);
+
+                vp7 = new VerticalPanel('vp7', 'row');
+                var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+                vp7.add(vp99);
+
+                let axios = window._api.axios;
+                let messageManager = new MessageManager(axios);
+
+                messageManager.fetchMessages(labels[index].name)
+                    .then(response => {
+                        vp99 = drawInbox(messageManager.messages)
+                    });
+            }
+
+            list_items.push(container);
         }
     }
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');

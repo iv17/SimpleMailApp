@@ -11,20 +11,6 @@ import MessageManager from '.././js/managers/MessageManager.js';
 
 export default function drawSingleMail(message) {
 
-    for (let j = 0; j < message.headers.length; j++) {
-        if (message.headers[j].name == 'From') {
-            var from = message.headers[j].value;
-        }
-        if (message.headers[j].name == 'To') {
-            var to = message.headers[j].value;
-        }
-        if (message.headers[j].name == 'Subject') {
-            var subject = message.headers[j].value;
-        }
-        if (message.headers[j].name == 'Date') {
-            var date = message.headers[j].value;
-        }
-    }
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
     var vp10 = new VerticalPanel('vp10', 'inbox-body');
@@ -35,12 +21,12 @@ export default function drawSingleMail(message) {
 
     var vp12 = new VerticalPanel('vp12', 'col-md-12');
     vp11.add(vp12);
-    var h41 = new H4('h41', 'col-md-8', subject);
+    var h41 = new H4('h41', 'col-md-8', message.headers.subject);
     vp12.add(h41);
-    
+
     var vp13 = new VerticalPanel('vp13', 'col-md-4 text-right');
     vp12.add(vp13);
-    var date = new Label('date', 'date', date);
+    var date = new Label('date', 'date', message.headers.date);
     vp13.add(date);
 
     var vp14 = new VerticalPanel('vp14', 'col-md-12');
@@ -60,13 +46,13 @@ export default function drawSingleMail(message) {
     var vp17 = new VerticalPanel('vp17', 'col-md-12');
     vp16.add(vp17);
 
-    var senderImage = new Image('senderImage', '', 'https://bootdey.com/img/Content/avatar/avatar6.png', from, '40px', '40px');
+    var senderImage = new Image('senderImage', '', 'https://bootdey.com/img/Content/avatar/avatar6.png', message.headers.from, '40px', '40px');
     vp17.add(senderImage);
-    var senderName = new Strong('senderName', '', from);
+    var senderName = new Strong('senderName', '', message.headers.from);
     vp17.add(senderName);
     var textTo = new Label('textTo', '', ' to ');
     vp17.add(textTo);
-    var textMe = new Strong('textMe', '', to);
+    var textMe = new Strong('textMe', '', message.headers.to);
     vp17.add(textMe);
 
     var vp18 = new VerticalPanel('vp18', 'view-mail');
@@ -91,8 +77,7 @@ export default function drawSingleMail(message) {
     button1.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log(from + '' + subject);
-
+        
         var vp7 = document.getElementById("vp7");
         var vp9 = document.getElementById("vp9");
         vp9.remove(vp7);

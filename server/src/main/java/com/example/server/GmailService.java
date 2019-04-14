@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.Draft;
 import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
@@ -44,11 +45,6 @@ public class GmailService {
 		} else {
 			labelJSON.put("labelListVisibility", "labelShow");
 		}
-		if(label.getMessageListVisibility() != null) {
-			labelJSON.put("messageListVisibility", label.getMessageListVisibility());
-		} else {
-			labelJSON.put("messageListVisibility", "show");
-		}
 		
 		return labelJSON;
 	}
@@ -64,7 +60,7 @@ public class GmailService {
 		}
 		messageJSON.put("labels", labels);
 		
-		JSONArray headersArray = fetchMessageHeaders(message);
+		JSONObject headersArray = fetchMessageHeaders(message);
 		messageJSON.put("headers", headersArray);
 		
 		return messageJSON;
@@ -81,7 +77,7 @@ public class GmailService {
 			//ZA POSLATE
 			content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getBody().getData()));
 		} else {
-			//ZA PRIMLJENJE
+			//ZA PRIMLJENE
 			content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getParts().get(0).getBody().getData()));
 		}
 		
@@ -92,16 +88,16 @@ public class GmailService {
 		}
 		messageJSON.put("labelIds", labels);
 		
-		JSONArray headersArray = fetchMessageHeaders(message);
+		JSONObject headersArray = fetchMessageHeaders(message);
 		messageJSON.put("headers", headersArray);
 		
 		return messageJSON;
 
 	}
 	
-	protected JSONArray fetchMessageHeaders(Message message) throws ParseException {
+	protected JSONObject fetchMessageHeaders(Message message) throws ParseException, JSONException {
 		
-		JSONArray headersArray = new JSONArray();
+		JSONObject headersObject = new JSONObject();
 		for (MessagePartHeader header : message.getPayload().getHeaders()) {
 			if(header.getName().equals("Date")) {
 				SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ROOT);
@@ -110,20 +106,20 @@ public class GmailService {
 				DateFormat df = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
 				String s = df.format(date);
 				header.setValue(s);
-				headersArray.put(header);
+				headersObject.put("date", header.getValue());
 			}
 			if(header.getName().equals("Subject")) {
-				headersArray.put(header);
+				headersObject.put("subject", header.getValue());
 			}
 			if(header.getName().equals("From")) {
-				headersArray.put(header);
+				headersObject.put("from", header.getValue());
 			}
 			if(header.getName().equals("To")) {
-				headersArray.put(header);
+				headersObject.put("to", header.getValue());
 			}
 
 		}
-		return headersArray;
+		return headersObject;
 	}
 
 	/**
@@ -183,6 +179,19 @@ public class GmailService {
 		Message message = createMessageWithEmail(emailContent);
 		
 		return message;
+	}
+	
+	protected JSONObject fetchDraft(Draft draft) throws IOException, JSONException, ParseException {
+
+		JSONObject draftJSON = new JSONObject();
+
+		draftJSON.put("id", draft.getId());
+		Message message = draft.getMessage();
+		JSONObject messageJSON = fetchMessage(message);
+		draftJSON.put("message", messageJSON);
+		
+		return draftJSON;
+
 	}
 	
 	protected List<String> getScopes() {

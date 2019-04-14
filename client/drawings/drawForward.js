@@ -6,18 +6,6 @@ import {
 
 export default function drawForward(message) {
 
-    for (let j = 0; j < message.headers.length; j++) {
-        if (message.headers[j].name == 'From') {
-            var from = message.headers[j].value;
-        }
-        if (message.headers[j].name == 'Subject') {
-            var subject = message.headers[j].value;
-        }
-        if (message.headers[j].name == 'Date') {
-            var date = message.headers[j].value;
-        }
-    }
-    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
     var vp10 = new VerticalPanel('vp10', 'inbox-body');
@@ -44,7 +32,7 @@ export default function drawForward(message) {
     var emptyRow3 = new EmptyRow('er3', '');
     vp13.add(emptyRow3);
 
-    document.getElementById('inputTitle').value = subject;
+    document.getElementById('inputTitle').value = message.headers.subject;
     document.getElementById('inputMessage').value = message.content;
 
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
