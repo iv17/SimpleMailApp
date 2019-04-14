@@ -25,12 +25,33 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
 
 @Service
 public class GmailService {
 
+	protected JSONObject fetchLabel(Label label) throws JSONException {
+		
+		JSONObject labelJSON = new JSONObject();
+		
+		labelJSON.put("name", label.getName());
+		labelJSON.put("messagesTotal", label.getMessagesTotal());
+		
+		if(label.getLabelListVisibility() != null) {
+			labelJSON.put("labelListVisibility", label.getLabelListVisibility());
+		} else {
+			labelJSON.put("labelListVisibility", "labelShow");
+		}
+		if(label.getMessageListVisibility() != null) {
+			labelJSON.put("messageListVisibility", label.getMessageListVisibility());
+		} else {
+			labelJSON.put("messageListVisibility", "show");
+		}
+		
+		return labelJSON;
+	}
 	protected JSONObject fetchMessage(Message message) throws IOException, JSONException, ParseException {
 
 		JSONObject messageJSON = new JSONObject();

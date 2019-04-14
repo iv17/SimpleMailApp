@@ -143,21 +143,8 @@ public class Controller {
 		JSONArray labelArray = new JSONArray();
 		for (Label l : labelsResponse.getLabels()) {
 			Label label = client.users().labels().get(userId, l.getId()).execute();
-			JSONObject labelJSON = new JSONObject();
-			labelJSON.put("name", label.getName());
-			if(label.getLabelListVisibility() != null) {
-				labelJSON.put("labelListVisibility", label.getLabelListVisibility());
-			} else {
-				labelJSON.put("labelListVisibility", "labelShow");
-			}
-			if(label.getMessageListVisibility() != null) {
-				labelJSON.put("messageListVisibility", label.getMessageListVisibility());
-			} else {
-				labelJSON.put("messageListVisibility", "show");
-			}
-
-			labelJSON.put("messagesTotal", label.getMessagesTotal());
-
+			
+			JSONObject labelJSON = service.fetchLabel(label);
 			labelArray.put(labelJSON);
 		}
 
@@ -201,6 +188,10 @@ public class Controller {
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
 
 		JSONArray messageArray = new JSONArray();
+		if(msgResponse.getMessages() == null) {
+			return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+		}
+		
 		for (Message msg : msgResponse.getMessages()) {
 
 			Message message = client.users().messages().get(userId, msg.getId()).execute();

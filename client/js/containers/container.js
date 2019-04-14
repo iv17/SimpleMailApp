@@ -6,31 +6,14 @@ export default class Container extends Component {
         this.children = new Map();
     }
 
-    findChild(id) {
-        for (var child of this.children.values()) {
-            if (child.id == id) {
-                //nasao dete
-            }
-        }
-        for (var child of children.values()) { //?
-            if (child.id == id && child instanceof Container) {
-
-            }
-        }
-    }
     add(component) {
         this.children.set(component.id, component);
         component.setParent(this);
         $('#' + this.id).append(component.tohtml());
-        //console.log(this.id + " " + component.id);
-        //this.addListeners(component);
 
         for (var child of this.children.values()) {
             this.addListeners(child);
-            //child.element = $("#" + child.id)[0];
         }
-
-        //component.element = $("#" + component.id)[0];
     }
 
     remove(component) {
@@ -39,8 +22,6 @@ export default class Container extends Component {
     }
 
     draw() {
-        //var src = this.tohtml();
-        //$('#' + this.id).append(src);
         for (var child of this.children.values()) {
             this.addListeners(child);
             child.element = $("#" + child.id)[0];
@@ -53,8 +34,7 @@ export default class Container extends Component {
                 this.addListeners(child);
             }
         }
-        //https://www.w3schools.com/jsref/dom_obj_event.asp
-        //https://api.jquery.com/category/events/
+       
         if (component.onclick) {
             $("#" + component.id).click(component.onclick);
         }

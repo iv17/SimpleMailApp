@@ -85,7 +85,7 @@ export default function drawMail(labels, messages, user) {
         vp7.add(vp99);
         vp99 = drawCompose();
     }
-    
+
     var hr2 = new HR('hr2');
     vp8.add(hr2);
 
@@ -94,21 +94,17 @@ export default function drawMail(labels, messages, user) {
 
     var list_items = [];
     if (labels.length > 0) {
-        for (let index = 1; index < labels.length + 1; index++) {
-            var itemID = "item" + index;
-            var li = new LI(itemID, '');
-            list_items.push(li);
-        }
         for (let index = 0; index < labels.length; index++) {
-
             if (labels[index].labelListVisibility != "labelHide") {
-                var container = list_items[index];
+                var container = new LI(labels[index].name, '');
                 ul2.add(container);
                 var a = new AContainer('a2' + index, '', labels[index].name, '#');
                 container.add(a);
                 var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
                 a.add(badge);
-
+                if (labels[index].name == 'INBOX') {
+                    container.addCSSClass('active');
+                }
                 container.onclick = function (e) {
                     e.preventDefault();
                     e.stopImmediatePropagation();
@@ -125,10 +121,12 @@ export default function drawMail(labels, messages, user) {
                     let messageManager = new MessageManager(axios);
 
                     messageManager.fetchMessages(labels[index].name)
-                    .then(response => {
-                        vp99 = drawInbox(messageManager.messages)
-                    });
+                        .then(response => {
+                            vp99 = drawInbox(messageManager.messages)
+                        });
                 }
+               
+                list_items.push(container);
             }
         }
     }
