@@ -157,7 +157,6 @@ public class Controller {
 			}
 
 			labelJSON.put("messagesTotal", label.getMessagesTotal());
-			labelJSON.put("messagesUnread", label.getMessagesUnread());
 
 			labelArray.put(labelJSON);
 		}
@@ -232,9 +231,7 @@ public class Controller {
 	}
 
 	@RequestMapping(value = "/send", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> sendMessage(@RequestBody String body) throws JSONException, IOException, MessagingException {		
-
-		JSONObject messageJSON = new JSONObject();
+	public ResponseEntity<String> sendMessage(@RequestBody String body) throws JSONException, IOException, MessagingException, ParseException {		
 
 		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build();
@@ -243,10 +240,40 @@ public class Controller {
 
 		Message temp = service.prepareForSend(body, userId);
 
-		Message message = client.users().messages().send(userId, temp).execute();
-		messageJSON.put("message", message);
-
+		Message send = client.users().messages().send(userId, temp).execute();
+		
+		Message message = client.users().messages().get(userId, send.getId()).setFormat("full").execute();
+		JSONObject messageJSON = service.fetchFullMessage(message);
+		
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value = "/trash", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> trashMessage(@RequestParam(value = "id") String id) throws JSONException, IOException, MessagingException, ParseException {		
+
+		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
+
+		String userId = "me";
+
+		client.users().messages().trash(userId, id).execute();
+		
+		List<String> labelIds = new ArrayList<>();
+		labelIds.add("TRASH");
+		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+
+		JSONArray messageArray = new JSONArray();
+		for (Message msg : msgResponse.getMessages()) {
+
+			Message message = client.users().messages().get(userId, msg.getId()).execute();
+
+			JSONObject messageJSON = service.fetchMessage(message);
+			messageArray.put(messageJSON);
+		}	
+		
+		
+		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
 

@@ -71,6 +71,7 @@ export default function drawMail(labels, messages, user) {
     vp7.add(vp8);
     var buttonCompose = new AContainer('buttonCompose', 'btn btn-danger btn-sm btn-block', 'COMPOSE');
     vp8.add(buttonCompose);
+
     buttonCompose.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -84,6 +85,7 @@ export default function drawMail(labels, messages, user) {
         vp7.add(vp99);
         vp99 = drawCompose();
     }
+    
     var hr2 = new HR('hr2');
     vp8.add(hr2);
 
@@ -110,8 +112,7 @@ export default function drawMail(labels, messages, user) {
                 container.onclick = function (e) {
                     e.preventDefault();
                     e.stopImmediatePropagation();
-                    console.log(list_items[index].id + " " + labels[index].name);
-
+                    
                     var vp7 = document.getElementById("vp7");
                     var vp9 = document.getElementById("vp9");
                     vp9.remove(vp7);

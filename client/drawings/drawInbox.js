@@ -6,7 +6,7 @@ import {
 import drawSingleMail from './drawSingleMail.js';
 import MessageManager from '.././js/managers/MessageManager.js';
 
-export default function drawInbox(messages, message) {
+export default function drawInbox(messages) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -56,8 +56,7 @@ export default function drawInbox(messages, message) {
         container.onclick = function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            console.log(messages[index].id);
-
+           
             var vp7 = document.getElementById("vp7");
             var vp9 = document.getElementById("vp9");
             vp9.remove(vp7);

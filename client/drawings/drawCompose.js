@@ -4,6 +4,8 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '.././js/osc.js';
 import drawInbox from './drawInbox.js';
+import MessageManager from '.././js/managers/MessageManager.js';
+import drawSingleMail from './drawSingleMail.js';
 
 export default function drawCompose() {
 
@@ -46,14 +48,30 @@ export default function drawCompose() {
     buttonSend.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log('SEND');
-        //console.log(message);
-        /*var to = document.getElementById('inputEmail').value;
+       
+        var to = document.getElementById('inputEmail').value;
         var subject = document.getElementById('inputTitle').value;
-        var bodyText = document.getElementById('inputMessage').value;*/
-        
+        var bodyText = document.getElementById('inputMessage').value;
+
+        var vp7 = document.getElementById("vp7");
+        var vp9 = document.getElementById("vp9");
+        vp9.remove(vp7);
+
+        vp7 = new VerticalPanel('vp7', 'row');
+        var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+        vp7.add(vp99);
+
+        let axios = window._api.axios;
+        let messageManager = new MessageManager(axios);
+
+        messageManager.sendMessage(to, subject, bodyText)
+            .then(response => {
+                console.log(response);
+                vp99 = drawSingleMail(messageManager.message);
+            });
+
     }
-   
+
     var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard ', '', '');
     vp14.add(buttonDiscard);
     var i2 = new I('i2', 'fa fa-trash-o');
@@ -64,7 +82,7 @@ export default function drawCompose() {
     buttonDiscard.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log('DISCARD'); 
+        console.log('DISCARD');
     }
 
     var hr2 = new HR('hr2', '');

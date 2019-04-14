@@ -55,10 +55,16 @@ public class GmailService {
 		JSONObject messageJSON = new JSONObject();
 
 		messageJSON.put("id", message.getId());
-		String content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getParts().get(0).getBody().getData()));
-
+		String content = "";
+		if(message.getPayload().getBody().getData()!= null) {
+			//ZA POSLATE
+			content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getBody().getData()));
+		} else {
+			//ZA PRIMLJENJE
+			content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getParts().get(0).getBody().getData()));
+		}
+		
 		messageJSON.put("content", content);
-		messageJSON.put("snippet", message.getSnippet());
 		JSONArray labels = new JSONArray();
 		for (String label : message.getLabelIds()) {
 			labels.put(label);
@@ -89,6 +95,9 @@ public class GmailService {
 				headersArray.put(header);
 			}
 			if(header.getName().equals("From")) {
+				headersArray.put(header);
+			}
+			if(header.getName().equals("To")) {
 				headersArray.put(header);
 			}
 

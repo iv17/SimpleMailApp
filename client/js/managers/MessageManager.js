@@ -31,9 +31,16 @@ export default class MessageManager {
             to: to,
             subject: subject,
             bodyText: bodyText
-        }).then((response) => {
-            this.message = response.data;
-        });
+            }).then((response) => {
+                this.message = response.data;
+            });
+    }
+
+    trashMessage(id) {
+        return this.axios.post(this.url + "/trash?id=" + id)
+            .then((response) => {
+                this.messages = response.data;
+            });
     }
 
     getMessages() {
