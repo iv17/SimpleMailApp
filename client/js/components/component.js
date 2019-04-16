@@ -3,8 +3,7 @@ export default class Component {
     this.id = id;
     this.CSSclass = CSSclass;
 
-    this.node = document.createElement("p");
-   
+    this.node = document.createElement("div");
     this.node.id = id;
     this.node.component = this;
     document.body.appendChild(this.node);

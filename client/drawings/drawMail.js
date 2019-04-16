@@ -76,7 +76,7 @@ export default function drawMail(labels, messages, user) {
 
     var vp7 = new VerticalPanel('vp7', 'row');
     vp1.add(vp7);
-    var hr1 = new HR('hr1');
+    var hr1 = new HR('idhr1');
     vp7.add(hr1);
 
     var vp8 = new VerticalPanel('vp8', 'col-sm-3 col-md-2');
@@ -84,18 +84,7 @@ export default function drawMail(labels, messages, user) {
     var buttonCompose = new AContainer('buttonCompose', 'btn btn-danger btn-sm btn-block', 'COMPOSE');
     vp8.add(buttonCompose);
 
-    buttonCompose.onclick = function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
-        var tempvp7 = buttonCompose.findById("vp7");
-        var tempvp9 = buttonCompose.findById("vp9");
-        tempvp9.remove(tempvp7);
-        var component = drawCompose();
-        tempvp7.add(component);
-    }
-
-    var hr2 = new HR('hr2');
+    var hr2 = new HR('idhr2');
     vp8.add(hr2);
 
     var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
@@ -140,5 +129,15 @@ export default function drawMail(labels, messages, user) {
     var vp9 = drawInbox(messages);
     vp7.add(vp9);
 
+    buttonCompose.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var tempvp7 = buttonCompose.findById("vp7");
+        var tempvp9 = buttonCompose.findById("vp9");
+        tempvp9.remove(tempvp7);
+        var component = drawCompose();
+        tempvp7.add(component);
+    }
     return vp1;
 }
