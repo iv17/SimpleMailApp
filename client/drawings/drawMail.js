@@ -8,6 +8,7 @@ import drawInbox from './drawInbox.js';
 import drawSingleMail from './drawSingleMail.js';
 import drawCompose from './drawCompose.js';
 import MessageManager from '.././js/managers/MessageManager.js';
+import UserManager from '.././js/managers/UserManager.js';
 
 //-----------------------------------
 function changeActiveClass(button) {
@@ -22,6 +23,7 @@ function changeActiveClass(button) {
 }
 
 export default function drawMail(labels, messages, user) {
+
     var vp1 = new VerticalPanel('vp1', 'container');
 
     var emptyRow1 = new EmptyRow('er1', 'row');
@@ -53,8 +55,18 @@ export default function drawMail(labels, messages, user) {
     li11.add(a11);
     var li12 = new LI('li12', '');
     ul1.add(li12);
-    var a12 = new A('a12', '', 'Log out', '#');
+    var a12 = new AContainer('a12', '', 'Log out', '');
     li12.add(a12);
+    a12.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        console.log('LOG OUT');
+
+        let axios = window._api.axios;
+        let userManager = new UserManager(axios);
+
+        userManager.logout();
+    }
 
     var vp6 = new VerticalPanel('vp6', 'user-name');
     vp4.add(vp6);
@@ -76,14 +88,11 @@ export default function drawMail(labels, messages, user) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        var vp7 = document.getElementById("vp7");
-        var vp9 = document.getElementById("vp9");
-        vp9.remove(vp7);
-
-        vp7 = new VerticalPanel('vp7', 'row');
-        var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
-        vp7.add(vp99);
-        vp99 = drawCompose();
+        var tempvp7 = buttonCompose.findById("vp7");
+        var tempvp9 = buttonCompose.findById("vp9");
+        tempvp9.remove(tempvp7);
+        var component = drawCompose();
+        tempvp7.add(component);
     }
 
     var hr2 = new HR('hr2');
@@ -108,30 +117,28 @@ export default function drawMail(labels, messages, user) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
 
-                var vp7 = document.getElementById("vp7");
-                var vp9 = document.getElementById("vp9");
+                changeActiveClass(this.component);
+
+                var vp7 = container.findById("vp7");
+                var vp9 = container.findById("vp9");
                 vp9.remove(vp7);
-
-                vp7 = new VerticalPanel('vp7', 'row');
-                var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
-                vp7.add(vp99);
-
+                
                 let axios = window._api.axios;
                 let messageManager = new MessageManager(axios);
 
                 messageManager.fetchMessages(labels[index].name)
                     .then(response => {
-                        vp99 = drawInbox(messageManager.messages)
+                        var component = drawInbox(messageManager.messages);
+                        vp7.add(component);
                     });
             }
 
             list_items.push(container);
         }
     }
-    var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
+    
+    var vp9 = drawInbox(messages);
     vp7.add(vp9);
-
-    vp9 = drawInbox(messages);
 
     return vp1;
 }

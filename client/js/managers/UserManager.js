@@ -12,6 +12,14 @@ export default class UserManager {
                 this.user = response.data;
             });
     }
+
+    logout() {
+        return this.axios.get(this.url + "/logout")
+            .then((response) => {
+                this.user = response.data;
+            });
+    }
+  
   
     getUser() {
         return this.user;

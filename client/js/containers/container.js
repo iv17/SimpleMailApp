@@ -9,7 +9,9 @@ export default class Container extends Component {
     add(component) {
         this.children.set(component.id, component);
         component.setParent(this);
+        $('#' + component.id).remove();
         $('#' + this.id).append(component.tohtml());
+        component.node = document.getElementById(component.id);
 
         for (var child of this.children.values()) {
             this.addListeners(child);
@@ -18,14 +20,8 @@ export default class Container extends Component {
 
     remove(component) {
         this.children.delete(component.id);
+        //component.children.delete(this.id);
         $('#' + this.id).empty();
-    }
-
-    draw() {
-        for (var child of this.children.values()) {
-            this.addListeners(child);
-            child.element = $("#" + child.id)[0];
-        }
     }
 
     addListeners(component) {

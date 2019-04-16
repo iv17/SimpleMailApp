@@ -46,20 +46,17 @@ export default function drawInbox(messages) {
             e.preventDefault();
             e.stopImmediatePropagation();
            
-            var vp7 = document.getElementById("vp7");
-            var vp9 = document.getElementById("vp9");
+            var vp7 = container.findById("vp7");
+            var vp9 = container.findById("vp9");
             vp9.remove(vp7);
-
-            vp7 = new VerticalPanel('vp7', 'row');
-            var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
-            vp7.add(vp99);
             
             let axios = window._api.axios;
             let messageManager = new MessageManager(axios);
 
             messageManager.fetchMessage(messages[index].id)
             .then(response => {
-                vp99 = drawSingleMail(messageManager.message);
+                var component = drawSingleMail(messageManager.message);
+                vp7.add(component);
 			});
            
         }

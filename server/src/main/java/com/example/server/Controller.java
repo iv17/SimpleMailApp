@@ -102,11 +102,13 @@ public class Controller {
 		credential = flow.createAndStoreCredential(response, "userID");	
 
 		RedirectView redirect = new RedirectView("http://localhost:5500/SimpleMailApp/client/index.html");
-		redirect.addStaticAttribute("code", code);
-
+		
 		return redirect;
 
 	}
+	
+	
+	
 
 	@RequestMapping(value = "/me", 
 			method = RequestMethod.GET,
@@ -334,6 +336,7 @@ public class Controller {
 
 	}
 	
+	
 	@RequestMapping(value = "/drafts", 
 			method = RequestMethod.GET, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -355,6 +358,22 @@ public class Controller {
 		}
 
 		return new ResponseEntity<>(draftArray.toString(), HttpStatus.OK);
+
+	}
+	
+	@RequestMapping(value = "/logout", 
+			method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> logout() throws IOException, JSONException {
+
+		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
+
+		String userId = "me";
+	
+		JSONObject me = new JSONObject();
+
+		return new ResponseEntity<>(me.toString(), HttpStatus.OK);
 
 	}
 }
