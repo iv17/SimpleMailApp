@@ -21,7 +21,6 @@ export default class Container extends Component {
    
     remove(component) {
         component.children.delete(this.id);
-       
         $('#' + this.id).remove();
     }
 
