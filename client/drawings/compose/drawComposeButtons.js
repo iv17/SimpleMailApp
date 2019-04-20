@@ -6,6 +6,7 @@ import {
 
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawSingleMail from '../singleMail/drawSingleMail.js';
+import drawInbox from '../inbox/drawInbox.js';
 
 export default function drawComposeButtons() {
 
@@ -56,6 +57,19 @@ export default function drawComposeButtons() {
         e.preventDefault();
         e.stopImmediatePropagation();
         console.log('DISCARD');
+
+        var vp7 = buttonDiscard.findById("vp7");
+        var vp9 = buttonDiscard.findById("vp9");
+        vp9.remove(vp7);
+
+        let axios = window._api.axios;
+        let messageManager = new MessageManager(axios);
+
+        messageManager.fetchMessages("INBOX")
+            .then(response => {
+                var component = drawInbox(messageManager.messages);
+                vp7.add(component);
+            });
     }
 
     var hr2 = new HR('hr2', '');
