@@ -36,12 +36,25 @@ export default function drawInbox(messages) {
         
         var container = inbox_rows[index];
         vp12.add(container);
-        var i1 = new I('i' + index, 'fa fa-trash');
-        container.add(i1);
-        i1.onclick = function(e) {
+        var trash = new I('i' + index, 'fa fa-trash');
+        container.add(trash);
+        trash.onclick = function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            console.log(checkbox);
+            console.log('DELETE ' + messages[index].id);
+
+            var vp7 = trash.findById("vp7");
+            var vp9 = trash.findById("vp9");
+            vp9.remove(vp7);
+    
+            let axios = window._api.axios;
+            let messageManager = new MessageManager(axios);
+    
+            messageManager.trashMessage(messages[index].id)
+                .then(response => {
+                    var component = drawInbox(messageManager.messages);
+                    vp7.add(component);
+                });
         }
         container.add(new EmptyCol('ec1' + index, ''));
         container.add(new EmptyCol('ec2' + index, ''));
