@@ -53,7 +53,7 @@ export default function drawSingleMailButtons(message) {
         vp7.add(component);
 
     }
-    var button3 = new AContainer('button3', 'btn btn-sm btn-default', 'Delete ', '', '');
+    var button3 = new AContainer('button3', 'btn btn-sm btn-default', 'Trash ', '', '');
     vp19.add(button3);
     var i6 = new I('i6', 'fa fa-trash-o');
     button3.add(i6);

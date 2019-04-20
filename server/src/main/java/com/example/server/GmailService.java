@@ -213,15 +213,14 @@ public class GmailService {
 	protected List<String> getScopes() {
 		List<String> scopes = new ArrayList<>();
 		
+		scopes.add("https://mail.google.com/");
 		scopes.add(GmailScopes.GMAIL_COMPOSE);
 		scopes.add(GmailScopes.GMAIL_INSERT);
 		scopes.add(GmailScopes.GMAIL_LABELS);
-		//scopes.add(GmailScopes.GMAIL_METADATA);
 		scopes.add(GmailScopes.GMAIL_MODIFY);
 		scopes.add(GmailScopes.GMAIL_READONLY);
 		scopes.add(GmailScopes.GMAIL_SEND);
 		scopes.add(GmailScopes.GMAIL_SETTINGS_BASIC);
-		//scopes.addAll(GmailScopes.all());
 		
 		return scopes;
 	}

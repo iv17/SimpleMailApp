@@ -8,6 +8,7 @@ import drawCompose from '../compose/drawCompose.js';
 import drawForward from '../forward/drawForward.js';
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from '../trash/drawTrash.js';
+import drawInbox from '../inbox/drawInbox.js';
 
 export default function drawTrashSingleMailButtons(message) {
 
@@ -33,7 +34,7 @@ export default function drawTrashSingleMailButtons(message) {
 
         messageManager.untrashMessage(message.id)
             .then(response => {
-                var component = drawTrash(messageManager.messages);
+                var component = drawInbox(messageManager.messages);
                 vp7.add(component);
             });
 

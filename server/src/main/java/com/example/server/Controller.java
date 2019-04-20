@@ -303,6 +303,10 @@ public class Controller {
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
 
 		JSONArray messageArray = new JSONArray();
+		if(msgResponse.getMessages() == null) {
+			return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+		}
+
 		for (Message msg : msgResponse.getMessages()) {
 
 			Message message = client.users().messages().get(userId, msg.getId()).execute();
@@ -333,6 +337,10 @@ public class Controller {
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
 
 		JSONArray messageArray = new JSONArray();
+		if(msgResponse.getMessages() == null) {
+			return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+		}
+
 		for (Message msg : msgResponse.getMessages()) {
 
 			Message message = client.users().messages().get(userId, msg.getId()).execute();
@@ -362,6 +370,10 @@ public class Controller {
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
 
 		JSONArray messageArray = new JSONArray();
+		if(msgResponse.getMessages() == null) {
+			return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+		}
+
 		for (Message msg : msgResponse.getMessages()) {
 
 			Message message = client.users().messages().get(userId, msg.getId()).execute();
