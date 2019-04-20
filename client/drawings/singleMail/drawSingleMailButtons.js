@@ -4,10 +4,10 @@ import {
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 } from '../../js/osc.js';
 
-import drawInbox from '../inbox/drawInbox.js';
 import drawCompose from '../compose/drawCompose.js';
 import drawForward from '../forward/drawForward.js';
 import MessageManager from '../../js/managers/MessageManager.js';
+import drawTrash from '../trash/drawTrash.js';
 
 export default function drawSingleMailButtons(message) {
 
@@ -61,7 +61,7 @@ export default function drawSingleMailButtons(message) {
     button3.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log('DELETE ' + message.id);
+        console.log('TRASH ' + message.id);
 
         var vp7 = button3.findById("vp7");
         var vp9 = button3.findById("vp9");
@@ -72,7 +72,7 @@ export default function drawSingleMailButtons(message) {
 
         messageManager.trashMessage(message.id)
             .then(response => {
-                var component = drawInbox(messageManager.messages);
+                var component = drawTrash(messageManager.messages);
                 vp7.add(component);
             });
     }

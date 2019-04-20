@@ -6,9 +6,8 @@ import {
 
 import drawSingleMail from '../singleMail/drawSingleMail.js';
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawTrash from '../trash/drawTrash.js';
 
-export default function drawInbox(messages) {
+export default function drawTrash(messages) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -38,12 +37,12 @@ export default function drawInbox(messages) {
         
         var container = inbox_rows[index];
         vp12.add(container);
-        var trash = new I('i' + index, 'fa fa-trash');
-        container.add(trash);
-        trash.onclick = function(e) {
+        var mail = new I('i' + index, 'fa fa-envelope');
+        container.add(mail);
+        mail.onclick = function(e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-            console.log('TRASH ' + messages[index].id);
+            console.log('UNTRASH ' + messages[index].id);
 
             var vp7 = trash.findById("vp7");
             var vp9 = trash.findById("vp9");
@@ -52,9 +51,9 @@ export default function drawInbox(messages) {
             let axios = window._api.axios;
             let messageManager = new MessageManager(axios);
     
-            messageManager.trashMessage(messages[index].id)
+            messageManager.untrashMessage(messages[index].id)
                 .then(response => {
-                    var component = drawTrash(messageManager.messages);
+                    var component = drawInbox(messageManager.messages);
                     vp7.add(component);
                 });
         }

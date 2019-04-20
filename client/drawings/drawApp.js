@@ -9,6 +9,7 @@ import drawCompose from './compose/drawCompose.js';
 import MessageManager from '../js/managers/MessageManager.js';
 import UserManager from '../js/managers/UserManager.js';
 import changeActiveClass from '../js/changeActiveClass.js';
+import drawTrash from './trash/drawTrash.js';
 
 export default function drawApp(labels, messages, user) {
 
@@ -104,11 +105,21 @@ export default function drawApp(labels, messages, user) {
                 let axios = window._api.axios;
                 let messageManager = new MessageManager(axios);
 
-                messageManager.fetchMessages(labels[index].name)
+                if(labels[index].name == 'TRASH') {
+                    console.log('TRASH')
+                    messageManager.fetchMessages(labels[index].name)
+                    .then(response => {
+                        var component = drawTrash(messageManager.messages);
+                        vp7.add(component);
+                    });
+                } else {
+                    messageManager.fetchMessages(labels[index].name)
                     .then(response => {
                         var component = drawInbox(messageManager.messages);
                         vp7.add(component);
                     });
+                }
+               
             }
 
             list_items.push(container);
