@@ -2,9 +2,9 @@ import {
     A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
     InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
-} from '.././js/osc.js';
-import drawSingleMail from './drawSingleMail.js';
-import MessageManager from '.././js/managers/MessageManager.js';
+} from '../../js/osc.js';
+import drawSingleMail from '../singleMail/drawSingleMail.js';
+import MessageManager from '../../js/managers/MessageManager.js';
 
 export default function drawInbox(messages) {
 

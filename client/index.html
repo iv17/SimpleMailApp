@@ -25,7 +25,7 @@
 			Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 		} from './js/osc.js';
 
-		import drawMail from './drawings/drawMail.js';
+		import drawApp from './drawings/drawApp.js';
 		import UserManager from './js/managers/UserManager.js';
 		import LabelManager from './js/managers/LabelManager.js';
 		import MessageManager from './js/managers/MessageManager.js';
@@ -52,7 +52,7 @@
 			]).then(response => {
 				var mp = new MainPanel('main', '');
 
-				var vp1 = drawMail(labelManager.labels, messageManager.messages, userManager.user);
+				var vp1 = drawApp(labelManager.labels, messageManager.messages, userManager.user);
 				mp.add(vp1);
 			})
 		});

@@ -2,13 +2,9 @@ import {
     A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
     InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
-} from '.././js/osc.js';
+} from '../../js/osc.js';
 
-import drawInbox from './drawInbox.js';
-import drawCompose from './drawCompose.js';
-import drawForward from './drawForward.js';
 import drawSingleMailButtons from './drawSingleMailButtons.js';
-import MessageManager from '.././js/managers/MessageManager.js';
 
 export default function drawSingleMail(message) {
 
@@ -47,7 +43,7 @@ export default function drawSingleMail(message) {
     var vp17 = new VerticalPanel('vp17', 'col-md-12');
     vp16.add(vp17);
 
-    var senderImage = new Image('senderImage', '', 'https://bootdey.com/img/Content/avatar/avatar6.png', message.headers.from, '40px', '40px');
+    var senderImage = new Image('senderImage', '', 'http://chittagongit.com//images/google-user-icon/google-user-icon-7.jpg', message.headers.from, '40px', '40px');
     vp17.add(senderImage);
     var senderName = new Strong('senderName', '', message.headers.from);
     vp17.add(senderName);

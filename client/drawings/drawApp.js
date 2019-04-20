@@ -2,16 +2,15 @@ import {
     A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
     InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
-} from '.././js/osc.js';
+} from '../js/osc.js';
 
-import drawInbox from './drawInbox.js';
-import drawSingleMail from './drawSingleMail.js';
-import drawCompose from './drawCompose.js';
-import MessageManager from '.././js/managers/MessageManager.js';
-import UserManager from '.././js/managers/UserManager.js';
+import drawInbox from './inbox/drawInbox.js';
+import drawCompose from './compose/drawCompose.js';
+import MessageManager from '../js/managers/MessageManager.js';
+import UserManager from '../js/managers/UserManager.js';
 import changeActiveClass from '../js/changeActiveClass.js';
 
-export default function drawMail(labels, messages, user) {
+export default function drawApp(labels, messages, user) {
 
     var vp1 = new VerticalPanel('vp1', 'container');
 
@@ -26,7 +25,7 @@ export default function drawMail(labels, messages, user) {
 
     var ac1 = new AContainer('ac1', 'inbox-avatar', '', '#', '');
     vp4.add(ac1);
-    var image1 = new Image('image1', 'img-responsive', 'https://bootdey.com/img/Content/avatar/avatar1.png', user.name, '50px', '50px');
+    var image1 = new Image('image1', 'img-responsive', 'http://chittagongit.com//images/google-user-icon/google-user-icon-7.jpg', user.name, '50px', '50px');
     ac1.add(image1);
 
     var vp5 = new VerticalPanel('vp5', 'btn-group pull-right');
