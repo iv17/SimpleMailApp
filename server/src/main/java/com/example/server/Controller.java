@@ -102,13 +102,13 @@ public class Controller {
 		credential = flow.createAndStoreCredential(response, "userID");	
 
 		RedirectView redirect = new RedirectView("http://localhost:5500/SimpleMailApp/client/index.html");
-		
+
 		return redirect;
 
 	}
-	
-	
-	
+
+
+
 
 	@RequestMapping(value = "/me", 
 			method = RequestMethod.GET,
@@ -120,7 +120,7 @@ public class Controller {
 
 		String userId = "me";
 		Profile profile = client.users().getProfile(userId).execute();
-		
+
 		JSONObject me = new JSONObject();
 		me.put("email", profile.getEmailAddress());
 
@@ -143,7 +143,7 @@ public class Controller {
 		JSONArray labelArray = new JSONArray();
 		for (Label l : labelsResponse.getLabels()) {
 			Label label = client.users().labels().get(userId, l.getId()).execute();
-			
+
 			JSONObject labelJSON = service.fetchLabel(label);
 			if(labelJSON.getString("labelListVisibility").equals("labelShow")) {
 				labelArray.put(labelJSON);
@@ -177,7 +177,7 @@ public class Controller {
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
-	
+
 
 	@RequestMapping(value = "/messages", 
 			method = RequestMethod.GET, 
@@ -189,7 +189,7 @@ public class Controller {
 
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add(l);
-		
+
 		String userId = "me";
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
 
@@ -197,7 +197,7 @@ public class Controller {
 		if(msgResponse.getMessages() == null) {
 			return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 		}
-		
+
 		for (Message msg : msgResponse.getMessages()) {
 
 			Message message = client.users().messages().get(userId, msg.getId()).execute();
@@ -227,6 +227,7 @@ public class Controller {
 
 	}
 
+
 	@RequestMapping(value = "/send", 
 			method = RequestMethod.POST, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -239,13 +240,52 @@ public class Controller {
 		Message temp = service.prepareForSend(body, userId);
 
 		Message send = client.users().messages().send(userId, temp).execute();
-		
+
 		Message message = client.users().messages().get(userId, send.getId()).setFormat("full").execute();
 		JSONObject messageJSON = service.fetchFullMessage(message);
-		
+
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
 
 	}
+
+
+	@RequestMapping(value = "/draft", 
+			method = RequestMethod.POST, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> draftMessage(@RequestBody String body) throws JSONException, IOException, MessagingException, ParseException {		
+
+		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
+
+		String userId = "me";
+		Message temp = service.prepareForSend(body, userId);
+
+		Draft tempDraft = new Draft();
+		tempDraft.setMessage(temp);
+		client.users().drafts().create(userId, tempDraft).execute();
+
+		List<String> labelIds = new ArrayList<>();
+		labelIds.add("DRAFT");
+
+		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+
+		JSONArray messageArray = new JSONArray();
+		if(msgResponse.getMessages() == null) {
+			return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+		}
+
+		for (Message msg : msgResponse.getMessages()) {
+
+			Message message = client.users().messages().get(userId, msg.getId()).execute();
+
+			JSONObject messageJSON = service.fetchMessage(message);
+			messageArray.put(messageJSON);
+		}	
+
+		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+
+	}
+
 
 	@RequestMapping(value = "/trash", 
 			method = RequestMethod.POST, 
@@ -257,7 +297,7 @@ public class Controller {
 
 		String userId = "me";
 		client.users().messages().trash(userId, id).execute();
-		
+
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("TRASH");
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
@@ -270,13 +310,13 @@ public class Controller {
 			JSONObject messageJSON = service.fetchMessage(message);
 			messageArray.put(messageJSON);
 		}	
-		
-		
+
+
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
-	
-	
+
+
 	@RequestMapping(value = "/untrash", 
 			method = RequestMethod.POST, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -287,7 +327,7 @@ public class Controller {
 
 		String userId = "me";
 		client.users().messages().untrash(userId, id).execute();
-		
+
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("INBOX");
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
@@ -300,12 +340,12 @@ public class Controller {
 			JSONObject messageJSON = service.fetchMessage(message);
 			messageArray.put(messageJSON);
 		}	
-		
-		
+
+
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
-	
+
 
 	@RequestMapping(value = "/delete", 
 			method = RequestMethod.POST, 
@@ -317,7 +357,7 @@ public class Controller {
 
 		String userId = "me";
 		client.users().messages().delete(userId, id).execute();
-		
+
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("TRASH");
 		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
@@ -330,13 +370,13 @@ public class Controller {
 			JSONObject messageJSON = service.fetchMessage(message);
 			messageArray.put(messageJSON);
 		}	
-		
-		
+
+
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
-	
-	
+
+
 	@RequestMapping(value = "/drafts", 
 			method = RequestMethod.GET, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -360,7 +400,7 @@ public class Controller {
 		return new ResponseEntity<>(draftArray.toString(), HttpStatus.OK);
 
 	}
-	
+
 	@RequestMapping(value = "/logout", 
 			method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -370,7 +410,7 @@ public class Controller {
 				.setApplicationName(APPLICATION_NAME).build();
 
 		String userId = "me";
-	
+
 		JSONObject me = new JSONObject();
 
 		return new ResponseEntity<>(me.toString(), HttpStatus.OK);

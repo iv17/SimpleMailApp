@@ -139,10 +139,26 @@ public class GmailService {
 
 		MimeMessage email = new MimeMessage(session);
 
-		email.setFrom(new InternetAddress(from));
-		email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
-		email.setSubject(subject);
-		email.setText(bodyText);
+		if(from != null) {
+			email.setFrom(new InternetAddress(from));
+		} else {
+			email.setFrom("");
+		}
+		if(to != null && !to.equals("")) {
+			email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+		} else {
+			email.addRecipients(javax.mail.Message.RecipientType.TO, "");
+		}
+		if(subject != null) {
+			email.setSubject(subject);
+		} else {
+			email.setSubject("");
+		}
+		if(bodyText != null) {
+			email.setText(bodyText);
+		} else {
+			email.setText("");
+		}
 
 		return email;
 	}

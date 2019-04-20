@@ -28,25 +28,53 @@ export default function drawComposeButtons() {
         var subject = document.getElementById('inputTitle').value;
         var bodyText = document.getElementById('inputMessage').value;
 
-        var vp7 = document.getElementById("vp7");
-        var vp9 = document.getElementById("vp9");
+        var vp7 = buttonSend.findById("vp7");
+        var vp9 = buttonSend.findById("vp9");
         vp9.remove(vp7);
-
-        vp7 = new VerticalPanel('vp7', 'row');
-        var vp99 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
-        vp7.add(vp99);
 
         let axios = window._api.axios;
         let messageManager = new MessageManager(axios);
 
         messageManager.sendMessage(to, subject, bodyText)
             .then(response => {
-                vp99 = drawSingleMail(messageManager.message);
+                var component = drawSingleMail(messageManager.message);
+                vp7.add(component);
             });
 
     }
 
-    var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard ', '', '');
+    var buttonDraft = new AContainer('buttonDraft', 'btn btn-sm btn-default', 'Save draft ', '', '');
+    vp14.add(buttonDraft);
+    var i3 = new I('i3', 'fa fa-envelope');
+    buttonDraft.add(i3);
+    var ec3 = new EmptyCol('ec3', '');
+    vp14.add(ec3);
+
+    buttonDraft.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        console.log('DRAFT');
+
+        var to = document.getElementById('inputEmail').value;
+        var subject = document.getElementById('inputTitle').value;
+        var bodyText = document.getElementById('inputMessage').value;
+
+        var vp7 = buttonDraft.findById("vp7");
+        var vp9 = buttonDraft.findById("vp9");
+        vp9.remove(vp7);
+
+        let axios = window._api.axios;
+        let messageManager = new MessageManager(axios);
+
+        messageManager.draftMessage(to, subject, bodyText)
+            .then(response => {
+                var component = drawInbox(messageManager.messages);
+                vp7.add(component);
+            });
+
+    }
+
+    var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-primary', 'Discard ', '', '');
     vp14.add(buttonDiscard);
     var i2 = new I('i2', 'fa fa-trash-o');
     buttonDiscard.add(i2);

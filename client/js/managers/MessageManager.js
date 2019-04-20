@@ -26,18 +26,28 @@ export default class MessageManager {
                 this.message = response.data;
             });
     }
+
+    draftMessage(to, subject, bodyText) {
+        return this.axios.post(this.url + "/draft", {
+            to: to,
+            subject: subject,
+            bodyText: bodyText
+        }).then((response) => {
+            this.messages = response.data;
+        });
+    }
+
     sendMessage(to, subject, bodyText) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(re.test(String(to).toLowerCase()) && subject.length > 0  && bodyText.length > 0) {
+        if (re.test(String(to).toLowerCase()) && subject.length > 0 && bodyText.length > 0) {
             return this.axios.post(this.url + "/send", {
                 to: to,
                 subject: subject,
                 bodyText: bodyText
-                }).then((response) => {
-                    this.message = response.data;
-                });
+            }).then((response) => {
+                this.message = response.data;
+            });
         }
-        
     }
 
     trashMessage(id) {

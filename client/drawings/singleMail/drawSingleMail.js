@@ -45,12 +45,19 @@ export default function drawSingleMail(message) {
 
     var senderImage = new Image('senderImage', '', 'http://chittagongit.com//images/google-user-icon/google-user-icon-7.jpg', message.headers.from, '40px', '40px');
     vp17.add(senderImage);
+    var emptyCol = new EmptyCol('emptyCol1', '');
+    vp17.add(emptyCol);
     var senderName = new Strong('senderName', '', message.headers.from);
     vp17.add(senderName);
     var textTo = new Label('textTo', '', ' to ');
     vp17.add(textTo);
-    var textMe = new Strong('textMe', '', message.headers.to);
-    vp17.add(textMe);
+    if(message.headers.to == undefined) {
+        var textMe = new Strong('textMe', '', '');
+        vp17.add(textMe);
+    } else {
+        var textMe = new Strong('textMe', '', message.headers.to);
+        vp17.add(textMe);
+    }
 
     var vp18 = new VerticalPanel('vp18', 'view-mail');
     vp10.add(vp18);
