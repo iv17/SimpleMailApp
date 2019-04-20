@@ -9,18 +9,7 @@ import drawSingleMail from './drawSingleMail.js';
 import drawCompose from './drawCompose.js';
 import MessageManager from '.././js/managers/MessageManager.js';
 import UserManager from '.././js/managers/UserManager.js';
-
-//-----------------------------------
-function changeActiveClass(button) {
-    if (button.getCSSClass() == '') {
-        button.addCSSClass('active');
-        for (var child of button.getParent().children.values()) {
-            if (child.id != button.id && child.getCSSClass() == 'active') {
-                child.removeCSSClass('active');
-            }
-        }
-    }
-}
+import changeActiveClass from '../js/changeActiveClass.js';
 
 export default function drawMail(labels, messages, user) {
 
@@ -57,6 +46,7 @@ export default function drawMail(labels, messages, user) {
     ul1.add(li12);
     var a12 = new AContainer('a12', '', 'Log out', '');
     li12.add(a12);
+     
     a12.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
@@ -133,11 +123,12 @@ export default function drawMail(labels, messages, user) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        var tempvp7 = buttonCompose.findById("vp7");
-        var tempvp9 = buttonCompose.findById("vp9");
-        tempvp9.remove(tempvp7);
+        var vp7 = buttonCompose.findById("vp7");
+        var vp9 = buttonCompose.findById("vp9");
+        vp9.remove(vp7);
         var component = drawCompose();
-        tempvp7.add(component);
+        vp7.add(component);
     }
+
     return vp1;
 }

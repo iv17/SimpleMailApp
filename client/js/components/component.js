@@ -28,14 +28,13 @@ export default class Component {
     return this.parent;
   }
 
+  getCSSClass() {
+    return this.CSSclass;
+  }
+
   addCSSClass(CSSclass) {
     this.CSSclass = CSSclass;
     $('#' + this.id).addClass(CSSclass);
-  }
-
-  changeCSSClass(CSSclass) {
-    this.CSSclass = CSSclass;
-    $('#' + this.id).toggleClass(CSSclass);
   }
 
   removeCSSClass(CSSclass) {
@@ -43,18 +42,9 @@ export default class Component {
     $('#' + this.id).removeClass(CSSclass);
   }
 
-  getCSSClass() {
-    return this.CSSclass;
-  }
-
-  tohtml_b() {
-    return "";
-  }
-  tohtml_e() {
-    return "";
-  }
   tohtml() {
     return "";
   }
+
 }
 

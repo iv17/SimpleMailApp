@@ -42,7 +42,7 @@ export default function drawForward(message) {
     vp14.add(buttonSend);
     var i1 = new I('i1', 'fa fa-envelope');
     buttonSend.add(i1);
-    var ec1 = new EmptyCol('ec1', '');
+    var ec1 = new EmptyCol('emptyCol1', '');
     vp14.add(ec1);
     
     buttonSend.onclick = function (e) {
@@ -59,7 +59,7 @@ export default function drawForward(message) {
     vp14.add(buttonDiscard);
     var i2 = new I('i2', 'fa fa-trash-o');
     buttonDiscard.add(i2);
-    var ec2 = new EmptyCol('ec2', '');
+    var ec2 = new EmptyCol('emptyCol2', '');
     vp14.add(ec2);
 
     buttonDiscard.onclick = function (e) {

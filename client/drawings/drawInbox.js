@@ -36,12 +36,19 @@ export default function drawInbox(messages) {
         
         var container = inbox_rows[index];
         vp12.add(container);
-        container.add(new InputField("checkbox" + index, '', 'checkbox', ''));
-        //container.add(new EmptyCol('ec1', ''));
-        //container.add(new EmptyCol('ec2', ''));
-        container.add(new Label("sender" + index, 'name', messages[index].headers.from, 'min-width: 120px;display: inline-block;'));
+        var i1 = new I('i' + index, 'fa fa-trash');
+        container.add(i1);
+        i1.onclick = function(e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            console.log(checkbox);
+        }
+        container.add(new EmptyCol('ec1' + index, ''));
+        container.add(new EmptyCol('ec2' + index, ''));
+        container.add(new Label("sender" + index, 'name', messages[index].headers.from, 'min-width: 160px;display: inline-block;'));
         container.add(new Label("title" + index, '', messages[index].headers.subject, ''));
         container.add(new Label("time" + index, 'badge', messages[index].headers.date, ''));
+       
         container.onclick = function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
