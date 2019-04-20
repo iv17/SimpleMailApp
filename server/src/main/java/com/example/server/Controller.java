@@ -341,7 +341,6 @@ public class Controller {
 			messageArray.put(messageJSON);
 		}	
 
-
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
