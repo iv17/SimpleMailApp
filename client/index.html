@@ -12,7 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="css/styles.css" />
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	
+
 </head>
 
 <body>
@@ -32,19 +32,18 @@
 
 		const urlParams = new URLSearchParams(window.location.search);
 		const code = urlParams.get('code');
-		
+
 		window._api = {}
 		window._api.axios = axios;
+		let userManager = new UserManager(axios);
+		let labelManager = new LabelManager(axios);
+		let messageManager = new MessageManager(axios);
+
+		let fetchUser = userManager.fetchUser();
+		let fetchLabels = labelManager.fetchLabels();
+		let fetchINBOX = messageManager.fetchMessages("INBOX");
 
 		$(document).ready(function () {
-			let userManager = new UserManager(axios);
-			let labelManager = new LabelManager(axios);
-			let messageManager = new MessageManager(axios);
-		
-			let fetchUser = userManager.fetchUser();
-			let fetchLabels = labelManager.fetchLabels();
-			let fetchINBOX = messageManager.fetchMessages("INBOX");
-		
 			Promise.all([
 				fetchUser,
 				fetchLabels,

@@ -48,6 +48,7 @@ public class GmailService {
 		
 		return labelJSON;
 	}
+	
 	protected JSONObject fetchMessage(Message message) throws IOException, JSONException, ParseException {
 
 		JSONObject messageJSON = new JSONObject();
