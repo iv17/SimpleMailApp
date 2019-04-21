@@ -1,14 +1,12 @@
 import {
-    A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
-    InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
-    Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
+    A, EmptyRow, H5, HR, Image, Label, AContainer, ButtonContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../js/osc.js';
 
 import drawInbox from './inbox/drawInbox.js';
 import drawCompose from './compose/drawCompose.js';
 import MessageManager from '../js/managers/MessageManager.js';
 import UserManager from '../js/managers/UserManager.js';
-import changeActiveClass from '../js/changeActiveClass.js';
+import changeActiveClass from '../js/util/changeActiveClass.js';
 import drawTrash from './trash/drawTrash.js';
 
 export default function drawApp(labels, messages, user) {
