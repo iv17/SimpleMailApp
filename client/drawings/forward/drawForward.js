@@ -28,7 +28,7 @@ export default function drawForward(message) {
     vp13.add(inputTitle);
     var emptyRow2 = new EmptyRow('er2', '');
     vp13.add(emptyRow2);
-    var inputMessage = new InputArea('inputMessage', 'form-control', message.content, 10, 50);
+    var inputMessage = new InputArea('inputMessage', 'form-control', message.content, 13, 50);
     vp13.add(inputMessage);
     var emptyRow3 = new EmptyRow('er3', '');
     vp13.add(emptyRow3);

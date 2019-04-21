@@ -45,10 +45,10 @@ export default function drawComposeButtons() {
 
     var buttonDraft = new AContainer('buttonDraft', 'btn btn-sm btn-default', 'Save draft ', '', '');
     vp14.add(buttonDraft);
-    var i3 = new I('i3', 'fa fa-envelope');
-    buttonDraft.add(i3);
-    var ec3 = new EmptyCol('ec3', '');
-    vp14.add(ec3);
+    var i2 = new I('i2', 'fa fa-envelope');
+    buttonDraft.add(i2);
+    var ec2 = new EmptyCol('ec2', '');
+    vp14.add(ec2);
 
     buttonDraft.onclick = function (e) {
         e.preventDefault();
@@ -76,10 +76,10 @@ export default function drawComposeButtons() {
 
     var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-primary', 'Discard ', '', '');
     vp14.add(buttonDiscard);
-    var i2 = new I('i2', 'fa fa-trash-o');
-    buttonDiscard.add(i2);
-    var ec2 = new EmptyCol('ec2', '');
-    vp14.add(ec2);
+    var i3 = new I('i3', 'fa fa-trash-o');
+    buttonDiscard.add(i3);
+    var ec3 = new EmptyCol('ec3', '');
+    vp14.add(ec3);
 
     buttonDiscard.onclick = function (e) {
         e.preventDefault();

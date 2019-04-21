@@ -220,7 +220,6 @@ public class GmailService {
 		scopes.add(GmailScopes.GMAIL_MODIFY);
 		scopes.add(GmailScopes.GMAIL_READONLY);
 		scopes.add(GmailScopes.GMAIL_SEND);
-		scopes.add(GmailScopes.GMAIL_SETTINGS_BASIC);
 		
 		return scopes;
 	}

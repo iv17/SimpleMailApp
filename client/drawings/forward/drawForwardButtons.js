@@ -41,20 +41,20 @@ export default function drawForwardButtons(message) {
 
     }
 
-    var buttonCancel = new AContainer('buttonCancel', 'btn btn-sm btn-default', 'Cancel ', '', '');
-    vp14.add(buttonCancel);
+    var buttonDiscard = new AContainer('buttonDiscard', 'btn btn-sm btn-default', 'Discard ', '', '');
+    vp14.add(buttonDiscard);
     var i2 = new I('i2', 'fa fa-trash-o');
-    buttonCancel.add(i2);
+    buttonDiscard.add(i2);
     var ec2 = new EmptyCol('emptyCol2', '');
     vp14.add(ec2);
 
-    buttonCancel.onclick = function (e) {
+    buttonDiscard.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
         console.log('CANCEL');
 
-        var vp7 = buttonCancel.findById("vp7");
-        var vp9 = buttonCancel.findById("vp9");
+        var vp7 = buttonDiscard.findById("vp7");
+        var vp9 = buttonDiscard.findById("vp9");
         vp9.remove(vp7);
 
         let axios = window._api.axios;
