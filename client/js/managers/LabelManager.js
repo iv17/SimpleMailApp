@@ -1,12 +1,13 @@
 export default class LabelManager {
 
     constructor(axiosApi) {
-        this.labels = [];
         this.axios = axiosApi;
+        this.url = 'http://localhost:9000/labels';
+        this.labels = [];
     }
 
-    fetchLabels(url, code) {
-        return this.axios.get(url + "/labels?code=" + code)
+    fetchLabels() {
+        return this.axios.get(this.url)
         .then((response) => {
             this.labels = response.data;
         });

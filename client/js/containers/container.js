@@ -6,55 +6,39 @@ export default class Container extends Component {
         this.children = new Map();
     }
 
-    findChild(id) {
-        for (var child of this.children.values()) {
-            if (child.id == id) {
-                //nasao dete
-            }
-        }
-        for (var child of children.values()) { //?
-            if (child.id == id && child instanceof Container) {
-
-            }
-        }
-    }
     add(component) {
         this.children.set(component.id, component);
         component.setParent(this);
+
+        $('#' + component.id).remove();
         $('#' + this.id).append(component.tohtml());
-        //console.log(this.id + " " + component.id);
-        //this.addListeners(component);
+        component.node = document.getElementById(component.id);
 
         for (var child of this.children.values()) {
             this.addListeners(child);
-            //child.element = $("#" + child.id)[0];
         }
-
-        //component.element = $("#" + component.id)[0];
     }
-
+   
     remove(component) {
-        this.children.delete(component.id);
-        $('#' + this.id).empty();
+        component.children.delete(this.id);
+        $('#' + this.id).remove();
     }
 
-    draw() {
-        //var src = this.tohtml();
-        //$('#' + this.id).append(src);
+    tohtml() {
+        var ret = "";
         for (var child of this.children.values()) {
-            this.addListeners(child);
-            child.element = $("#" + child.id)[0];
+            ret += child.tohtml();
         }
+        return ret;
     }
-
+    
     addListeners(component) {
         if (component.children) {
             for (var child of component.children.values()) {
                 this.addListeners(child);
             }
         }
-        //https://www.w3schools.com/jsref/dom_obj_event.asp
-        //https://api.jquery.com/category/events/
+       
         if (component.onclick) {
             $("#" + component.id).click(component.onclick);
         }
@@ -122,12 +106,5 @@ export default class Container extends Component {
         var el = $("#" + component.id);
         el[0].component = component;
     }
-
-    tohtml() {
-        var ret = "";
-        for (var child of this.children.values()) {
-            ret += child.tohtml();
-        }
-        return ret;
-    }
+    
 }

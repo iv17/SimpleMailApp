@@ -2,16 +2,24 @@ export default class UserManager {
 
     constructor(axiosApi) {
         this.user;
-        this.user2;
         this.axios = axiosApi;
+        this.url = 'http://localhost:9000';
     }
 
-    fetchUser(url, code) {
-        return this.axios.get(url + "/me?code=" + code)
+    fetchUser() {
+        return this.axios.get(this.url + "/me")
             .then((response) => {
                 this.user = response.data;
             });
     }
+
+    logout() {
+        return this.axios.get(this.url + "/logout")
+            .then((response) => {
+                this.user = response.data;
+            });
+    }
+  
   
     getUser() {
         return this.user;

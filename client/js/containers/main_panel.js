@@ -15,10 +15,4 @@ export default class MainPanel extends Container {
         return ret;
     }
 
-    draw() { 
-        var src = this.tohtml();
-        $(this.body).append(src);//doda u memoriju
-        this.element = $("#" + this.id)[0]; //doda u dom
-        $("#" + this.id).append(this);
-    }
 }

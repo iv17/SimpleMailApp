@@ -7,17 +7,6 @@ export default class Button extends Component {
         this.type = type;
         this.style = style;
     }
-    
-  
-      changeDisplayToNone(style) {
-        this.style = style;
-        $('#' + this.id).css('display', 'none');
-      }
-      changeDisplayToBlock(style) {
-        this.style = style;
-        $('#' + this.id).css('display', 'block');
-      }
-  
 
     tohtml() {
         return "<button id=\'" + this.id + "\' type=\'"+ this.type + "\' class=\'" + this.CSSclass + "\' + style=\'" + this.style + "\'>" + this.text + "</button>";
