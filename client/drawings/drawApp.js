@@ -4,10 +4,8 @@ import {
 
 import drawInbox from './inbox/drawInbox.js';
 import drawCompose from './compose/drawCompose.js';
-import MessageManager from '../js/managers/MessageManager.js';
+import drawLabels from './drawLabels.js';
 import UserManager from '../js/managers/UserManager.js';
-import changeActiveClass from '../js/util/changeActiveClass.js';
-import drawTrash from './trash/drawTrash.js';
 
 export default function drawApp(labels, messages, user) {
 
@@ -24,7 +22,7 @@ export default function drawApp(labels, messages, user) {
 
     var ac1 = new AContainer('ac1', 'inbox-avatar', '', '#', '');
     vp4.add(ac1);
-    var image1 = new Image('image1', 'img-responsive', 'http://chittagongit.com//images/google-user-icon/google-user-icon-7.jpg', user.name, '50px', '50px');
+    var image1 = new Image('image1', 'img-responsive', './images/profile.png', user.name, '50px', '50px');
     ac1.add(image1);
 
     var vp5 = new VerticalPanel('vp5', 'btn-group pull-right');
@@ -75,55 +73,9 @@ export default function drawApp(labels, messages, user) {
     var hr2 = new HR('idhr2');
     vp8.add(hr2);
 
-    var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
+    var ul2 = drawLabels(labels);
     vp8.add(ul2);
 
-    //var list_items = [];
-    if (labels.length > 0) {
-        for (let index = 0; index < labels.length; index++) {
-            var container = new LI(labels[index].name, '');
-            ul2.add(container);
-            var a = new AContainer('a2' + index, '', labels[index].name, '#');
-            container.add(a);
-            var badge = new Label('badge' + index, 'badge pull-right', labels[index].messagesTotal);
-            a.add(badge);
-            if (labels[index].name == 'INBOX') {
-                container.addCSSClass('active');
-            }
-            container.onclick = function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-
-                changeActiveClass(this.component);
-
-                var vp7 = container.findById("vp7");
-                var vp9 = container.findById("vp9");
-                vp9.remove(vp7);
-                
-                let axios = window._api.axios;
-                let messageManager = new MessageManager(axios);
-
-                if(labels[index].name == 'TRASH') {
-                    console.log('TRASH')
-                    messageManager.fetchMessages(labels[index].name)
-                    .then(response => {
-                        var component = drawTrash(messageManager.messages);
-                        vp7.add(component);
-                    });
-                } else {
-                    messageManager.fetchMessages(labels[index].name)
-                    .then(response => {
-                        var component = drawInbox(messageManager.messages);
-                        vp7.add(component);
-                    });
-                }
-               
-            }
-
-            //list_items.push(container);
-        }
-    }
-    
     var vp9 = drawInbox(messages);
     vp7.add(vp9);
 
