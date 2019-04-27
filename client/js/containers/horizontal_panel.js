@@ -13,4 +13,5 @@ export default class HorizontalPanel extends Container {
       ret += "</span>";
       return ret;
     }
+    
   }

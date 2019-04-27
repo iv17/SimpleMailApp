@@ -30,9 +30,6 @@
 		import LabelManager from './js/managers/LabelManager.js';
 		import MessageManager from './js/managers/MessageManager.js';
 
-		const urlParams = new URLSearchParams(window.location.search);
-		const code = urlParams.get('code');
-
 		window._api = {}
 		window._api.axios = axios;
 		let userManager = new UserManager(axios);
