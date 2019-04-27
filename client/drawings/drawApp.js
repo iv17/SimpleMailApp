@@ -78,7 +78,7 @@ export default function drawApp(labels, messages, user) {
     var ul2 = new UL('ul2', 'nav nav-pills nav-stacked');
     vp8.add(ul2);
 
-    var list_items = [];
+    //var list_items = [];
     if (labels.length > 0) {
         for (let index = 0; index < labels.length; index++) {
             var container = new LI(labels[index].name, '');
@@ -120,7 +120,7 @@ export default function drawApp(labels, messages, user) {
                
             }
 
-            list_items.push(container);
+            //list_items.push(container);
         }
     }
     

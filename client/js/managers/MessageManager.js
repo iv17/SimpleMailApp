@@ -8,11 +8,12 @@ export default class MessageManager {
     }
 
     fetchAllMessages() {
-        return this.axios.get(this.url + "/allMessages?code=")
+        return this.axios.get(this.url + "/allMessages")
             .then((response) => {
                 this.messages = response.data;
             });
     }
+    
     fetchMessages(label) {
         return this.axios.get(this.url + "/messages?label=" + label)
             .then((response) => {
@@ -78,4 +79,5 @@ export default class MessageManager {
     getMessage() {
         return this.message;
     }
+    
 }
