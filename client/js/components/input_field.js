@@ -8,6 +8,7 @@ export default class InputField extends Component {
     }
     
     tohtml() {
-        return "<input id=\'" + this.id + "\' type=\'"+ this.type + "\' class=\'"+ this.CSSclass + "\' placeholder=\'"+ this.placeholder + "\'></input>";
+        return "<input id=\'" + this.id + "\' type=\'"+ this.type + "\' class=\'"+ this.CSSclass + 
+        "\' placeholder=\'"+ this.placeholder + "\'></input>";
     }
 }

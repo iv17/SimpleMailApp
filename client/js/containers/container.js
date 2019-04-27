@@ -24,6 +24,14 @@ export default class Container extends Component {
         $('#' + this.id).remove();
     }
 
+    tohtml() {
+        var ret = "";
+        for (var child of this.children.values()) {
+            ret += child.tohtml();
+        }
+        return ret;
+    }
+    
     addListeners(component) {
         if (component.children) {
             for (var child of component.children.values()) {
@@ -97,14 +105,6 @@ export default class Container extends Component {
 
         var el = $("#" + component.id);
         el[0].component = component;
-    }
-
-    tohtml() {
-        var ret = "";
-        for (var child of this.children.values()) {
-            ret += child.tohtml();
-        }
-        return ret;
     }
     
 }
