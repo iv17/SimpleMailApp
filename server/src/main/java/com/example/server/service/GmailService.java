@@ -1,4 +1,4 @@
-package com.example.server;
+package com.example.server.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,7 +33,7 @@ import com.google.api.services.gmail.model.MessagePartHeader;
 @Service
 public class GmailService {
 
-	protected JSONObject fetchLabel(Label label) throws JSONException {
+	public JSONObject fetchLabel(Label label) throws JSONException {
 		
 		JSONObject labelJSON = new JSONObject();
 		
@@ -49,7 +49,7 @@ public class GmailService {
 		return labelJSON;
 	}
 	
-	protected JSONObject fetchMessage(Message message) throws IOException, JSONException, ParseException {
+	public JSONObject fetchMessage(Message message) throws IOException, JSONException, ParseException {
 
 		JSONObject messageJSON = new JSONObject();
 
@@ -68,7 +68,7 @@ public class GmailService {
 
 	}
 	
-	protected JSONObject fetchFullMessage(Message message) throws JSONException, ParseException {
+	public JSONObject fetchFullMessage(Message message) throws JSONException, ParseException {
 
 		JSONObject messageJSON = new JSONObject();
 
@@ -96,7 +96,7 @@ public class GmailService {
 
 	}
 	
-	protected JSONObject fetchMessageHeaders(Message message) throws ParseException, JSONException {
+	public JSONObject fetchMessageHeaders(Message message) throws ParseException, JSONException {
 		
 		JSONObject headersObject = new JSONObject();
 		for (MessagePartHeader header : message.getPayload().getHeaders()) {
@@ -133,7 +133,7 @@ public class GmailService {
 	 * @return the MimeMessage to be used to send email
 	 * @throws MessagingException
 	 */
-	protected MimeMessage createEmail(String to, String from, String subject, String bodyText) throws MessagingException {
+	public MimeMessage createEmail(String to, String from, String subject, String bodyText) throws MessagingException {
 
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
@@ -172,7 +172,7 @@ public class GmailService {
 	 * @throws IOException
 	 * @throws MessagingException
 	 */
-	protected Message createMessageWithEmail(MimeMessage emailContent)
+	public Message createMessageWithEmail(MimeMessage emailContent)
 			throws MessagingException, IOException {
 
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -185,7 +185,7 @@ public class GmailService {
 		return message;
 	}
 	
-	protected Message prepareForSend(String body, String userId) throws JSONException, MessagingException, IOException {
+	public Message prepareForSend(String body, String userId) throws JSONException, MessagingException, IOException {
 		JSONObject json = new JSONObject(body);
 		String to = json.getString("to");
 		String subject = json.getString("subject");
@@ -198,7 +198,7 @@ public class GmailService {
 		return message;
 	}
 	
-	protected JSONObject fetchDraft(Draft draft) throws IOException, JSONException, ParseException {
+	public JSONObject fetchDraft(Draft draft) throws IOException, JSONException, ParseException {
 
 		JSONObject draftJSON = new JSONObject();
 
@@ -211,7 +211,7 @@ public class GmailService {
 
 	}
 	
-	protected List<String> getScopes() {
+	public List<String> getScopes() {
 		List<String> scopes = new ArrayList<>();
 		
 		scopes.add("https://mail.google.com/");
