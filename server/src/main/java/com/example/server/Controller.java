@@ -64,6 +64,8 @@ public class Controller {
 
 	@Value("${gmail.client.redirectUri}")
 	private String redirectUri;
+	
+	private final String USER_ID = "me";
 
 	@Autowired
 	GmailService service;
@@ -71,7 +73,7 @@ public class Controller {
 
 	@RequestMapping(value = "/login", 
 			method = RequestMethod.GET)
-	public RedirectView googleConnectionStatus() throws Exception {
+	public RedirectView login() throws Exception {
 		AuthorizationCodeRequestUrl authorizationUrl;
 		if (flow == null) {
 			Details web = new Details();
@@ -100,6 +102,9 @@ public class Controller {
 		TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
 		credential = flow.createAndStoreCredential(response, "userID");	
 
+		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+				.setApplicationName(APPLICATION_NAME).build();
+		
 		RedirectView redirect = new RedirectView("http://localhost:5500/SimpleMailApp/client/index.html");
 
 		return redirect;
@@ -112,11 +117,7 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMe() throws IOException, JSONException {
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		Profile profile = client.users().getProfile(userId).execute();
+		Profile profile = client.users().getProfile(USER_ID).execute();
 
 		JSONObject me = new JSONObject();
 		me.put("email", profile.getEmailAddress());
@@ -131,15 +132,11 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getLabels() throws IOException, JSONException {
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		ListLabelsResponse labelsResponse = client.users().labels().list(userId).execute();
+		ListLabelsResponse labelsResponse = client.users().labels().list(USER_ID).execute();
 
 		JSONArray labelArray = new JSONArray();
 		for (Label l : labelsResponse.getLabels()) {
-			Label label = client.users().labels().get(userId, l.getId()).execute();
+			Label label = client.users().labels().get(USER_ID, l.getId()).execute();
 
 			JSONObject labelJSON = service.fetchLabel(label);
 			if(labelJSON.getString("labelListVisibility").equals("labelShow")) {
@@ -156,13 +153,9 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getAllMessages() throws IOException, JSONException, ParseException {
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
+		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).execute();
 
-		String userId = "me";
-		ListMessagesResponse msgResponse = client.users().messages().list(userId).execute();
-
-		JSONArray messageArray = fetchMessages(msgResponse, userId);
+		JSONArray messageArray = fetchMessages(msgResponse, USER_ID);
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
@@ -174,16 +167,12 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMessages(@RequestParam(value = "label") String l) throws IOException, JSONException, ParseException {
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add(l);
 
-		String userId = "me";
-		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
 
-		JSONArray messageArray = fetchMessages(msgResponse, userId);	
+		JSONArray messageArray = fetchMessages(msgResponse, USER_ID);	
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
@@ -195,11 +184,8 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getMessage(@RequestParam(value = "id") String id) throws JSONException, ParseException, IOException {
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		Message message = client.users().messages().get(userId, id).setFormat("full").execute();
+		String USER_ID = "me";
+		Message message = client.users().messages().get(USER_ID, id).setFormat("full").execute();
 		JSONObject messageJSON = service.fetchFullMessage(message);
 
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
@@ -212,15 +198,11 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> sendMessage(@RequestBody String body) throws JSONException, IOException, MessagingException, ParseException {		
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
+		Message temp = service.prepareForSend(body, USER_ID);
 
-		String userId = "me";
-		Message temp = service.prepareForSend(body, userId);
+		Message send = client.users().messages().send(USER_ID, temp).execute();
 
-		Message send = client.users().messages().send(userId, temp).execute();
-
-		Message message = client.users().messages().get(userId, send.getId()).setFormat("full").execute();
+		Message message = client.users().messages().get(USER_ID, send.getId()).setFormat("full").execute();
 		JSONObject messageJSON = service.fetchFullMessage(message);
 
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
@@ -233,22 +215,18 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> draftMessage(@RequestBody String body) throws JSONException, IOException, MessagingException, ParseException {		
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		Message temp = service.prepareForSend(body, userId);
+		Message temp = service.prepareForSend(body, USER_ID);
 
 		Draft tempDraft = new Draft();
 		tempDraft.setMessage(temp);
-		client.users().drafts().create(userId, tempDraft).execute();
+		client.users().drafts().create(USER_ID, tempDraft).execute();
 
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("DRAFT");
 
-		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
 
-		JSONArray messageArray = fetchMessages(msgResponse, userId);	
+		JSONArray messageArray = fetchMessages(msgResponse, USER_ID);	
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
@@ -260,17 +238,13 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> trashMessage(@RequestParam(value = "id") String id) throws JSONException, IOException, MessagingException, ParseException {		
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		client.users().messages().trash(userId, id).execute();
+		client.users().messages().trash(USER_ID, id).execute();
 
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("TRASH");
-		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
 
-		JSONArray messageArray = fetchMessages(msgResponse, userId);	
+		JSONArray messageArray = fetchMessages(msgResponse, USER_ID);	
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
@@ -282,17 +256,13 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> untrashMessage(@RequestParam(value = "id") String id) throws JSONException, IOException, MessagingException, ParseException {		
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		client.users().messages().untrash(userId, id).execute();
+		client.users().messages().untrash(USER_ID, id).execute();
 
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("INBOX");
-		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
 
-		JSONArray messageArray = fetchMessages(msgResponse, userId);	
+		JSONArray messageArray = fetchMessages(msgResponse, USER_ID);	
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
@@ -304,17 +274,13 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> deleteMessage(@RequestParam(value = "id") String id) throws JSONException, IOException, MessagingException, ParseException {		
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		String userId = "me";
-		client.users().messages().delete(userId, id).execute();
+		client.users().messages().delete(USER_ID, id).execute();
 
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("TRASH");
-		ListMessagesResponse msgResponse = client.users().messages().list(userId).setLabelIds(labelIds).execute();
+		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
 
-		JSONArray messageArray = fetchMessages(msgResponse, userId);
+		JSONArray messageArray = fetchMessages(msgResponse, USER_ID);
 
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
@@ -326,10 +292,6 @@ public class Controller {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> logout() throws IOException, JSONException {
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
-				.setApplicationName(APPLICATION_NAME).build();
-
-		//String userId = "me";
 
 		JSONObject me = new JSONObject();
 
