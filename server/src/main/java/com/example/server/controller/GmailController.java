@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.example.server.service.FetchService;
 import com.example.server.service.GmailService;
+import com.example.server.service.UtilService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.auth.oauth2.TokenResponse;
@@ -68,6 +70,12 @@ public class GmailController {
 	private String redirectUri;
 
 	@Autowired
+	UtilService utilService;
+	
+	@Autowired
+	FetchService fetchService;
+	
+	@Autowired
 	GmailService service;
 
 
@@ -82,7 +90,7 @@ public class GmailController {
 			clientSecrets = new GoogleClientSecrets().setWeb(web);
 			httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
-			List<String> scopes = service.getScopes();
+			List<String> scopes = utilService.getScopes();
 			flow = new GoogleAuthorizationCodeFlow
 					.Builder(httpTransport, JSON_FACTORY, clientSecrets, Collections.unmodifiableList(scopes))
 					.build();
@@ -178,7 +186,7 @@ public class GmailController {
 	public ResponseEntity<String> getMessage(@RequestParam(value = "id") String id) throws JSONException, ParseException, IOException {
 
 		Message message = client.users().messages().get(USER_ID, id).setFormat("full").execute();
-		JSONObject messageJSON = service.fetchFullMessage(message);
+		JSONObject messageJSON = fetchService.fetchFullMessage(message);
 
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
 
@@ -195,7 +203,7 @@ public class GmailController {
 		Message send = client.users().messages().send(USER_ID, temp).execute();
 
 		Message message = client.users().messages().get(USER_ID, send.getId()).setFormat("full").execute();
-		JSONObject messageJSON = service.fetchFullMessage(message);
+		JSONObject messageJSON = fetchService.fetchFullMessage(message);
 
 		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
 
@@ -302,7 +310,7 @@ public class GmailController {
 
 			Message message = client.users().messages().get(USER_ID, msg.getId()).execute();
 
-			JSONObject messageJSON = service.fetchMessage(message);
+			JSONObject messageJSON = fetchService.fetchMessage(message);
 			messageArray.put(messageJSON);
 		}	
 		
@@ -315,7 +323,7 @@ public class GmailController {
 		for (Label l : labelsResponse.getLabels()) {
 			Label label = client.users().labels().get(USER_ID, l.getId()).execute();
 
-			JSONObject labelJSON = service.fetchLabel(label);
+			JSONObject labelJSON = fetchService.fetchLabel(label);
 			if(labelJSON.getString("labelListVisibility").equals("labelShow")) {
 				labelArray.put(labelJSON);
 			}
