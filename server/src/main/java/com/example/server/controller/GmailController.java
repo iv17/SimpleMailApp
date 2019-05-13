@@ -39,6 +39,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.Gmail.Builder;
 import com.google.api.services.gmail.model.Draft;
 import com.google.api.services.gmail.model.Label;
 import com.google.api.services.gmail.model.ListLabelsResponse;
@@ -110,7 +111,7 @@ public class GmailController {
 		TokenResponse response = flow.newTokenRequest(code).setRedirectUri(redirectUri).execute();
 		credential = flow.createAndStoreCredential(response, "userID");	
 
-		client = new com.google.api.services.gmail.Gmail.Builder(httpTransport, JSON_FACTORY, credential)
+		client = new Builder(httpTransport, JSON_FACTORY, credential)
 				.setApplicationName(APPLICATION_NAME).build();
 		
 		RedirectView redirect = new RedirectView("http://localhost:5500/SimpleMailApp/client/index.html");

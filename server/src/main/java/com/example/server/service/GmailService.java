@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
@@ -43,9 +44,9 @@ public class GmailService {
 			email.setFrom("");
 		}
 		if(to != null && !to.equals("")) {
-			email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+			email.addRecipient(RecipientType.TO, new InternetAddress(to));
 		} else {
-			email.addRecipients(javax.mail.Message.RecipientType.TO, "");
+			email.addRecipients(RecipientType.TO, "");
 		}
 		if(subject != null) {
 			email.setSubject(subject);
