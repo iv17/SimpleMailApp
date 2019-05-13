@@ -23,7 +23,7 @@ import com.google.api.services.gmail.model.MessagePartHeader;
 @Service
 public class FetchService {
 
-public JSONObject fetchLabel(Label label) throws JSONException {
+	public JSONObject fetchLabel(Label label) throws JSONException {
 		
 		JSONObject labelJSON = new JSONObject();
 		

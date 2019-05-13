@@ -2,8 +2,6 @@ import {
     EmptyCol, HR, I, AContainer, VerticalPanel
 } from '../../js/osc.js';
 
-import drawCompose from '../compose/drawCompose.js';
-import drawForward from '../forward/drawForward.js';
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from '../trash/drawTrash.js';
 import drawInbox from '../inbox/drawInbox.js';

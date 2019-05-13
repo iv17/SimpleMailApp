@@ -19,11 +19,7 @@
 
 	<script type="module">
 
-		import {
-			A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
-			InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
-			Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
-		} from './js/osc.js';
+		import { MainPanel } from './js/osc.js';
 
 		import drawApp from './drawings/drawApp.js';
 		import UserManager from './js/managers/UserManager.js';
@@ -32,6 +28,7 @@
 
 		window._api = {}
 		window._api.axios = axios;
+
 		let userManager = new UserManager(axios);
 		let labelManager = new LabelManager(axios);
 		let messageManager = new MessageManager(axios);
