@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Simple mail app</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="module" src="js/osc.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+
+</head>
+
+<body>
+
+    <script type="module">
+
+        import {
+            Button, H1, InputField, Form, MainPanel, VerticalPanel
+        } from './js/osc.js';
+
+
+        $(document).ready(function () {
+
+            var mp = new MainPanel('main', '');
+            var vp1 = new VerticalPanel('vp1', 'container');
+            mp.add(vp1);
+
+            var vp2 = new VerticalPanel('vp2', 'row justify-content-md-center');
+            vp1.add(vp2);
+
+            var vp3 = new VerticalPanel('vp3', 'col-sm-6 col-md-4 col-md-offset-4');
+            vp2.add(vp3);
+
+            var h1 = new H1('h1', 'text-center login-title', 'Sign in');
+            vp3.add(h1);
+
+            var form = new Form('form1', 'form-signin');
+            vp3.add(form);
+
+            var inputEmail = new InputField('i1', 'form-control', 'email', 'Email');
+            inputEmail.onchange = function (e) {
+                var email = document.getElementById("i1").value;
+                if (email.length == 0 || email.indexOf("@") == -1) {
+                    alert('Not a valid email address!');
+                }
+            }
+            form.add(inputEmail);
+            var inputPassword = new InputField('i2', 'form-control', 'password', 'Password');
+            inputPassword.onchange = function (e) {
+                var password = document.getElementById("i2").value;
+                if (password.length < 6) {
+                    alert('Password must be a least 6 characters long!');
+                }
+            }
+            form.add(inputPassword);
+            var button1 = new Button('b1', 'btn btn-lg btn-primary btn-block', 'Sign in', 'submit');
+            button1.onclick = function (e) {
+                alert("Trying to login with username: " + document.getElementById("i1").value + " and password: " + document.getElementById("i2").value);
+            }
+            form.add(button1);
+
+        })
+
+    </script>
+
+</body>
+
+</html>

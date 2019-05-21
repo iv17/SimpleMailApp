@@ -6,18 +6,13 @@ export default class MainPanel extends Container {
         this.body = document.body;
     }
 
-  draw() {
-   /* var src = super.tohtml();
-    
-    $(this.body).append(src);
-    this.element = $("#" + this.id)[0];
-    $("#" + this.id).append(this);
-    console.log(src)*/
-    var src = super.tohtml();
-    $(this.body).append(src);
-    for (var child of this.children.values()) {
-        super.addListeners(child);
-        child.element = $("#" + child.id)[0];
+    tohtml() {
+        var ret = "<div id=\'" + this.id + "\' class=\'" + this.CSSclass + "\'>";
+        for (var child of this.children.values()) {
+            ret += child.tohtml();
+        }
+        ret += "</div>";
+        return ret;
     }
-  }
+
 }
