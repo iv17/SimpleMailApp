@@ -293,7 +293,7 @@ public class GmailController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> logout() throws IOException, JSONException {
 
-
+		//TODO 
 		JSONObject me = new JSONObject();
 
 		return new ResponseEntity<>(me.toString(), HttpStatus.OK);
@@ -326,7 +326,7 @@ public class GmailController {
 
 			JSONObject labelJSON = fetchService.fetchLabel(label);
 			if(labelJSON.getString("labelListVisibility").equals("labelShow")) {
-				if(!labelJSON.getString("name").equals("CATEGORY_PERSONAL")) {
+				if(!labelJSON.getString("name").equals("CATEGORY_PERSONAL")) { //
 					labelArray.put(labelJSON);
 				}
 				
