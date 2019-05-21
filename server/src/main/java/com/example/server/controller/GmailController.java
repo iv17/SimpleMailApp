@@ -326,7 +326,10 @@ public class GmailController {
 
 			JSONObject labelJSON = fetchService.fetchLabel(label);
 			if(labelJSON.getString("labelListVisibility").equals("labelShow")) {
-				labelArray.put(labelJSON);
+				if(!labelJSON.getString("name").equals("CATEGORY_PERSONAL")) {
+					labelArray.put(labelJSON);
+				}
+				
 			}
 		}
 		
