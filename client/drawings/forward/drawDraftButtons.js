@@ -22,7 +22,7 @@ export default function drawDraftButtons(message) {
         e.stopImmediatePropagation();
         console.log('SEND');
 
-        var to = inputEmail.value;//document.getElementById('inputEmail').value;
+        var to = inputEmail.value;
 
         var vp7 = buttonSend.findById("vp7");
         var vp9 = buttonSend.findById("vp9");
