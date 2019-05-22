@@ -22,9 +22,9 @@ export default function drawComposeButtons() {
         e.stopImmediatePropagation();
         console.log('SEND');
 
-        var to = document.getElementById('inputEmail').value;
-        var subject = document.getElementById('inputTitle').value;
-        var bodyText = document.getElementById('inputMessage').value;
+        var to = inputEmail.value;
+        var subject = inputTitle.value;
+        var bodyText = inputMessage.value;
 
         var vp7 = buttonSend.findById("vp7");
         var vp9 = buttonSend.findById("vp9");
