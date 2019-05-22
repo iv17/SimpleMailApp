@@ -6,7 +6,7 @@ import MessageManager from '../../js/managers/MessageManager.js';
 import drawSingleMail from '../singleMail/drawSingleMail.js';
 import drawInbox from '../inbox/drawInbox.js';
 
-export default function drawForwardButtons(message) {
+export default function drawDraftButtons(message) {
     
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
   

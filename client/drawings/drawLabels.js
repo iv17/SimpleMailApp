@@ -3,6 +3,7 @@ import {
 } from '../js/osc.js';
 
 import drawInbox from './inbox/drawInbox.js';
+import drawDrafts from './drafts/drawDrafts.js';
 import MessageManager from '../js/managers/MessageManager.js';
 import changeActiveClass from '../js/util/changeActiveClass.js';
 import drawTrash from './trash/drawTrash.js';
@@ -42,7 +43,16 @@ export default function drawLabels(labels) {
                             var component = drawTrash(messageManager.messages);
                             vp7.add(component);
                         });
-                } else {
+                }
+                if (labels[index].name == 'DRAFT') {
+                    console.log('DRAFT')
+                    messageManager.fetchMessages(labels[index].name)
+                        .then(response => {
+                            var component = drawDrafts(messageManager.messages);
+                            vp7.add(component);
+                        });
+                } 
+                else {
                     messageManager.fetchMessages(labels[index].name)
                         .then(response => {
                             var component = drawInbox(messageManager.messages);

@@ -41,7 +41,7 @@ export default function drawTrashSingleMail(message) {
     var vp17 = new VerticalPanel('vp17', 'col-md-12');
     vp16.add(vp17);
 
-    var senderImage = new Image('senderImage', '', 'http://chittagongit.com//images/google-user-icon/google-user-icon-7.jpg', message.headers.from, '40px', '40px');
+    var senderImage = new Image('senderImage', '', './images/profile.png', message.headers.from, '40px', '40px');
     vp17.add(senderImage);
     var emptyCol = new EmptyCol('emptyCol1', '');
     vp17.add(emptyCol);
