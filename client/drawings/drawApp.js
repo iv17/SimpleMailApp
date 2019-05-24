@@ -2,10 +2,10 @@ import {
     A, EmptyRow, H5, HR, Image, Label, AContainer, ButtonContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../js/osc.js';
 
+import UserManager from '../js/managers/UserManager.js';
 import drawInbox from './messages/drawInbox.js';
 import drawCompose from './message/drawCompose.js';
 import drawLabels from './drawLabels.js';
-import UserManager from '../js/managers/UserManager.js';
 
 export default function drawApp(labels, messages, user) {
 
@@ -38,21 +38,6 @@ export default function drawApp(labels, messages, user) {
     ul1.add(li11);
     var a11 = new A('a11', '', user.email, '#');
     li11.add(a11);
-    var li12 = new LI('li12', '');
-    ul1.add(li12);
-    var a12 = new AContainer('a12', '', 'Log out', '');
-    li12.add(a12);
-
-    a12.onclick = function (e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        console.log('LOG OUT');
-
-        let axios = window._api.axios;
-        let userManager = new UserManager(axios);
-
-        userManager.logout();
-    }
 
     var vp6 = new VerticalPanel('vp6', 'user-name');
     vp4.add(vp6);

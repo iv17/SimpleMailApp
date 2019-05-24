@@ -2,8 +2,8 @@ import {
     EmptyCol, I, Label, AContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../../js/osc.js';
 
-import drawSingleMail from '../message/drawSingleMail.js';
 import MessageManager from '../../js/managers/MessageManager.js';
+import drawSingleMail from '../message/drawSingleMail.js';
 
 export default function drawTrash(messages) {
 

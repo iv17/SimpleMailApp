@@ -2,10 +2,10 @@ import {
     EmptyCol, HR, I, AContainer, VerticalPanel
 } from '../../js/osc.js';
 
+import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from '../messages/drawTrash.js';
 import drawCompose from './drawCompose.js';
 import drawForward from './drawForward.js';
-import MessageManager from '../../js/managers/MessageManager.js';
 
 export default function drawSingleMailButtons(message) {
 
