@@ -47,7 +47,7 @@ export default function drawSingleMailButtons(message) {
         var vp9 = button2.findById("vp9");
         vp9.remove(vp7);
         
-        var component = drawForward(message);
+        var component = drawForward(message, 'FORWARD');
         vp7.add(component);
 
     }

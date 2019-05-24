@@ -35,7 +35,7 @@ export default function drawComposeButtons() {
 
         messageManager.sendMessage(to, subject, bodyText)
             .then(response => {
-                var component = drawSingleMail(messageManager.message);
+                var component = drawSingleMail(messageManager.message, "MAIL");
                 vp7.add(component);
             });
 

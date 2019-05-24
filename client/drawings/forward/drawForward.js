@@ -3,8 +3,9 @@ import {
 } from '../../js/osc.js';
 
 import drawForwardButtons from './drawForwardButtons.js';
+import drawDraftButtons from './drawDraftButtons.js';
 
-export default function drawForward(message) {
+export default function drawForward(message, type) {
    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -32,7 +33,13 @@ export default function drawForward(message) {
     var emptyRow3 = new EmptyRow('er3', '');
     vp13.add(emptyRow3);
 
-    var vp14 = drawForwardButtons(message);
+    var vp14;
+    if(type == 'FORWARD') {
+        vp14 = drawForwardButtons(message);
+    }
+    if(type == 'DRAFT') {
+        vp14 = drawDraftButtons(message);
+    }
     vp10.add(vp14);
 
     return vp9;

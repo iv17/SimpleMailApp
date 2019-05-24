@@ -3,7 +3,6 @@ import {
 } from '../js/osc.js';
 
 import drawInbox from './inbox/drawInbox.js';
-import drawDrafts from './drafts/drawDrafts.js';
 import MessageManager from '../js/managers/MessageManager.js';
 import changeActiveClass from '../js/util/changeActiveClass.js';
 import drawTrash from './trash/drawTrash.js';
@@ -29,14 +28,13 @@ export default function drawLabels(labels) {
 
                 changeActiveClass(this.component);
 
-                var vp7 = container.findById("vp7");
-                var vp9 = container.findById("vp9");
-                vp9.remove(vp7);
-
                 let axios = window._api.axios;
                 let messageManager = new MessageManager(axios);
 
                 if (labels[index].name == 'TRASH') {
+                    var vp7 = container.findById("vp7");
+                    var vp9 = container.findById("vp9");
+                    vp9.remove(vp7);
                     console.log('TRASH')
                     messageManager.fetchMessages(labels[index].name)
                         .then(response => {
@@ -44,20 +42,27 @@ export default function drawLabels(labels) {
                             vp7.add(component);
                         });
                 }
-                if (labels[index].name == 'DRAFT') {
-                    console.log('DRAFT')
-                    messageManager.fetchMessages(labels[index].name)
+                if(labels[index].name != 'TRASH') {
+                    var vp7 = container.findById("vp7");
+                    var vp9 = container.findById("vp9");
+                    vp9.remove(vp7);
+                    if(labels[index].name == 'DRAFT') {
+                        console.log('DRAFTS');
+                        messageManager.fetchMessages(labels[index].name)
                         .then(response => {
-                            var component = drawDrafts(messageManager.messages);
+                            var component = drawInbox(messageManager.messages, 'DRAFT');
                             vp7.add(component);
                         });
-                } 
-                else {
-                    messageManager.fetchMessages(labels[index].name)
+                    }
+                    if(labels[index].name == 'INBOX') {
+                        console.log('INBOX');
+                        messageManager.fetchMessages(labels[index].name)
                         .then(response => {
-                            var component = drawInbox(messageManager.messages);
+                            var component = drawInbox(messageManager.messages, 'INBOX');
                             vp7.add(component);
                         });
+                    }
+                 
                 }
             }
         }

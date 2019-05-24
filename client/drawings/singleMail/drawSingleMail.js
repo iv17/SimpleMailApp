@@ -3,8 +3,9 @@ import {
 } from '../../js/osc.js';
 
 import drawSingleMailButtons from './drawSingleMailButtons.js';
+import drawTrashSingleMailButtons from './drawTrashSingleMailButtons.js';
 
-export default function drawSingleMail(message) {
+export default function drawSingleMail(message, type) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -66,8 +67,16 @@ export default function drawSingleMail(message) {
     var emptyRow3 = new EmptyRow('er3', '');
     vp10.add(emptyRow3);
  
-    var vp19 = drawSingleMailButtons(message);
+    var vp19;
+    if(type == 'MAIL') {
+        console.log("MAIL BUTTONS");
+        vp19 = drawSingleMailButtons(message);
+    } else if (type == 'TRASH') {
+        console.log("TRASH BUTTONS");
+        vp19 = drawTrashSingleMailButtons(message);
+    }
     vp10.add(vp19);
+    
 
     return vp9;
 }

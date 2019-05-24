@@ -2,7 +2,7 @@ import {
     EmptyCol, I, Label, AContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../../js/osc.js';
 
-import drawTrashSingleMail from '../singleMail/drawTrashSingleMail.js';
+import drawSingleMail from '../singleMail/drawSingleMail.js';
 import MessageManager from '../../js/managers/MessageManager.js';
 
 export default function drawTrash(messages) {
@@ -74,7 +74,7 @@ export default function drawTrash(messages) {
 
             messageManager.fetchMessage(messages[index].id)
             .then(response => {
-                var component = drawTrashSingleMail(messageManager.message);
+                var component = drawSingleMail(messageManager.message, 'TRASH');
                 vp7.add(component);
 			});
            

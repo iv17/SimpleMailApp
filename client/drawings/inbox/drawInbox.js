@@ -5,8 +5,9 @@ import {
 import drawSingleMail from '../singleMail/drawSingleMail.js';
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from '../trash/drawTrash.js';
+import drawForward from '../forward/drawForward.js';
 
-export default function drawInbox(messages) {
+export default function drawInbox(messages, type) {
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -73,11 +74,20 @@ export default function drawInbox(messages) {
             let axios = window._api.axios;
             let messageManager = new MessageManager(axios);
 
-            messageManager.fetchMessage(messages[index].id)
-            .then(response => {
-                var component = drawSingleMail(messageManager.message);
-                vp7.add(component);
-			});
+            if(type == 'INBOX') {
+                messageManager.fetchMessage(messages[index].id)
+                .then(response => {
+                    var component = drawSingleMail(messageManager.message, "MAIL");
+                    vp7.add(component);
+                });
+            }
+            if(type == 'DRAFT') {
+                messageManager.fetchMessage(messages[index].id)
+                .then(response => {
+                    var component = drawForward(messageManager.message, 'DRAFT');
+                    vp7.add(component);
+                });
+            }
            
         }
     }
