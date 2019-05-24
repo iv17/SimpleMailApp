@@ -2,10 +2,10 @@ import {
     EmptyCol, I, Label, AContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../../js/osc.js';
 
-import drawSingleMail from '../singleMail/drawSingleMail.js';
-import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from './drawTrash.js';
-import drawForward from '../forward/drawForward.js';
+import drawSingleMail from '../message/drawSingleMail.js';
+import drawForward from '../message/drawForward.js';
+import MessageManager from '../../js/managers/MessageManager.js';
 
 export default function drawInbox(messages, type) {
 

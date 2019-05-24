@@ -3,10 +3,10 @@ import {
 } from '../../js/osc.js';
 
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawSingleMail from '../singleMail/drawSingleMail.js';
-import drawInbox from '../inbox/drawInbox.js';
+import drawSingleMail from '../message/drawSingleMail.js';
+import drawInbox from '../messages/drawInbox.js';
 
-export default function drawDraftButtons(message) {
+export default function drawForwardButtons(message) {
     
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
   

@@ -2,10 +2,10 @@ import {
     Label, AContainer, LI, UL
 } from '../js/osc.js';
 
-import drawInbox from './inbox/drawInbox.js';
+import drawInbox from './messages/drawInbox.js';
+import drawTrash from './messages/drawTrash.js';
 import MessageManager from '../js/managers/MessageManager.js';
 import changeActiveClass from '../js/util/changeActiveClass.js';
-import drawTrash from './inbox/drawTrash.js';
 
 export default function drawLabels(labels) {
 
@@ -42,27 +42,27 @@ export default function drawLabels(labels) {
                             vp7.add(component);
                         });
                 }
-                if(labels[index].name != 'TRASH') {
+                if (labels[index].name != 'TRASH') {
                     var vp7 = container.findById('vp7');
                     var vp9 = container.findById('vp9');
                     vp9.remove(vp7);
-                    if(labels[index].name == 'DRAFT') {
+                    if (labels[index].name == 'DRAFT') {
                         console.log('DRAFTS');
                         messageManager.fetchMessages(labels[index].name)
-                        .then(response => {
-                            var component = drawInbox(messageManager.messages, 'DRAFT');
-                            vp7.add(component);
-                        });
+                            .then(response => {
+                                var component = drawInbox(messageManager.messages, 'DRAFT');
+                                vp7.add(component);
+                            });
                     }
-                    if(labels[index].name == 'INBOX') {
+                    if (labels[index].name == 'INBOX') {
                         console.log('INBOX');
                         messageManager.fetchMessages(labels[index].name)
-                        .then(response => {
-                            var component = drawInbox(messageManager.messages, 'INBOX');
-                            vp7.add(component);
-                        });
+                            .then(response => {
+                                var component = drawInbox(messageManager.messages, 'INBOX');
+                                vp7.add(component);
+                            });
                     }
-                 
+
                 }
             }
         }

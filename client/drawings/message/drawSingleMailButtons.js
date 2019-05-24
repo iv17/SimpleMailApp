@@ -2,15 +2,16 @@ import {
     EmptyCol, HR, I, AContainer, VerticalPanel
 } from '../../js/osc.js';
 
+import drawTrash from '../messages/drawTrash.js';
+import drawCompose from './drawCompose.js';
+import drawForward from './drawForward.js';
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawTrash from '../inbox/drawTrash.js';
-import drawInbox from '../inbox/drawInbox.js';
 
-export default function drawTrashSingleMailButtons(message) {
+export default function drawSingleMailButtons(message) {
 
     var vp19 = new VerticalPanel('vp19', 'compose-btn pull-left');
     
-    var button1 = new AContainer('button1', 'btn btn-sm btn-primary', 'Untrash ', '', '');
+    var button1 = new AContainer('button1', 'btn btn-sm btn-primary', 'Reply ', '', '');
     vp19.add(button1);
     var i4 = new I('i4', 'fa fa-reply');
     button1.add(i4);
@@ -25,18 +26,32 @@ export default function drawTrashSingleMailButtons(message) {
         var vp9 = button1.findById('vp9');
         vp9.remove(vp7);
 
-        let axios = window._api.axios;
-        let messageManager = new MessageManager(axios);
-
-        messageManager.untrashMessage(message.id)
-            .then(response => {
-                var component = drawInbox(messageManager.messages);
-                vp7.add(component);
-            });
+        var component = drawCompose();
+        vp7.add(component);
 
     }
 
-    var button3 = new AContainer('button3', 'btn btn-sm btn-default', 'Delete ', '', '');
+    var button2 = new AContainer('button2', 'btn btn-sm btn-default', 'Forward ', '', '');
+    vp19.add(button2);
+    var i5 = new I('i5', 'fa fa-arrow-right');
+    button2.add(i5);
+    var emptyCol4 = new EmptyCol('ec4', '');
+    vp19.add(emptyCol4);
+
+    button2.onclick = function (e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        console.log('FORWARD');
+
+        var vp7 = button2.findById('vp7');
+        var vp9 = button2.findById('vp9');
+        vp9.remove(vp7);
+        
+        var component = drawForward(message, 'FORWARD');
+        vp7.add(component);
+
+    }
+    var button3 = new AContainer('button3', 'btn btn-sm btn-default', 'Trash ', '', '');
     vp19.add(button3);
     var i6 = new I('i6', 'fa fa-trash-o');
     button3.add(i6);
@@ -44,7 +59,7 @@ export default function drawTrashSingleMailButtons(message) {
     button3.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log('DELETE ' + message.id);
+        console.log('TRASH ' + message.id);
 
         var vp7 = button3.findById('vp7');
         var vp9 = button3.findById('vp9');
@@ -53,7 +68,7 @@ export default function drawTrashSingleMailButtons(message) {
         let axios = window._api.axios;
         let messageManager = new MessageManager(axios);
 
-        messageManager.deleteMessage(message.id)
+        messageManager.trashMessage(message.id)
             .then(response => {
                 var component = drawTrash(messageManager.messages);
                 vp7.add(component);

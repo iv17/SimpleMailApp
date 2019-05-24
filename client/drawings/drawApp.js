@@ -2,8 +2,8 @@ import {
     A, EmptyRow, H5, HR, Image, Label, AContainer, ButtonContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../js/osc.js';
 
-import drawInbox from './inbox/drawInbox.js';
-import drawCompose from './compose/drawCompose.js';
+import drawInbox from './messages/drawInbox.js';
+import drawCompose from './message/drawCompose.js';
 import drawLabels from './drawLabels.js';
 import UserManager from '../js/managers/UserManager.js';
 
@@ -42,7 +42,7 @@ export default function drawApp(labels, messages, user) {
     ul1.add(li12);
     var a12 = new AContainer('a12', '', 'Log out', '');
     li12.add(a12);
-     
+
     a12.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
