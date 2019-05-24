@@ -4,7 +4,7 @@ import {
 
 import drawSingleMail from '../singleMail/drawSingleMail.js';
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawTrash from '../trash/drawTrash.js';
+import drawTrash from './drawTrash.js';
 import drawForward from '../forward/drawForward.js';
 
 export default function drawInbox(messages, type) {
@@ -30,7 +30,7 @@ export default function drawInbox(messages, type) {
 
     var inbox_rows = [];
     for (let index = 1; index < messages.length + 1; index++) {
-        var inbox_rowID = "inbox_row" + index;
+        var inbox_rowID = 'inbox_row' + index;
         inbox_rows.push(new AContainer(inbox_rowID, 'list-group-item', '', '#'));
     }
     for (let index = 0; index < messages.length; index++) {
@@ -44,8 +44,8 @@ export default function drawInbox(messages, type) {
             e.stopImmediatePropagation();
             console.log('TRASH ' + messages[index].id);
 
-            var vp7 = trash.findById("vp7");
-            var vp9 = trash.findById("vp9");
+            var vp7 = trash.findById('vp7');
+            var vp9 = trash.findById('vp9');
             vp9.remove(vp7);
     
             let axios = window._api.axios;
@@ -59,16 +59,16 @@ export default function drawInbox(messages, type) {
         }
         container.add(new EmptyCol('ec1' + index, ''));
         container.add(new EmptyCol('ec2' + index, ''));
-        container.add(new Label("sender" + index, 'name', messages[index].headers.from, 'min-width: 160px;display: inline-block;'));
-        container.add(new Label("title" + index, '', messages[index].headers.subject, ''));
-        container.add(new Label("time" + index, 'badge', messages[index].headers.date, ''));
+        container.add(new Label('sender' + index, 'name', messages[index].headers.from, 'min-width: 160px;display: inline-block;'));
+        container.add(new Label('title' + index, '', messages[index].headers.subject, ''));
+        container.add(new Label('time' + index, 'badge', messages[index].headers.date, ''));
        
         container.onclick = function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
            
-            var vp7 = container.findById("vp7");
-            var vp9 = container.findById("vp9");
+            var vp7 = container.findById('vp7');
+            var vp9 = container.findById('vp9');
             vp9.remove(vp7);
             
             let axios = window._api.axios;
@@ -77,7 +77,7 @@ export default function drawInbox(messages, type) {
             if(type == 'INBOX') {
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
-                    var component = drawSingleMail(messageManager.message, "MAIL");
+                    var component = drawSingleMail(messageManager.message, 'MAIL');
                     vp7.add(component);
                 });
             }

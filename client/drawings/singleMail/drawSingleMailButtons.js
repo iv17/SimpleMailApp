@@ -5,7 +5,7 @@ import {
 import drawCompose from '../compose/drawCompose.js';
 import drawForward from '../forward/drawForward.js';
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawTrash from '../trash/drawTrash.js';
+import drawTrash from '../inbox/drawTrash.js';
 
 export default function drawSingleMailButtons(message) {
 
@@ -22,8 +22,8 @@ export default function drawSingleMailButtons(message) {
         e.preventDefault();
         e.stopImmediatePropagation();
         
-        var vp7 = button1.findById("vp7");
-        var vp9 = button1.findById("vp9");
+        var vp7 = button1.findById('vp7');
+        var vp9 = button1.findById('vp9');
         vp9.remove(vp7);
 
         var component = drawCompose();
@@ -41,10 +41,10 @@ export default function drawSingleMailButtons(message) {
     button2.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        console.log("FORWARD");
+        console.log('FORWARD');
 
-        var vp7 = button2.findById("vp7");
-        var vp9 = button2.findById("vp9");
+        var vp7 = button2.findById('vp7');
+        var vp9 = button2.findById('vp9');
         vp9.remove(vp7);
         
         var component = drawForward(message, 'FORWARD');
@@ -61,8 +61,8 @@ export default function drawSingleMailButtons(message) {
         e.stopImmediatePropagation();
         console.log('TRASH ' + message.id);
 
-        var vp7 = button3.findById("vp7");
-        var vp9 = button3.findById("vp9");
+        var vp7 = button3.findById('vp7');
+        var vp9 = button3.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;

@@ -5,7 +5,7 @@ import {
 import drawInbox from './inbox/drawInbox.js';
 import MessageManager from '../js/managers/MessageManager.js';
 import changeActiveClass from '../js/util/changeActiveClass.js';
-import drawTrash from './trash/drawTrash.js';
+import drawTrash from './inbox/drawTrash.js';
 
 export default function drawLabels(labels) {
 
@@ -32,8 +32,8 @@ export default function drawLabels(labels) {
                 let messageManager = new MessageManager(axios);
 
                 if (labels[index].name == 'TRASH') {
-                    var vp7 = container.findById("vp7");
-                    var vp9 = container.findById("vp9");
+                    var vp7 = container.findById('vp7');
+                    var vp9 = container.findById('vp9');
                     vp9.remove(vp7);
                     console.log('TRASH')
                     messageManager.fetchMessages(labels[index].name)
@@ -43,8 +43,8 @@ export default function drawLabels(labels) {
                         });
                 }
                 if(labels[index].name != 'TRASH') {
-                    var vp7 = container.findById("vp7");
-                    var vp9 = container.findById("vp9");
+                    var vp7 = container.findById('vp7');
+                    var vp9 = container.findById('vp9');
                     vp9.remove(vp7);
                     if(labels[index].name == 'DRAFT') {
                         console.log('DRAFTS');

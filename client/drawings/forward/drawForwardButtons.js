@@ -24,8 +24,8 @@ export default function drawForwardButtons(message) {
 
         var to = inputEmail.value;
 
-        var vp7 = buttonSend.findById("vp7");
-        var vp9 = buttonSend.findById("vp9");
+        var vp7 = buttonSend.findById('vp7');
+        var vp9 = buttonSend.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
@@ -33,7 +33,7 @@ export default function drawForwardButtons(message) {
 
         messageManager.sendMessage(to, message.headers.subject, message.content)
             .then(response => {
-                var component = drawSingleMail(messageManager.message, "MAIL");
+                var component = drawSingleMail(messageManager.message, 'MAIL');
                 vp7.add(component);
             });
 
@@ -51,14 +51,14 @@ export default function drawForwardButtons(message) {
         e.stopImmediatePropagation();
         console.log('CANCEL');
 
-        var vp7 = buttonDiscard.findById("vp7");
-        var vp9 = buttonDiscard.findById("vp9");
+        var vp7 = buttonDiscard.findById('vp7');
+        var vp9 = buttonDiscard.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
         let messageManager = new MessageManager(axios);
 
-        messageManager.fetchMessages("INBOX")
+        messageManager.fetchMessages('INBOX')
             .then(response => {
                 var component = drawInbox(messageManager.messages);
                 vp7.add(component);

@@ -26,8 +26,8 @@ export default function drawComposeButtons() {
         var subject = inputTitle.value;
         var bodyText = inputMessage.value;
 
-        var vp7 = buttonSend.findById("vp7");
-        var vp9 = buttonSend.findById("vp9");
+        var vp7 = buttonSend.findById('vp7');
+        var vp9 = buttonSend.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
@@ -35,7 +35,7 @@ export default function drawComposeButtons() {
 
         messageManager.sendMessage(to, subject, bodyText)
             .then(response => {
-                var component = drawSingleMail(messageManager.message, "MAIL");
+                var component = drawSingleMail(messageManager.message, 'MAIL');
                 vp7.add(component);
             });
 
@@ -57,8 +57,8 @@ export default function drawComposeButtons() {
         var subject = document.getElementById('inputTitle').value;
         var bodyText = document.getElementById('inputMessage').value;
 
-        var vp7 = buttonDraft.findById("vp7");
-        var vp9 = buttonDraft.findById("vp9");
+        var vp7 = buttonDraft.findById('vp7');
+        var vp9 = buttonDraft.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
@@ -84,14 +84,14 @@ export default function drawComposeButtons() {
         e.stopImmediatePropagation();
         console.log('DISCARD');
 
-        var vp7 = buttonDiscard.findById("vp7");
-        var vp9 = buttonDiscard.findById("vp9");
+        var vp7 = buttonDiscard.findById('vp7');
+        var vp9 = buttonDiscard.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
         let messageManager = new MessageManager(axios);
 
-        messageManager.fetchMessages("INBOX")
+        messageManager.fetchMessages('INBOX')
             .then(response => {
                 var component = drawInbox(messageManager.messages);
                 vp7.add(component);

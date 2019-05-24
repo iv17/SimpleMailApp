@@ -83,8 +83,8 @@ export default function drawApp(labels, messages, user) {
         e.preventDefault();
         e.stopImmediatePropagation();
 
-        var vp7 = buttonCompose.findById("vp7");
-        var vp9 = buttonCompose.findById("vp9");
+        var vp7 = buttonCompose.findById('vp7');
+        var vp9 = buttonCompose.findById('vp9');
         vp9.remove(vp7);
         var component = drawCompose();
         vp7.add(component);

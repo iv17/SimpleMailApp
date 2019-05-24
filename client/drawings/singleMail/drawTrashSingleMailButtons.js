@@ -3,7 +3,7 @@ import {
 } from '../../js/osc.js';
 
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawTrash from '../trash/drawTrash.js';
+import drawTrash from '../inbox/drawTrash.js';
 import drawInbox from '../inbox/drawInbox.js';
 
 export default function drawTrashSingleMailButtons(message) {
@@ -21,8 +21,8 @@ export default function drawTrashSingleMailButtons(message) {
         e.preventDefault();
         e.stopImmediatePropagation();
         
-        var vp7 = button1.findById("vp7");
-        var vp9 = button1.findById("vp9");
+        var vp7 = button1.findById('vp7');
+        var vp9 = button1.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
@@ -46,8 +46,8 @@ export default function drawTrashSingleMailButtons(message) {
         e.stopImmediatePropagation();
         console.log('DELETE ' + message.id);
 
-        var vp7 = button3.findById("vp7");
-        var vp9 = button3.findById("vp9");
+        var vp7 = button3.findById('vp7');
+        var vp9 = button3.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;

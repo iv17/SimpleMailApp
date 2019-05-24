@@ -69,10 +69,10 @@ export default function drawSingleMail(message, type) {
  
     var vp19;
     if(type == 'MAIL') {
-        console.log("MAIL BUTTONS");
+        console.log('MAIL BUTTONS');
         vp19 = drawSingleMailButtons(message);
     } else if (type == 'TRASH') {
-        console.log("TRASH BUTTONS");
+        console.log('TRASH BUTTONS');
         vp19 = drawTrashSingleMailButtons(message);
     }
     vp10.add(vp19);
