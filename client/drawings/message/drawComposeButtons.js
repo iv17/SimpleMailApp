@@ -3,7 +3,7 @@ import {
 } from '../../js/osc.js';
 
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawSingleMail from './drawSingleMail.js';
+import drawMessage from './drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
 
 export default function drawComposeButtons() {
@@ -35,7 +35,7 @@ export default function drawComposeButtons() {
 
         messageManager.sendMessage(to, subject, bodyText)
             .then(response => {
-                var component = drawSingleMail(messageManager.message, 'MAIL');
+                var component = drawMessage(messageManager.message, 'MAIL');
                 vp7.add(component);
             });
 

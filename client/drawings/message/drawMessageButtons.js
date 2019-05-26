@@ -5,9 +5,9 @@ import {
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from '../messages/drawTrash.js';
 import drawCompose from './drawCompose.js';
-import drawForward from './drawForward.js';
+import drawDraft from './drawDraft.js';
 
-export default function drawSingleMailButtons(message) {
+export default function drawMessageButtons(message) {
 
     var vp19 = new VerticalPanel('vp19', 'compose-btn pull-left');
     
@@ -47,7 +47,7 @@ export default function drawSingleMailButtons(message) {
         var vp9 = button2.findById('vp9');
         vp9.remove(vp7);
         
-        var component = drawForward(message, 'FORWARD');
+        var component = drawDraft(message, 'FORWARD');
         vp7.add(component);
 
     }

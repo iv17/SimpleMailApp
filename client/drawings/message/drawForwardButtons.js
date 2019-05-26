@@ -3,8 +3,9 @@ import {
 } from '../../js/osc.js';
 
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawSingleMail from '../message/drawSingleMail.js';
+import drawMessgae from './drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
+import drawMessage from './drawMessage.js';
 
 export default function drawForwardButtons(message) {
     
@@ -33,7 +34,7 @@ export default function drawForwardButtons(message) {
 
         messageManager.sendMessage(to, message.headers.subject, message.content)
             .then(response => {
-                var component = drawSingleMail(messageManager.message, 'MAIL');
+                var component = drawMessage(messageManager.message, 'MAIL');
                 vp7.add(component);
             });
 
@@ -60,7 +61,7 @@ export default function drawForwardButtons(message) {
 
         messageManager.fetchMessages('INBOX')
             .then(response => {
-                var component = drawInbox(messageManager.messages);
+                var component = drawMessage(messageManager.messages);
                 vp7.add(component);
             });
     }

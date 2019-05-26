@@ -2,10 +2,10 @@ import {
     EmptyCol, EmptyRow, H4, HR, Image, Strong, Label, VerticalPanel
 } from '../../js/osc.js';
 
-import drawSingleMailButtons from './drawSingleMailButtons.js';
-import drawTrashSingleMailButtons from './drawTrashSingleMailButtons.js';
+import drawMessageButtons from './drawMessageButtons.js';
+import drawTrashButtons from './drawTrashButtons.js';
 
-export default function drawSingleMail(message, type) {
+export default function drawMessage(message, type) {
 
     console.log('drawSingleMail');
     
@@ -72,10 +72,10 @@ export default function drawSingleMail(message, type) {
     var vp19;
     if(type == 'MAIL') {
         console.log('MAIL BUTTONS');
-        vp19 = drawSingleMailButtons(message);
+        vp19 = drawMessageButtons(message);
     } else if (type == 'TRASH') {
         console.log('TRASH BUTTONS');
-        vp19 = drawTrashSingleMailButtons(message);
+        vp19 = drawTrashButtons(message);
     }
     vp10.add(vp19);
     

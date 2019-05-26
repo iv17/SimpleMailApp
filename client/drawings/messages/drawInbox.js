@@ -4,8 +4,8 @@ import {
 
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from './drawTrash.js';
-import drawSingleMail from '../message/drawSingleMail.js';
-import drawForward from '../message/drawForward.js';
+import drawMessage from '../message/drawMessage.js';
+import drawDraft from '../message/drawDraft.js';
 
 export default function drawInbox(messages, type) {
     console.log('drawInbox: ' + type);
@@ -78,14 +78,14 @@ export default function drawInbox(messages, type) {
             if(type == 'MAIL') {
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
-                    var component = drawSingleMail(messageManager.message, 'MAIL');
+                    var component = drawMessage(messageManager.message, 'MAIL');
                     vp7.add(component);
                 });
             }
             if(type == 'DRAFT') {
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
-                    var component = drawForward(messageManager.message, 'DRAFT');
+                    var component = drawDraft(messageManager.message, 'DRAFT');
                     vp7.add(component);
                 });
             }

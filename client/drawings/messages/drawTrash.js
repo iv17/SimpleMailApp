@@ -3,7 +3,7 @@ import {
 } from '../../js/osc.js';
 
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawSingleMail from '../message/drawSingleMail.js';
+import drawMessage from '../message/drawMessage.js';
 
 export default function drawTrash(messages) {
 
@@ -74,7 +74,7 @@ export default function drawTrash(messages) {
 
             messageManager.fetchMessage(messages[index].id)
             .then(response => {
-                var component = drawSingleMail(messageManager.message, 'TRASH');
+                var component = drawMessage(messageManager.message, 'TRASH');
                 vp7.add(component);
 			});
            

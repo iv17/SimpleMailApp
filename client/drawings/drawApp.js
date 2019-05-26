@@ -2,7 +2,6 @@ import {
     A, EmptyRow, H5, HR, Image, Label, AContainer, ButtonContainer, HorizontalPanel, LI, UL, VerticalPanel
 } from '../js/osc.js';
 
-import UserManager from '../js/managers/UserManager.js';
 import drawInbox from './messages/drawInbox.js';
 import drawCompose from './message/drawCompose.js';
 import drawLabels from './drawLabels.js';
@@ -61,7 +60,7 @@ export default function drawApp(labels, messages, user) {
     var ul2 = drawLabels(labels);
     vp8.add(ul2);
 
-    var vp9 = drawInbox(messages, 'INBOX');
+    var vp9 = drawInbox(messages, 'MAIL');
     vp7.add(vp9);
 
     buttonCompose.onclick = function (e) {
