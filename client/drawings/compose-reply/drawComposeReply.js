@@ -6,6 +6,7 @@ import drawComposeButtons from './drawComposeButtons.js';
 import drawReplayButtons from './drawReplayButtons.js';
 
 export default function drawComposeReply(message, type) {
+    console.log('drawComposeReply: ' + type);
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -44,7 +45,7 @@ export default function drawComposeReply(message, type) {
     } 
     if(type == 'REPLY') {
         var vp14 = drawReplayButtons();
-    vp10.add(vp14);
+        vp10.add(vp14);
     }
     
 

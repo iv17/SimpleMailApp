@@ -7,6 +7,7 @@ import drawMessage from '../message/drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
 
 export default function drawReplayButtons() {
+    console.log('drawReplayButtons');
 
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
   
@@ -62,7 +63,7 @@ export default function drawReplayButtons() {
 
         messageManager.fetchMessages('INBOX')
             .then(response => {
-                var component = drawInbox(messageManager.messages);
+                var component = drawInbox(messageManager.messages, 'MAIL');
                 vp7.add(component);
             });
     }

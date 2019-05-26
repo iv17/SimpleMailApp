@@ -35,7 +35,6 @@ export default function drawLabels(labels) {
                     var vp7 = container.findById('vp7');
                     var vp9 = container.findById('vp9');
                     vp9.remove(vp7);
-                    console.log('TRASH')
                     messageManager.fetchMessages(labels[index].name)
                         .then(response => {
                             var component = drawTrash(messageManager.messages);
@@ -43,21 +42,22 @@ export default function drawLabels(labels) {
                         });
                 }
                 if (labels[index].name != 'TRASH') {
-                    var vp7 = container.findById('vp7');
-                    var vp9 = container.findById('vp9');
-                    vp9.remove(vp7);
                     if (labels[index].name == 'DRAFT') {
-                        console.log('DRAFTS');
+                        var vp7 = container.findById('vp7');
+                        var vp9 = container.findById('vp9');
+                        vp9.remove(vp7);
                         messageManager.fetchMessages(labels[index].name)
                             .then(response => {
                                 var component = drawInbox(messageManager.messages, 'DRAFT');
                                 vp7.add(component);
                             });
                     } else {
-                        console.log('MAIL');
+                        var vp7 = container.findById('vp7');
+                        var vp9 = container.findById('vp9');
+                        vp9.remove(vp7);
                         messageManager.fetchMessages(labels[index].name)
                         .then(response => {
-                            var component = drawInbox(messageManager.messages, 'MAIL');
+                            var component = drawInbox(messageManager.messages, labels[index].name);
                             vp7.add(component);
                         });
                     }

@@ -8,6 +8,7 @@ import drawComposeReply from '../compose-reply/drawComposeReply.js';
 import drawDraftForward from '../draft-forward/drawDraftForward.js';
 
 export default function drawMessageButtons(message) {
+    console.log('drawMessageButtons');
 
     var vp19 = new VerticalPanel('vp19', 'compose-btn pull-left');
     

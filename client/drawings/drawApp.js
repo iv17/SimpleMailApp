@@ -7,6 +7,7 @@ import drawLabels from './drawLabels.js';
 import drawComposeReply from './compose-reply/drawComposeReply.js';
 
 export default function drawApp(labels, messages, user) {
+    console.log('drawApp')
 
     var vp1 = new VerticalPanel('vp1', 'container');
 

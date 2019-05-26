@@ -7,7 +7,8 @@ import drawMessage from '../message/drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
 
 export default function drawComposeButtons() {
-
+    console.log('drawComposeButtons');
+    
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
   
     var buttonSend = new AContainer('buttonSend', 'btn btn-sm btn-primary', 'Send ', '', '');

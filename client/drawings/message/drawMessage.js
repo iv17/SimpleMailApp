@@ -6,8 +6,7 @@ import drawMessageButtons from './drawMessageButtons.js';
 import drawTrashButtons from './drawTrashButtons.js';
 
 export default function drawMessage(message, type) {
-
-    console.log('drawSingleMail');
+    console.log('drawMessage: ' + type);
     
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -69,15 +68,13 @@ export default function drawMessage(message, type) {
     var emptyRow3 = new EmptyRow('er3', '');
     vp10.add(emptyRow3);
  
-    var vp19;
-    if(type == 'MAIL') {
-        console.log('MAIL BUTTONS');
-        vp19 = drawMessageButtons(message);
-    } else if (type == 'TRASH') {
-        console.log('TRASH BUTTONS');
-        vp19 = drawTrashButtons(message);
+    if (type == 'TRASH') {
+        var vp19 = drawTrashButtons(message);
+        vp10.add(vp19);
+    } else {
+        var vp19 = drawMessageButtons(message);
+        vp10.add(vp19);
     }
-    vp10.add(vp19);
     
 
     return vp9;

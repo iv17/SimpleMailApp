@@ -67,25 +67,28 @@ export default function drawInbox(messages, type) {
         container.onclick = function (e) {
             e.preventDefault();
             e.stopImmediatePropagation();
-           
-            var vp7 = container.findById('vp7');
-            var vp9 = container.findById('vp9');
-            vp9.remove(vp7);
             
             let axios = window._api.axios;
             let messageManager = new MessageManager(axios);
 
-            if(type == 'MAIL') {
-                messageManager.fetchMessage(messages[index].id)
-                .then(response => {
-                    var component = drawMessage(messageManager.message, 'MAIL');
-                    vp7.add(component);
-                });
-            }
             if(type == 'DRAFT') {
+                var vp7 = container.findById('vp7');
+                var vp9 = container.findById('vp9');
+                vp9.remove(vp7);
+
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
                     var component = drawDraftForward(messageManager.message, 'DRAFT');
+                    vp7.add(component);
+                });
+            } else {
+                var vp7 = container.findById('vp7');
+                var vp9 = container.findById('vp9');
+                vp9.remove(vp7);
+
+                messageManager.fetchMessage(messages[index].id)
+                .then(response => {
+                    var component = drawMessage(messageManager.message, type);
                     vp7.add(component);
                 });
             }

@@ -7,6 +7,7 @@ import drawTrash from '../messages/drawTrash.js';
 import drawInbox from '../messages/drawInbox.js';
 
 export default function drawTrashButtons(message) {
+    console.log('drawTrashButtons');
 
     var vp19 = new VerticalPanel('vp19', 'compose-btn pull-left');
     

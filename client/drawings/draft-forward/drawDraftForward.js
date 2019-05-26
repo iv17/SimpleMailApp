@@ -6,7 +6,7 @@ import drawForwardButtons from './drawForwardButtons.js';
 import drawDraftButtons from './drawDraftButtons.js';
 
 export default function drawDraftForward(message, type) {
-    console.log(message + ' ' + type);
+    console.log('drawDraftForward: ' + type);
    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 

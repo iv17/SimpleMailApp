@@ -7,6 +7,7 @@ import drawMessage from '../message/drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
 
 export default function drawForwardButtons(message) {
+    console.log('drawForwardButtons');
     
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
   

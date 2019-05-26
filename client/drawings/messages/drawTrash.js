@@ -6,6 +6,7 @@ import MessageManager from '../../js/managers/MessageManager.js';
 import drawMessage from '../message/drawMessage.js';
 
 export default function drawTrash(messages) {
+    console.log('drawTrash');
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
