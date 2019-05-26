@@ -8,6 +8,7 @@ import drawSingleMail from '../message/drawSingleMail.js';
 import drawForward from '../message/drawForward.js';
 
 export default function drawInbox(messages, type) {
+    console.log('drawInbox: ' + type);
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -74,7 +75,7 @@ export default function drawInbox(messages, type) {
             let axios = window._api.axios;
             let messageManager = new MessageManager(axios);
 
-            if(type == 'INBOX') {
+            if(type == 'MAIL') {
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
                     var component = drawSingleMail(messageManager.message, 'MAIL');

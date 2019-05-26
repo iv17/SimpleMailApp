@@ -7,6 +7,8 @@ import drawTrashSingleMailButtons from './drawTrashSingleMailButtons.js';
 
 export default function drawSingleMail(message, type) {
 
+    console.log('drawSingleMail');
+    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
     var vp10 = new VerticalPanel('vp10', 'inbox-body');

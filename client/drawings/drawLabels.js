@@ -53,16 +53,14 @@ export default function drawLabels(labels) {
                                 var component = drawInbox(messageManager.messages, 'DRAFT');
                                 vp7.add(component);
                             });
-                    }
-                    if (labels[index].name == 'INBOX') {
-                        console.log('INBOX');
+                    } else {
+                        console.log('MAIL');
                         messageManager.fetchMessages(labels[index].name)
-                            .then(response => {
-                                var component = drawInbox(messageManager.messages, 'INBOX');
-                                vp7.add(component);
-                            });
+                        .then(response => {
+                            var component = drawInbox(messageManager.messages, 'MAIL');
+                            vp7.add(component);
+                        });
                     }
-
                 }
             }
         }

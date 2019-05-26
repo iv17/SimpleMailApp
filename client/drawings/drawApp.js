@@ -61,7 +61,7 @@ export default function drawApp(labels, messages, user) {
     var ul2 = drawLabels(labels);
     vp8.add(ul2);
 
-    var vp9 = drawInbox(messages);
+    var vp9 = drawInbox(messages, 'INBOX');
     vp7.add(vp9);
 
     buttonCompose.onclick = function (e) {
