@@ -70,7 +70,7 @@ export default function drawApp(labels, messages, user) {
         var vp7 = buttonCompose.findById('vp7');
         var vp9 = buttonCompose.findById('vp9');
         vp9.remove(vp7);
-        var component = drawCompose();
+        var component = drawCompose(undefined, 'COMPOSE');
         vp7.add(component);
     }
 

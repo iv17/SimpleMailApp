@@ -21,12 +21,13 @@ export default function drawMessageButtons(message) {
     button1.onclick = function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
+        console.log('REPLY');
         
         var vp7 = button1.findById('vp7');
         var vp9 = button1.findById('vp9');
         vp9.remove(vp7);
 
-        var component = drawCompose();
+        var component = drawCompose(message, 'REPLY');
         vp7.add(component);
 
     }

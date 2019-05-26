@@ -6,6 +6,7 @@ import drawForwardButtons from './drawForwardButtons.js';
 import drawDraftButtons from './drawDraftButtons.js';
 
 export default function drawDraft(message, type) {
+    console.log(message + ' ' + type);
    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -17,8 +18,15 @@ export default function drawDraft(message, type) {
 
     var vp12 = new VerticalPanel('vp12', 'col-md-12');
     vp11.add(vp12);
-    var inputEmail = new InputField('inputEmail', 'form-control', 'email', 'To');
-    vp12.add(inputEmail);
+    if(type == 'FORWARD') {
+        var inputEmail = new InputField('inputEmail', 'form-control', 'email', 'To');
+        vp12.add(inputEmail);
+    }
+    if(type == 'DRAFT') {
+        var inputEmail = new InputField('inputEmail', 'form-control', 'email', message.headers.to);
+        vp12.add(inputEmail);
+    }
+   
     var hr1 = new HR('hr1', '');
     vp12.add(hr1);
 
@@ -36,11 +44,12 @@ export default function drawDraft(message, type) {
     var vp14;
     if(type == 'FORWARD') {
         vp14 = drawForwardButtons(message);
+        vp10.add(vp14);
     }
     if(type == 'DRAFT') {
         vp14 = drawDraftButtons(message);
+        vp10.add(vp14);
     }
-    vp10.add(vp14);
 
     return vp9;
 }
