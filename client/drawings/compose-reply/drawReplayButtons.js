@@ -3,7 +3,7 @@ import {
 } from '../../js/osc.js';
 
 import MessageManager from '../../js/managers/MessageManager.js';
-import drawMessage from './drawMessage.js';
+import drawMessage from '../message/drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
 
 export default function drawReplayButtons() {

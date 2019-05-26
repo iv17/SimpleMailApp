@@ -4,8 +4,8 @@ import {
 
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from '../messages/drawTrash.js';
-import drawCompose from './drawCompose.js';
-import drawDraft from './drawDraft.js';
+import drawComposeReply from '../compose-reply/drawComposeReply.js';
+import drawDraftForward from '../draft-forward/drawDraftForward.js';
 
 export default function drawMessageButtons(message) {
 
@@ -27,7 +27,7 @@ export default function drawMessageButtons(message) {
         var vp9 = button1.findById('vp9');
         vp9.remove(vp7);
 
-        var component = drawCompose(message, 'REPLY');
+        var component = drawComposeReply(message, 'REPLY');
         vp7.add(component);
 
     }
@@ -48,7 +48,7 @@ export default function drawMessageButtons(message) {
         var vp9 = button2.findById('vp9');
         vp9.remove(vp7);
         
-        var component = drawDraft(message, 'FORWARD');
+        var component = drawDraftForward(message, 'FORWARD');
         vp7.add(component);
 
     }

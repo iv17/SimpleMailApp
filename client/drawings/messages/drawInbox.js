@@ -5,7 +5,7 @@ import {
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawTrash from './drawTrash.js';
 import drawMessage from '../message/drawMessage.js';
-import drawDraft from '../message/drawDraft.js';
+import drawDraftForward from '../draft-forward/drawDraftForward.js';
 
 export default function drawInbox(messages, type) {
     console.log('drawInbox: ' + type);
@@ -85,7 +85,7 @@ export default function drawInbox(messages, type) {
             if(type == 'DRAFT') {
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
-                    var component = drawDraft(messageManager.message, 'DRAFT');
+                    var component = drawDraftForward(messageManager.message, 'DRAFT');
                     vp7.add(component);
                 });
             }

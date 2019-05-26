@@ -3,8 +3,8 @@ import {
 } from '../js/osc.js';
 
 import drawInbox from './messages/drawInbox.js';
-import drawCompose from './message/drawCompose.js';
 import drawLabels from './drawLabels.js';
+import drawComposeReply from './compose-reply/drawComposeReply.js';
 
 export default function drawApp(labels, messages, user) {
 
@@ -70,7 +70,7 @@ export default function drawApp(labels, messages, user) {
         var vp7 = buttonCompose.findById('vp7');
         var vp9 = buttonCompose.findById('vp9');
         vp9.remove(vp7);
-        var component = drawCompose(undefined, 'COMPOSE');
+        var component = drawComposeReply(undefined, 'COMPOSE');
         vp7.add(component);
     }
 
