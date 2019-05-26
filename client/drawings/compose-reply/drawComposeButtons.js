@@ -54,9 +54,9 @@ export default function drawComposeButtons() {
         e.stopImmediatePropagation();
         console.log('DRAFT');
 
-        var to = document.getElementById('inputEmail').value;
-        var subject = document.getElementById('inputTitle').value;
-        var bodyText = document.getElementById('inputMessage').value;
+        var to = inputEmail.value;
+        var subject = inputTitle.value;
+        var bodyText = inputMessage.value;
 
         var vp7 = buttonDraft.findById('vp7');
         var vp9 = buttonDraft.findById('vp9');
@@ -67,7 +67,7 @@ export default function drawComposeButtons() {
 
         messageManager.draftMessage(to, subject, bodyText)
             .then(response => {
-                var component = drawInbox(messageManager.messages);
+                var component = drawInbox(messageManager.messages, 'DRAFT');
                 vp7.add(component);
             });
 
@@ -94,7 +94,7 @@ export default function drawComposeButtons() {
 
         messageManager.fetchMessages('INBOX')
             .then(response => {
-                var component = drawInbox(messageManager.messages);
+                var component = drawInbox(messageManager.messages, 'INBOX');
                 vp7.add(component);
             });
     }

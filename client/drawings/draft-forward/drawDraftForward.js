@@ -19,11 +19,11 @@ export default function drawDraftForward(message, type) {
     var vp12 = new VerticalPanel('vp12', 'col-md-12');
     vp11.add(vp12);
     if(type == 'FORWARD') {
-        var inputEmail = new InputField('inputEmail', 'form-control', 'email', 'To');
+        var inputEmail = new InputField('inputEmail', 'form-control', 'email', 'To', '');
         vp12.add(inputEmail);
     }
     if(type == 'DRAFT') {
-        var inputEmail = new InputField('inputEmail', 'form-control', 'email', message.headers.to);
+        var inputEmail = new InputField('inputEmail', 'form-control', 'email', '', message.headers.to);
         vp12.add(inputEmail);
     }
    
@@ -32,7 +32,7 @@ export default function drawDraftForward(message, type) {
 
     var vp13 = new VerticalPanel('vp13', 'view-mail');
     vp10.add(vp13);
-    var inputTitle = new InputField('inputTitle', 'form-control', 'text', message.headers.subject);
+    var inputTitle = new InputField('inputTitle', 'form-control', 'text', '', message.headers.subject);
     vp13.add(inputTitle);
     var emptyRow2 = new EmptyRow('er2', '');
     vp13.add(emptyRow2);
