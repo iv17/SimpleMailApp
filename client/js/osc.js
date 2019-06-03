@@ -13,6 +13,7 @@ import I from './components/i.js';
 import Image from './components/image.js';
 import InputArea from './components/input_area.js';
 import InputField from './components/input_field.js';
+import InputAreaWithValue from './components/input_area_with_value.js';
 import Strong from './components/strong.js';
 import Label from './components/label.js';
 import AContainer from './containers/a_container.js';
@@ -26,6 +27,6 @@ import VerticalPanel from './containers/vertical_panel.js';
 
 export {
     A, Button, EmptyCol, EmptyRow, H1, H2, H3, H4, H5, H6, HR, I, Image,
-    InputArea, InputField, Strong, Label, AContainer, ButtonContainer,
+    InputArea, InputAreaWithValue, InputField, Strong, Label, AContainer, ButtonContainer,
     Form, HorizontalPanel, LI, MainPanel, UL, VerticalPanel
 }

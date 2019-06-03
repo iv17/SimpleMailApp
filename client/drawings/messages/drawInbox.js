@@ -7,8 +7,17 @@ import drawTrash from './drawTrash.js';
 import drawMessage from '../message/drawMessage.js';
 import drawDraftForward from '../draft-forward/drawDraftForward.js';
 
-export default function drawInbox(messages, type) {
+export default function drawInbox(data, type) {
     console.log('drawInbox: ' + type);
+
+    var messages = [];
+    if(type == 'DRAFT') {
+        for (let index = 0; index < data.length; index++) {
+            messages.push(data[index].message);
+        }
+    } else {
+        messages = data;
+    }
 
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
 
@@ -60,7 +69,7 @@ export default function drawInbox(messages, type) {
         }
         container.add(new EmptyCol('ec1' + index, ''));
         container.add(new EmptyCol('ec2' + index, ''));
-        container.add(new Label('sender' + index, 'name', messages[index].headers.from, 'min-width: 160px;display: inline-block;'));
+        container.add(new Label('sender' + index, 'name', messages[index].headers.from, 'min-width: 190px;display: inline-block;'));
         container.add(new Label('title' + index, '', messages[index].headers.subject, ''));
         container.add(new Label('time' + index, 'badge', messages[index].headers.date, ''));
        
@@ -78,7 +87,7 @@ export default function drawInbox(messages, type) {
 
                 messageManager.fetchMessage(messages[index].id)
                 .then(response => {
-                    var component = drawDraftForward(messageManager.message, 'DRAFT');
+                    var component = drawDraftForward(messageManager.message, data[index].id, 'DRAFT');
                     vp7.add(component);
                 });
             } else {

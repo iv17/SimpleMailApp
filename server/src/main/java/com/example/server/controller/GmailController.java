@@ -42,6 +42,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.Gmail.Builder;
 import com.google.api.services.gmail.model.Draft;
 import com.google.api.services.gmail.model.Label;
+import com.google.api.services.gmail.model.ListDraftsResponse;
 import com.google.api.services.gmail.model.ListLabelsResponse;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
@@ -210,6 +211,27 @@ public class GmailController {
 
 	}
 
+	@RequestMapping(value = "/sendDraft", 
+			method = RequestMethod.POST, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> sendDraft(@RequestParam(value = "id") String id) throws JSONException, IOException, MessagingException, ParseException {		
+
+		Draft draft = client.users().drafts().get(USER_ID, id).execute();
+		
+		JSONObject messageFromDraft = fetchService.fetchDraftForSend(draft.getMessage());
+	
+		Message temp = service.prepareForSend(messageFromDraft.toString(), USER_ID);
+		Message send = client.users().messages().send(USER_ID, temp).execute();
+		
+		client.users().drafts().delete(USER_ID, id).execute();
+
+		Message message = client.users().messages().get(USER_ID, send.getId()).setFormat("full").execute();
+		JSONObject messageJSON = fetchService.fetchFullMessage(message);
+
+		return new ResponseEntity<>(messageJSON.toString(), HttpStatus.OK);
+
+	}
+
 
 	@RequestMapping(value = "/draft", 
 			method = RequestMethod.POST, 
@@ -225,11 +247,24 @@ public class GmailController {
 		List<String> labelIds = new ArrayList<>();
 		labelIds.add("DRAFT");
 
-		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
+		ListDraftsResponse draftsResponse = client.users().drafts().list(USER_ID).execute();
+		
+		JSONArray draftArray = fetchDrafts(draftsResponse);
 
-		JSONArray messageArray = fetchMessages(msgResponse);	
+		return new ResponseEntity<>(draftArray.toString(), HttpStatus.OK);
 
-		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/drafts", 
+			method = RequestMethod.GET, 
+			produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> getDrafts() throws JSONException, IOException, MessagingException, ParseException {		
+
+		ListDraftsResponse draftsResponse = client.users().drafts().list(USER_ID).execute();
+		
+		JSONArray draftArray = fetchDrafts(draftsResponse);
+
+		return new ResponseEntity<>(draftArray.toString(), HttpStatus.OK);
 
 	}
 
@@ -286,19 +321,6 @@ public class GmailController {
 		return new ResponseEntity<>(messageArray.toString(), HttpStatus.OK);
 
 	}
-
-
-	@RequestMapping(value = "/logout", 
-			method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> logout() throws IOException, JSONException {
-
-		//TODO 
-		JSONObject me = new JSONObject();
-
-		return new ResponseEntity<>(me.toString(), HttpStatus.OK);
-
-	}
 	
 	private JSONArray fetchMessages(ListMessagesResponse msgResponse) throws IOException, JSONException, ParseException {
 
@@ -316,6 +338,24 @@ public class GmailController {
 		}	
 		
 		return messageArray;
+	}
+	
+	private JSONArray fetchDrafts(ListDraftsResponse draftsResponse) throws IOException, JSONException, ParseException {
+
+		JSONArray draftArray = new JSONArray();
+		if(draftsResponse.getDrafts() == null) {
+			return draftArray;
+		}
+
+		for (Draft d : draftsResponse.getDrafts()) {
+			
+			Draft draft = client.users().drafts().get(USER_ID, d.getId()).execute();
+
+			JSONObject draftJSON = fetchService.fetchDraft(draft);
+			draftArray.put(draftJSON);
+		}	
+		
+		return draftArray;
 	}
 	
 	private JSONArray fetchLabels(ListLabelsResponse labelsResponse) throws IOException, JSONException {

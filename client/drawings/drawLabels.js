@@ -46,9 +46,9 @@ export default function drawLabels(labels) {
                         var vp7 = container.findById('vp7');
                         var vp9 = container.findById('vp9');
                         vp9.remove(vp7);
-                        messageManager.fetchMessages(labels[index].name)
+                        messageManager.fetchDrafts()
                             .then(response => {
-                                var component = drawInbox(messageManager.messages, 'DRAFT');
+                                var component = drawInbox(messageManager.drafts, 'DRAFT');
                                 vp7.add(component);
                             });
                     } else {

@@ -126,4 +126,25 @@ public class FetchService {
 
 	}
 	
+	public JSONObject fetchDraftForSend(Message message) throws ParseException, JSONException {
+		
+		JSONObject json = new JSONObject();
+		for (MessagePartHeader header : message.getPayload().getHeaders()) {
+			if(header.getName().equals("Subject")) {
+				json.put("subject", header.getValue());
+			}
+			if(header.getName().equals("To")) {
+				json.put("to", header.getValue());
+			}
+		}
+		String content = "";
+		if(message.getPayload().getBody().getData()!= null) {
+			content = StringUtils.newStringUtf8(Base64.decodeBase64(message.getPayload().getBody().getData()));
+		}
+		
+		json.put("bodyText", content);
+		
+		return json;
+	}
+	
 }

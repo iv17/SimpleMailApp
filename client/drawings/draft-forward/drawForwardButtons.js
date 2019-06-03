@@ -4,7 +4,6 @@ import {
 
 import MessageManager from '../../js/managers/MessageManager.js';
 import drawMessage from '../message/drawMessage.js';
-import drawInbox from '../messages/drawInbox.js';
 
 export default function drawForwardButtons(message) {
     console.log('drawForwardButtons');

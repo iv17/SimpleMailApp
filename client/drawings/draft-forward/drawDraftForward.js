@@ -1,11 +1,11 @@
 import {
-    EmptyRow, HR, InputArea, InputField, VerticalPanel
+    EmptyRow, HR, InputAreaWithValue, InputField, VerticalPanel
 } from '../../js/osc.js';
 
 import drawForwardButtons from './drawForwardButtons.js';
 import drawDraftButtons from './drawDraftButtons.js';
 
-export default function drawDraftForward(message, type) {
+export default function drawDraftForward(message, id, type) {
     console.log('drawDraftForward: ' + type);
    
     var vp9 = new VerticalPanel('vp9', 'col-sm-9 col-md-10');
@@ -23,8 +23,13 @@ export default function drawDraftForward(message, type) {
         vp12.add(inputEmail);
     }
     if(type == 'DRAFT') {
-        var inputEmail = new InputField('inputEmail', 'form-control', 'email', '', message.headers.to);
-        vp12.add(inputEmail);
+        if(message.headers.to != undefined) {
+            var inputEmail = new InputField('inputEmail', 'form-control', 'email', '', message.headers.to);
+            vp12.add(inputEmail);
+        } else {
+            var inputEmail = new InputField('inputEmail', 'form-control', 'email', '', '');
+            vp12.add(inputEmail);
+        }
     }
    
     var hr1 = new HR('hr1', '');
@@ -36,18 +41,18 @@ export default function drawDraftForward(message, type) {
     vp13.add(inputTitle);
     var emptyRow2 = new EmptyRow('er2', '');
     vp13.add(emptyRow2);
-    var inputMessage = new InputArea('inputMessage', 'form-control', message.content, 13, 50);
+    var inputMessage = new InputAreaWithValue('inputMessage', 'form-control', '', 13, 50, message.content);
     vp13.add(inputMessage);
     var emptyRow3 = new EmptyRow('er3', '');
     vp13.add(emptyRow3);
-
+    
     var vp14;
     if(type == 'FORWARD') {
         vp14 = drawForwardButtons(message);
         vp10.add(vp14);
     }
     if(type == 'DRAFT') {
-        vp14 = drawDraftButtons(message);
+        vp14 = drawDraftButtons(id);
         vp10.add(vp14);
     }
 

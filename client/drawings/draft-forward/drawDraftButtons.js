@@ -6,7 +6,7 @@ import MessageManager from '../../js/managers/MessageManager.js';
 import drawMessage from '../message/drawMessage.js';
 import drawInbox from '../messages/drawInbox.js';
 
-export default function drawDraftButtons(message) {
+export default function drawDraftButtons(id) {
     console.log('drawDraftButtons');
     
     var vp14 = new VerticalPanel('vp14', 'compose-btn pull-left');
@@ -23,20 +23,18 @@ export default function drawDraftButtons(message) {
         e.stopImmediatePropagation();
         console.log('SEND');
 
-        var to = inputEmail.value;
-
         var vp7 = buttonSend.findById('vp7');
         var vp9 = buttonSend.findById('vp9');
         vp9.remove(vp7);
 
         let axios = window._api.axios;
         let messageManager = new MessageManager(axios);
-
-        messageManager.sendMessage(to, message.headers.subject, message.content)
-            .then(response => {
-                var component = drawMessage(messageManager.message, 'MAIL');
-                vp7.add(component);
-            });
+        
+        messageManager.sendDraft(id)
+        .then(response => {
+            var component = drawMessage(messageManager.message, 'MAIL');
+            vp7.add(component);
+        });
 
     }
 

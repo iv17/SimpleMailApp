@@ -3,6 +3,8 @@ export default class MessageManager {
     constructor(axiosApi) {
         this.messages = [];
         this.message = {};
+        this.drafts = [];
+
         this.axios = axiosApi;
         this.url = 'http://localhost:9000';
     }
@@ -18,6 +20,13 @@ export default class MessageManager {
         return this.axios.get(this.url + "/messages?label=" + label)
             .then((response) => {
                 this.messages = response.data;
+            });
+    }
+    
+    fetchDrafts() {
+        return this.axios.get(this.url + "/drafts")
+            .then((response) => {
+                this.drafts = response.data;
             });
     }
 
@@ -49,6 +58,13 @@ export default class MessageManager {
                 this.message = response.data;
             });
         }
+    }
+
+    sendDraft(id) {
+        return this.axios.post(this.url + "/sendDraft?id=" + id)
+        .then((response) => {
+            this.message = response.data;
+        });
     }
 
     trashMessage(id) {
