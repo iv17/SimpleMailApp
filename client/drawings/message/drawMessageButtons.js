@@ -7,6 +7,7 @@ import drawTrash from '../messages/drawTrash.js';
 import drawComposeReply from '../compose-reply/drawComposeReply.js';
 import drawDraftForward from '../draft-forward/drawDraftForward.js';
 
+
 export default function drawMessageButtons(message) {
     console.log('drawMessageButtons');
 
@@ -49,7 +50,7 @@ export default function drawMessageButtons(message) {
         var vp9 = button2.findById('vp9');
         vp9.remove(vp7);
         
-        var component = drawDraftForward(message, 'FORWARD');
+        var component = drawDraftForward(message, '', 'FORWARD');
         vp7.add(component);
 
     }

@@ -16,6 +16,7 @@
 </head>
 
 <body>
+	<img id="loader" style="display:none;margin-left:600px;margin-top:200px;" src="./images/Spinner-1s-200px.gif" />
 
 	<script type="module">
 
@@ -38,17 +39,35 @@
 		let fetchINBOX = messageManager.fetchMessages("INBOX");
 
 		$(document).ready(function () {
-			Promise.all([
-				fetchUser,
-				fetchLabels,
-				fetchINBOX
-			]).then(response => {
-				var mp = new MainPanel('main', '');
+			function myPromise() {
+				return Promise
+					.all([
+						fetchUser,
+						fetchLabels,
+						fetchINBOX
+					]).then(response => {
+						var mp = new MainPanel('main', '');
 
-				var vp1 = drawApp(labelManager.labels, messageManager.messages, userManager.user);
-				mp.add(vp1);
-			})
+						var vp1 = drawApp(labelManager.labels, messageManager.messages, userManager.user);
+						mp.add(vp1);
+					})
+			}
+
+			async function loader() {
+				try {
+					document.getElementById('loader').style.display = 'inline-block';
+					await myPromise();
+				} catch (err) {
+					console.error(err);
+				} finally {
+					document.getElementById('loader').style.display = 'none';
+				}
+			}
+
+			loader();
+
 		});
+
 
 	</script>
 

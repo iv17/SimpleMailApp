@@ -43,8 +43,8 @@ export default function drawTrash(messages) {
             e.stopImmediatePropagation();
             console.log('UNTRASH ' + messages[index].id);
 
-            var vp7 = trash.findById('vp7');
-            var vp9 = trash.findById('vp9');
+            var vp7 = mail.findById('vp7');
+            var vp9 = mail.findById('vp9');
             vp9.remove(vp7);
     
             let axios = window._api.axios;
@@ -52,7 +52,7 @@ export default function drawTrash(messages) {
     
             messageManager.untrashMessage(messages[index].id)
                 .then(response => {
-                    var component = drawInbox(messageManager.messages);
+                    var component = drawTrash(messageManager.messages);
                     vp7.add(component);
                 });
         }

@@ -295,7 +295,7 @@ public class GmailController {
 		client.users().messages().untrash(USER_ID, id).execute();
 
 		List<String> labelIds = new ArrayList<>();
-		labelIds.add("INBOX");
+		labelIds.add("TRASH");
 		ListMessagesResponse msgResponse = client.users().messages().list(USER_ID).setLabelIds(labelIds).execute();
 
 		JSONArray messageArray = fetchMessages(msgResponse);	
